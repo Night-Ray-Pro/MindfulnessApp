@@ -10,8 +10,10 @@ import SwiftUI
 struct MeditationView: View {
     var body: some View {
         NavigationStack{
-            VStack{
-                Text("Meditation")
+            ZStack{
+                VStack{
+                    Image(.meditationVector)
+                }
             }
             .toolbarBackground(Color("Meditation"), for: .tabBar)
             .toolbarBackground(.visible, for: .tabBar)
