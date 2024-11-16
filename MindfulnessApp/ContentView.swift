@@ -9,16 +9,33 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "1.circle")
-                .resizable()
-                .frame(width: 100,height: 100)
-                .foregroundStyle(.red)
-            Text("TestVersion 1.0")
-                .font(.title3)
-                .fontWeight(.bold)
+        TabView {
+            SleepCalculatorView()
+                .tabItem {
+                    Image(systemName: "moon")
+                }
+            
+            MeditationView()
+                .tabItem {
+                    Image(systemName: "leaf")
+                }
+            
+            HomeView()
+                .tabItem {
+                    Image(systemName: "house")
+                }
+            
+            NotesView()
+                .tabItem {
+                    Image(systemName: "pencil.and.scribble")
+                }
+            
+            SettingsView()
+                .tabItem {
+                    Image(systemName: "gearshape")
+                }
+            
         }
-        .padding()
     }
 }
 
