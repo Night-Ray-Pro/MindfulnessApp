@@ -27,12 +27,12 @@ struct ContentView: View {
             
             NotesView()
                 .tabItem {
-                    Image(systemName: "pencil.and.scribble")
+                    Image(systemName: "doc.plaintext")
                 }
             
             SettingsView()
                 .tabItem {
-                    Image(systemName: "gearshape")
+                    Image(systemName: "person.crop.circle.fill")
                 }
             
         }
