@@ -1,4 +1,4 @@
-<svg width="393" height="730" viewBox="0 0 393 730" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="393" height="654" viewBox="0 0 393 654" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g filter="url(#filter0_d_228_11)">
 <circle cx="197" cy="126" r="71" fill="url(#paint0_linear_228_11)"/>
 </g>
@@ -39,7 +39,6 @@
 <ellipse cx="12.8738" cy="12.6401" rx="12.8738" ry="12.6401" transform="matrix(0.999972 -0.00748413 0.00629648 0.99998 3 52.7202)" fill="#F7E3C9"/>
 <ellipse cx="12.8738" cy="12.6401" rx="12.8738" ry="12.6401" transform="matrix(0.999971 -0.00759351 0.00620578 0.999981 61.0962 52.7202)" fill="#F7E3C9"/>
 <rect x="14.4753" y="66.2068" width="59.9412" height="11.5772" fill="#F7E3C9"/>
-<rect x="-18" y="591" width="441" height="151" fill="#162030"/>
 <defs>
 <filter id="filter0_d_228_11" x="122" y="55" width="150" height="150" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 <feFlood flood-opacity="0" result="BackgroundImageFix"/>

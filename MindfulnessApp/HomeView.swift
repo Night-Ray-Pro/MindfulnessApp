@@ -61,7 +61,7 @@ struct LightView: View{
                     .scaledToFit()
                     
             }
-            .ignoresSafeArea()
+
         }
         .bottomSheet(bottomSheetPosition: self.$position, switchablePositions: [
             .relative(0.51),
@@ -104,8 +104,9 @@ struct DarkView: View{
                         .resizable()
                         .scaledToFit()
                         
+                        
                 }
-                .ignoresSafeArea()
+
             }
             .bottomSheet(bottomSheetPosition: self.$position, switchablePositions: [
                 .relative(0.51),
