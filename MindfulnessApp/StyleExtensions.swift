@@ -21,8 +21,45 @@ struct CalculatorViewGradient: ViewModifier {
     }
 }
 
+struct HomeDayViewGradient: ViewModifier {
+    let gradientStart = Color(red: 239 / 255, green: 108 / 255, blue: 29 / 255)
+    let gradientMiddle = Color(red: 255 / 255, green: 178 / 255, blue: 60 / 255)
+    let gradientEnd = Color(red: 255 / 255, green: 212 / 255, blue: 159 / 255)
+
+    func body(content: Content) -> some View {
+        content
+            .foregroundStyle(LinearGradient(stops: [
+                Gradient.Stop(color: gradientStart, location: 0.0),
+                Gradient.Stop(color: gradientMiddle, location: 0.60),
+                Gradient.Stop(color: gradientEnd, location: 0.99),
+            ], startPoint: .top, endPoint: .bottom))
+    }
+}
+
+struct HomeNightViewGradient: ViewModifier {
+    let gradientStart = Color(red: 68 / 255, green: 62 / 255, blue: 81 / 255)
+    let gradientEnd = Color(red: 205 / 255, green: 101 / 255, blue: 98 / 255)
+
+    func body(content: Content) -> some View {
+        content
+            .foregroundStyle(LinearGradient(stops: [
+                Gradient.Stop(color: gradientStart, location: 0.10),
+                Gradient.Stop(color: gradientEnd, location: 0.99),
+            ], startPoint: .top, endPoint: .bottom))
+    }
+}
+
+
 extension View {
     public func calculatorViewGradient() -> some View {
         self.modifier(CalculatorViewGradient())
+    }
+    
+    public func homeDayViewGradient() -> some View {
+        self.modifier(HomeDayViewGradient())
+    }
+    
+    public func homeNightViewGradient() -> some View {
+        self.modifier(HomeNightViewGradient())
     }
 }

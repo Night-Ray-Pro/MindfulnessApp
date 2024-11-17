@@ -44,10 +44,24 @@ struct LightView: View{
     @State private var position: BottomSheetPosition = .relative(0.51)
     
     var body: some View {
-        VStack{
-            Image(.homeLightVector)
-                .resizable()
-                .ignoresSafeArea()
+        ZStack{
+            VStack{
+                Rectangle()
+                    .frame(height:290)
+                    .homeDayViewGradient()
+                    .ignoresSafeArea()
+                Spacer()
+            }
+            
+            VStack{
+                Spacer()
+                
+                Image(.homeLightVector)
+                    .resizable()
+                    .scaledToFit()
+                    
+            }
+            .ignoresSafeArea()
         }
         .bottomSheet(bottomSheetPosition: self.$position, switchablePositions: [
             .relative(0.51),
@@ -74,10 +88,24 @@ struct DarkView: View{
     @State var position: BottomSheetPosition = .relative(0.51)
         
         var body: some View {
-            VStack{
-                Image(.homeDarkVector)
-                    .resizable()
-                    .ignoresSafeArea()
+            ZStack{
+                VStack{
+                    Rectangle()
+                        .frame(height:310)
+                        .homeNightViewGradient()
+                        .ignoresSafeArea()
+                    Spacer()
+                }
+                
+                VStack{
+                    Spacer()
+                    
+                    Image(.homeDarkVector)
+                        .resizable()
+                        .scaledToFit()
+                        
+                }
+                .ignoresSafeArea()
             }
             .bottomSheet(bottomSheetPosition: self.$position, switchablePositions: [
                 .relative(0.51),
