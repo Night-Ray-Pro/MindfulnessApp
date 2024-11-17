@@ -10,35 +10,94 @@ import BottomSheet
 
 struct HomeView: View {
     @State private var hour:Int = Calendar.current.component(.hour, from: .now)
+    @State private var mode: Bool = true
+    
     var body: some View {
         NavigationStack{
             VStack{
-                if hour > 5 && hour < 18{
+                if mode{
                     LightView()
                 } else{
                     DarkView()
                 }
                 
             }
-            .toolbarBackground(Color("HomeDay"), for: .tabBar)
+            .toolbarBackground(Color(mode ? "HomeDay":"HomeNight"), for: .tabBar)
             .toolbarBackground(.visible, for: .tabBar)
             .toolbarColorScheme(.dark, for: .tabBar)
+        }
+        .onAppear{
+            setMode()
+        }
+    }
+    
+    func setMode(){
+        if hour > 5 && hour < 18{
+            mode = true
+        } else{
+            mode = false
         }
     }
 }
 
 struct LightView: View{
+    @State private var position: BottomSheetPosition = .relative(0.51)
+    
     var body: some View {
-        Image(.homeLightVector)
-            .resizable()
-            .ignoresSafeArea()
+        VStack{
+            Image(.homeLightVector)
+                .resizable()
+                .ignoresSafeArea()
+        }
+        .bottomSheet(bottomSheetPosition: self.$position, switchablePositions: [
+            .relative(0.51),
+            .relativeTop(0.975)
+        ], title: "Title")  {
+            ScrollView {
+                ForEach(1..<10) { num in
+                    Text("This is \(num) line")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding([.leading, .bottom])
+                }
+            }
+        }
+//        .dragIndicatorColor(Color(red: 0.17, green: 0.17, blue: 0.33))
+        .customBackground(
+            Color("homeLightSheet")
+                .cornerRadius(30)
+        )
+        .foregroundColor(.white)
     }
 }
 
 struct DarkView: View{
-    var body: some View {
-        Text("Dark")
-    }
+    @State var position: BottomSheetPosition = .relative(0.51)
+        
+        var body: some View {
+            VStack{
+                Image(.homeDarkVector)
+                    .resizable()
+                    .ignoresSafeArea()
+            }
+            .bottomSheet(bottomSheetPosition: self.$position, switchablePositions: [
+                .relative(0.51),
+                .relativeTop(0.975)
+            ], title: "Title")  {
+                ScrollView {
+                    ForEach(1..<10) { num in
+                        Text("This is \(num) line")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding([.leading, .bottom])
+                    }
+                }
+            }
+    //        .dragIndicatorColor(Color(red: 0.17, green: 0.17, blue: 0.33))
+            .customBackground(
+                Color("homeDarkSheet")
+                    .cornerRadius(30)
+            )
+            .foregroundColor(.white)
+        }
 }
 
 #Preview {
