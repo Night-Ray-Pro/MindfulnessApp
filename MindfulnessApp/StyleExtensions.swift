@@ -49,6 +49,29 @@ struct HomeNightViewGradient: ViewModifier {
     }
 }
 
+struct SettingsViewGradient: ViewModifier {
+    let gradientStart = Color(red: 255 / 255, green: 132 / 255, blue: 61 / 255)
+    let gradientMiddle = Color(red: 247 / 255, green: 139 / 255, blue: 77 / 255)
+    let gradientEnd = Color(red: 75 / 255, green: 56 / 255, blue: 100 / 255)
+
+    func body(content: Content) -> some View {
+        content
+            .foregroundStyle(LinearGradient(stops: [
+                Gradient.Stop(color: gradientStart, location: 0.06),
+                Gradient.Stop(color: gradientMiddle, location: 0.32),
+                Gradient.Stop(color: gradientEnd, location: 0.99),
+            ], startPoint: .top, endPoint: .bottom))
+    }
+}
+
+struct SettingsViewColor: ViewModifier {
+    let color = Color(red: 53 / 255, green: 48 / 255, blue: 72 / 255)
+
+    func body(content: Content) -> some View {
+        content
+            .foregroundStyle(color)
+    }
+}
 
 extension View {
     public func calculatorViewGradient() -> some View {
@@ -61,5 +84,11 @@ extension View {
     
     public func homeNightViewGradient() -> some View {
         self.modifier(HomeNightViewGradient())
+    }
+    public func settingsViewGradient() -> some View {
+        self.modifier(SettingsViewGradient())
+    }
+    public func settingsViewColor() -> some View {
+        self.modifier(SettingsViewColor())
     }
 }
