@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct NotesView: View {
+    @State private var isScrolling = false
     var body: some View {
         NavigationStack{
             ZStack{
@@ -67,7 +68,7 @@ struct NotesView: View {
                         } label: {
                             Image(.journalVector3)
                         }
-    
+                        
                         
                         ScrollView{
                             
@@ -86,12 +87,19 @@ struct NotesView: View {
                             }
                         }
                         .scrollIndicators(.hidden)
+                        .onScrollPhaseChange { oldPhase, newPhase in
+                            withAnimation(.easeInOut(duration: 0.5).delay(isScrolling ? 2:0)) {
+                                isScrolling = newPhase.isScrolling
+                            }
+                        }
+                        
                     }
                 }
                 
                 VStack{
                     Spacer()
                     Image(.journalVector2)
+                        .opacity(isScrolling ? 0:1)
                         
                 }
                 .ignoresSafeArea()

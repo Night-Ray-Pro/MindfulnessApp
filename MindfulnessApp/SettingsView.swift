@@ -14,21 +14,24 @@ struct SettingsView: View {
                 Rectangle()
                     .ignoresSafeArea()
                     .settingsViewGradient()
-                VStack{
-                    Image(.settingsVector)
-                    Text("Oskar")
-                        .font(.custom("Cochin", size: 48))
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.white)
-                    Text("Personal info...")
-                        .font(.custom("Cochin", size: 32))
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.white)
-                    Rectangle()
-                        .frame(width: 314, height: 1)
-                        .foregroundStyle(Color("Settings"))
+                
                     
                     ScrollView{
+                        
+                        VStack{
+                            Image(.settingsVector)
+                            Text("Oskar")
+                                .font(.custom("Cochin", size: 48))
+                                .fontWeight(.semibold)
+                                .foregroundStyle(.white)
+                                .padding(.top, -20)
+                            Text("Personal info...")
+                                .font(.custom("Cochin", size: 32))
+                                .fontWeight(.semibold)
+                                .foregroundStyle(.white)
+                            Rectangle()
+                                .frame(width: 314, height: 1)
+                                .foregroundStyle(Color("Settings"))
                         
                         ForEach(1..<10){ num in
                             ZStack{

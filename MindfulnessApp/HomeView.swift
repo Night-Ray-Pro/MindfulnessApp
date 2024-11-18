@@ -32,6 +32,7 @@ struct HomeView: View {
     }
     
     func setMode(){
+        hour = Calendar.current.component(.hour, from: .now)
         if hour > 5 && hour < 18{
             mode = true
         } else{
