@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct NotesView: View {
+    @State private var tabbarVisibility = Visibility.visible
+    @State private var opacity = 1.0
     @State private var isScrolling = false
     var body: some View {
         NavigationStack{
@@ -17,10 +19,20 @@ struct NotesView: View {
                     .ignoresSafeArea()
                     .scaledToFill()
                 VStack{
+                    ScrollViewReader { value in
                     HStack{
                         
-                        Button {
-                            //
+                        NavigationLink {
+                            AddNoteView()
+                                .onAppear {
+                                        tabbarVisibility = .hidden
+                                        opacity = 0.0
+                                }
+                                .onDisappear{
+                                        tabbarVisibility = .visible
+                                    opacity = 1.0
+                                }
+                                
                         } label: {
                             Image(systemName: "square.and.pencil")
                                 .resizable()
@@ -42,7 +54,7 @@ struct NotesView: View {
                         }
                         
                     }
-                    .padding(.top, 35)
+                    .padding(.top, 55)
 //                    .padding(.bottom, 5)
                     .padding(.horizontal,20)
                     Text("Oskar's Journal")
@@ -59,7 +71,7 @@ struct NotesView: View {
                         
                     
                     
-                    ScrollViewReader { value in
+                    
                         
                         Button{
                             withAnimation{
@@ -69,7 +81,7 @@ struct NotesView: View {
                             Image(.journalVector3)
                         }
                         
-                        
+                        Spacer()
                         ScrollView{
                             
                             RoundedRectangle(cornerRadius: 20)
@@ -86,6 +98,8 @@ struct NotesView: View {
                                 
                             }
                         }
+                        .opacity(opacity)
+                        .animation(.easeInOut(duration:opacity == 1.0 ? 0.5:0.01).delay(0.3), value: opacity)
                         .scrollIndicators(.hidden)
                         .onScrollPhaseChange { oldPhase, newPhase in
                             withAnimation(.easeInOut(duration: 0.5).delay(isScrolling ? 2:0)) {
@@ -95,6 +109,8 @@ struct NotesView: View {
                         
                     }
                 }
+                .ignoresSafeArea()
+//                .padding(.top,25)
                 
                 VStack{
                     Spacer()
@@ -102,12 +118,17 @@ struct NotesView: View {
                         .opacity(isScrolling ? 0:1)
                         
                 }
+                .opacity(opacity)
+                .animation(.easeInOut(duration:opacity == 1.0 ? 0.5:0.01).delay(0.3), value: opacity)
                 .ignoresSafeArea()
             }
             .toolbarBackground(Color("Notes"), for: .tabBar)
             .toolbarBackground(.visible, for: .tabBar)
             .toolbarColorScheme(.dark, for: .tabBar)
         }
+        .toolbar(tabbarVisibility, for: .tabBar)
+        .animation(.easeInOut(duration:0.2), value: tabbarVisibility)
+        .accentColor(.white)
     }
 }
 

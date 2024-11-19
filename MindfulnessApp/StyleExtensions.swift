@@ -73,6 +73,19 @@ struct SettingsViewColor: ViewModifier {
     }
 }
 
+struct AddNoteGradient: ViewModifier {
+    let gradientStart = Color(red: 216 / 255, green: 161 / 255, blue: 223 / 255)
+    let gradientEnd = Color(red: 240 / 255, green: 210 / 255, blue: 244 / 255)
+
+    func body(content: Content) -> some View {
+        content
+            .foregroundStyle(LinearGradient(stops: [
+                Gradient.Stop(color: gradientStart, location: 0.01),
+                Gradient.Stop(color: gradientEnd, location: 0.99),
+            ], startPoint: .top, endPoint: .bottom))
+    }
+}
+
 extension View {
     public func calculatorViewGradient() -> some View {
         self.modifier(CalculatorViewGradient())
@@ -90,5 +103,8 @@ extension View {
     }
     public func settingsViewColor() -> some View {
         self.modifier(SettingsViewColor())
+    }
+    public func addNoteGradient() -> some View {
+        self.modifier(AddNoteGradient())
     }
 }

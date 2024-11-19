@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SettingsView: View {
+    @State private var numTapped = 0
     var body: some View {
         NavigationStack{
             ZStack{
@@ -34,23 +35,50 @@ struct SettingsView: View {
                                 .foregroundStyle(Color("Settings"))
                         
                         ForEach(1..<10){ num in
-                            ZStack{
-                                RoundedRectangle(cornerRadius: 10)
-                                    .frame(width: 347, height: 50)
-                                    .settingsViewColor()
-                                
-                                HStack{
-                                    Group{
-                                        Circle()
-                                            .frame(width:25)
-                                            .foregroundStyle(.orange)
-                                        Spacer()
-                                        Image(systemName: "chevron.forward")
-                                            .foregroundStyle(.white)
+                            Button{
+                                if numTapped == num{
+                                    withAnimation{
+                                        numTapped = 0
                                     }
-                                    .padding()
+                                }else{
+                                    withAnimation{
+                                        numTapped = num
+                                    }
                                 }
-                                .frame(width: 347, height: 50)
+                                
+                            }label: {
+                                ZStack{
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .frame(width: 347, height: numTapped == num ? 100 : 50)
+                                        .settingsViewColor()
+                                    
+                                    VStack{
+                                        HStack{
+                                            Group{
+                                                Circle()
+                                                    .frame(width:18, height: 18)
+                                                    .foregroundStyle(.orange)
+                                                Spacer()
+                                                Image(systemName: "chevron.forward")
+                                                    .foregroundStyle(.white)
+                                                    .rotationEffect(Angle(degrees: numTapped == num ? 90 : 0))
+                                            }
+                                            .padding()
+                                            .padding(.horizontal, 20)
+                                        }
+//                                        .background(.red)
+                                        if numTapped == num{
+                                            Spacer()
+                                            Text("Settings")
+                                                .foregroundStyle(.white)
+                                                .padding(.bottom)
+                                        }
+//                                        Spacer()
+                                        ////Settings content
+                                        
+                                    }
+                                    
+                                }
                             }
                             
                         }
