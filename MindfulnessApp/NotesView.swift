@@ -23,7 +23,12 @@ struct NotesView: View {
                     HStack{
                         
                         NavigationLink {
-                            AddNoteView()
+//                            AddNoteView()
+                            TestView()
+                            .navigationTitle("TestIn")
+                            .toolbarBackground(Color(red: 216 / 255, green: 161 / 255, blue: 223 / 255), for: .navigationBar)
+                            .toolbarBackground(.automatic, for: .navigationBar)
+                            
                                 .onAppear {
                                         tabbarVisibility = .hidden
                                         opacity = 0.0

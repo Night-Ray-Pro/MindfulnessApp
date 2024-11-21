@@ -58,7 +58,7 @@ struct AddNoteView: View {
                         .background(.ultraThinMaterial)
                         .foregroundStyle(.white)
                 }
-                .frame(height: 550)
+//                .frame(height: 550)
                 .clipShape(.rect(cornerRadius: 20))
                 .padding()
                 
@@ -66,6 +66,18 @@ struct AddNoteView: View {
             }
             .ignoresSafeArea()
             
+        }
+        .navigationTitle("test")
+
+        .toolbar{
+            Button{
+                //
+            } label: {
+                Image(systemName: "trash")
+                    .resizable()
+                    .foregroundStyle(.white)
+                    .frame(width: 20, height: 20)
+            }
         }
         
     }
