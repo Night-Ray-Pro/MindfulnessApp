@@ -129,6 +129,7 @@ struct AddNoteView: View {
                                 RoundedRectangle(cornerRadius: 20)
                                     .foregroundStyle(.ultraThinMaterial)
                             })
+                            .padding(.horizontal)
                             
 //                            .onChange(of: content) {
 //                                sp.scrollTo("TextEditor", anchor: .bottom)
