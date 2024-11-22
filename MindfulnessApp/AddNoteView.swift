@@ -36,6 +36,7 @@ struct AddNoteView: View {
                                 Text(Date.now.formatted(date: .long, time: .omitted))
                                     .foregroundStyle(.white)
                                     .padding(.horizontal)
+                                    .font(.system(size: 15, weight: .bold, design: .rounded))
 //                                    .background(.red)
                                 
                                 TextField("Title...", text: $title, axis:.vertical)
@@ -56,9 +57,12 @@ struct AddNoteView: View {
                                     sheetIsShowing.toggle()
                                 } label: {
                                     Text(location.isEmpty ? "Tap to add location": location)
-                                        .foregroundStyle(.white)
+                                        .foregroundStyle(location.isEmpty ? .black.opacity(0.2) : .white)
+                                        .font(.system(size: 15, weight: .bold, design: .rounded))
                                
                                 }
+                                
+                                
                                 
                             }
                             
@@ -74,10 +78,25 @@ struct AddNoteView: View {
                                         .clipShape(.rect(cornerRadius: 11))
                                         
                                 }else{
-                                    ContentUnavailableView("No picture", systemImage: "photo.badge.plus", description: Text("Tap to import photo"))
-                                        .frame(width: 150, height: 150)
-                                        .background(.ultraThinMaterial)
-                                        .clipShape(.rect(cornerRadius: 10))
+                                    VStack{
+                                        Image(systemName: "photo.badge.plus")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 50, height: 50)
+                                            .foregroundStyle(.gray)
+                                            
+                                        Text("Add a photo")
+                                            .foregroundStyle(.gray)
+//                                            .font(.headline)
+                                    }
+                                    .frame(width: 150, height: 150)
+                                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                                    .background(.ultraThinMaterial)
+                                    .clipShape(.rect(cornerRadius: 10))
+//                                    ContentUnavailableView("",systemImage: "photo.badge.plus")
+//                                    ContentUnavailableView("No picture", systemImage: "photo.badge.plus", description: Text("Tap to import photo"))
+//                                        .resizable()
+                                        
                                 }
                             }
                             .buttonStyle(.plain)
@@ -97,7 +116,8 @@ struct AddNoteView: View {
                         TextEditorView(string: $content)
                             .focused($isFocusedContent)
                             .scrollDisabled(true)
-//                            .font(.title3)
+                        
+                            .font(.title3)
 //                        TextEditor(text: $content)
                             .foregroundStyle(.white)
                             .id("TextEditor")
@@ -163,19 +183,22 @@ struct TextEditorView: View {
 //                .frame(minHeight:400)
                 .frame(height: max(400,textEditorHeight))
                 .border(.clear)
+//                .font(.system(size: 16, weight: .regular, design: .rounded))
 //                .background(.red)
             
             if string.isEmpty {
                 
-                Text("Content")
+                Text("Content...")
                     .font(.title3)
-                    .foregroundColor(.gray)
+                    .foregroundColor(.black.opacity(0.5))
                     .disabled(true)
                     .opacity(0.6)
-                    .padding([.top, .leading], 4)
+                    .padding(.top, 8.5)
+                    .padding(.leading, 5)
             }
             
         }
+//        .font(.system(size: 16, weight: .regular, design: .rounded))
 //        .frame(minHeight:400)
 //        .background(.blue)
         .onPreferenceChange(ViewHeightKey.self) { textEditorHeight = $0 }
