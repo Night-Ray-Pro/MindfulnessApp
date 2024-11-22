@@ -86,6 +86,7 @@ struct SettingsView: View {
                     }
                     .scrollIndicators(.hidden)
                 }
+                    .padding(.bottom)
             }
             .toolbarBackground(Color("Settings"), for: .tabBar)
             .toolbarBackground(.visible, for: .tabBar)

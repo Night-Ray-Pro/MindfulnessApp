@@ -23,9 +23,10 @@ struct NotesView: View {
                     HStack{
                         
                         NavigationLink {
-//                            AddNoteView()
-                            TestView()
-                            .navigationTitle("TestIn")
+                            AddNoteView()
+//                            TestView()
+//                                .navigationTitle("test")
+//                                .toolbarColorScheme(.dark, for: .navigationBar)
                             .toolbarBackground(Color(red: 216 / 255, green: 161 / 255, blue: 223 / 255), for: .navigationBar)
                             .toolbarBackground(.automatic, for: .navigationBar)
                             
