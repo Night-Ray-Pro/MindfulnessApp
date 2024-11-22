@@ -13,6 +13,7 @@ import PhotosUI
 struct AddNoteView: View {
     
     @State private var title = String()
+    @State private var location = String()
     @State private var content = String()
     @State private var photo : PhotosPickerItem?
     @State private var image : Image?
@@ -54,7 +55,7 @@ struct AddNoteView: View {
                                 Button{
                                     sheetIsShowing.toggle()
                                 } label: {
-                                    Text("Tap to add location")
+                                    Text(location.isEmpty ? "Tap to add location": location)
                                         .foregroundStyle(.white)
                                
                                 }
@@ -121,7 +122,7 @@ struct AddNoteView: View {
             }
         }
         .sheet(isPresented: $sheetIsShowing){
-            Text("Map View")
+            MapView(locationName: $location)
         }
         .onAppear{
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
