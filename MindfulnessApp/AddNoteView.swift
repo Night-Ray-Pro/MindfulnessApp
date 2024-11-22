@@ -17,6 +17,7 @@ struct AddNoteView: View {
     @State private var photo : PhotosPickerItem?
     @State private var image : Image?
     @FocusState private var isFocused: Bool
+    @FocusState private var isFocusedContent: Bool
     @State private var sheetIsShowing: Bool = false
     
     var body: some View {
@@ -43,6 +44,13 @@ struct AddNoteView: View {
                                     .padding(10)
                                     .background(.red.opacity(0.0))
                                     .font(.system(size: 28, weight: .bold, design: .rounded))
+                                    .onChange(of: title, {
+                                        guard let newValueLastChar = title.last else { return }
+                                        if newValueLastChar == "\n" {
+                                            title.removeLast()
+                                            isFocusedContent = true
+                                        }
+                                    })
                                 Button{
                                     sheetIsShowing.toggle()
                                 } label: {
@@ -85,8 +93,11 @@ struct AddNoteView: View {
                             
                         }
                         .padding()
-                        
-                        TextEditor(text: $content)
+                        TextEditorView(string: $content)
+                            .focused($isFocusedContent)
+                            .scrollDisabled(true)
+//                            .font(.title3)
+//                        TextEditor(text: $content)
                             .foregroundStyle(.white)
                             .id("TextEditor")
 //                            .focused($isFocused)
@@ -98,9 +109,9 @@ struct AddNoteView: View {
                                     .foregroundStyle(.ultraThinMaterial)
                             })
                             
-                            .onChange(of: content) {
-                                sp.scrollTo("TextEditor", anchor: .bottom)
-                            }
+//                            .onChange(of: content) {
+//                                sp.scrollTo("TextEditor", anchor: .bottom)
+//                            }
                     }
                     .scrollDismissesKeyboard(.interactively)
                 }
@@ -130,6 +141,52 @@ struct AddNoteView: View {
     }
 }
 
+struct TextEditorView: View {
+    
+    @Binding var string: String
+    @State var textEditorHeight : CGFloat = 20
+    
+    var body: some View {
+        
+        ZStack(alignment: .topLeading) {
+            
+            Text(string)
+                .foregroundColor(.clear)
+                .padding(10)
+                .background(GeometryReader {
+                    Color.clear.preference(key: ViewHeightKey.self,
+                                           value: $0.frame(in: .local).size.height)
+                })
+            
+            TextEditor(text: $string)
+//                .frame(minHeight:400)
+                .frame(height: max(400,textEditorHeight))
+                .border(.clear)
+//                .background(.red)
+            
+            if string.isEmpty {
+                
+                Text("Content")
+                    .font(.title3)
+                    .foregroundColor(.gray)
+                    .disabled(true)
+                    .opacity(0.6)
+                    .padding([.top, .leading], 4)
+            }
+            
+        }
+//        .frame(minHeight:400)
+//        .background(.blue)
+        .onPreferenceChange(ViewHeightKey.self) { textEditorHeight = $0 }
+    }
+}
+
+struct ViewHeightKey: PreferenceKey {
+    static var defaultValue: CGFloat { 0 }
+    static func reduce(value: inout Value, nextValue: () -> Value) {
+        value = value + nextValue()
+    }
+}
 
 #Preview {
     AddNoteView()
