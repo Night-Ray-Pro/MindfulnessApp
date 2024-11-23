@@ -7,10 +7,17 @@
 
 import SwiftUI
 
+//enum SortOrder{
+//    case day, month, year
+//}
+
 struct NotesView: View {
+    let buttonOverlayColor = Color(red: 177 / 255, green: 147 / 255, blue: 233 / 255)
     @State private var tabbarVisibility = Visibility.visible
     @State private var opacity = 1.0
     @State private var isScrolling = false
+    @State private var sortOrder = 0
+    let sortButtons = ["Day", "Monthh", "Year"]
     var body: some View {
         NavigationStack{
             ZStack{
@@ -89,12 +96,36 @@ struct NotesView: View {
                         
                         Spacer()
                         ScrollView{
-                            
-                            RoundedRectangle(cornerRadius: 20)
-                                .frame(width: 352, height: 50)
-                                .foregroundStyle(.ultraThinMaterial)
-                                .id(0)
-                                .preferredColorScheme(.light)
+                            ZStack{
+                                RoundedRectangle(cornerRadius: 35)
+                                    .foregroundStyle(.ultraThinMaterial)
+                                    .id(0)
+                                    .preferredColorScheme(.light)
+                                HStack{
+                                    ForEach(0..<3){ num in
+                                        Button{
+                                            sortOrder = num
+                                        }label: {
+                                            Text(sortButtons[num])
+                                                .frame(width:100, height:45)
+                                                .overlay {
+                                                    RoundedRectangle(cornerRadius: 33)
+                                                        .stroke(buttonOverlayColor, lineWidth: 2)
+                                                    
+                                                }
+                                        }
+                                        num == 2 ? nil:Spacer()
+                                    }
+                                    
+                                    
+                                }
+                                .padding(.horizontal,2)
+                                .foregroundStyle(.white)
+                                .font(.system(size: 20, weight: .bold, design: .rounded))
+//                                .background(.red)
+                            }
+                            .frame(width: 352, height: 50)
+//                            .background(.red)
                             
                             ForEach(1..<10){ num in
                                 RoundedRectangle(cornerRadius: 20)
