@@ -10,6 +10,7 @@ import SwiftUI
 struct MeditationView: View {
     @State private var tabbarVisibility = Visibility.visible
     @State private var opacity = 1.0
+    @State private var isBreathing = false
     @State private var playbackDuration: Int = 5
     @State private var selectedTheme: Int = 0
     let duration: [Int] = [5, 10, 15, 20]
@@ -171,20 +172,24 @@ struct MeditationView: View {
                                     Button{
                                         withAnimation{
                                             selectedTheme = num
+                                            startPulsating()
                                         }
                                     } label: {
                                         VStack(alignment: .center){
-                                            if num == 0{
+                                             
                                                 Image("\(themes[num])FlowiVector")
                                                     .resizable()
-                                                    .frame(width: 45, height: 45)
+                                                    .frame(width: num == 0 ? 45: 52, height: num == 0 ? 45:52)
                                                     .scaledToFit()
-                                            }else{
-                                                Image("\(themes[num])FlowiVector")
-                                                    .resizable()
-                                                    .frame(width: 52, height: 52)
-                                                    .scaledToFit()
-                                            }
+                                                    .scaleEffect(selectedTheme == num && isBreathing ? 1.1 : 1.0)
+                                                    .animation(
+                                                        selectedTheme == num && isBreathing
+                                                            ? Animation.easeInOut(duration: 1).repeatForever(autoreverses: true)
+                                                            : .default,
+                                                        value: isBreathing
+                                                    )
+//                                                    .animation(.easeInOut.repeatForever())
+                                            
                                             
                                             Text("\(themes[num].capitalizedSentence)")
                                                 .foregroundStyle(Color("MeditationFontColor"))
@@ -252,9 +257,18 @@ struct MeditationView: View {
             .toolbarBackground(.visible, for: .tabBar)
             .toolbarColorScheme(.dark, for: .tabBar)
         }
+        .onAppear{
+            isBreathing.toggle()
+        }
         .toolbar(tabbarVisibility, for: .tabBar)
         .animation(.easeInOut(duration:0.2), value: tabbarVisibility)
         .accentColor(.white)
+    }
+    private func startPulsating() {
+        isBreathing = false // Stop any existing pulsation
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            isBreathing = true // Restart the animation for the new button
+        }
     }
 }
 

@@ -226,7 +226,7 @@ struct SleepCalculatorView: View {
                     }
                     .frame(width: 352, height: 293)
                     .padding(.top, 22.0)
-                    .padding(.bottom, 35.0)
+//                    .padding(.bottom, 35.0)
                     
                    
                         Button{
@@ -246,7 +246,7 @@ struct SleepCalculatorView: View {
                             }
                             .frame(width: 195, height: 58)
                             .padding(.top, 22.0)
-                            .padding(.bottom, 35.0)
+                            .padding(.bottom, 30.0)
                         }
                         .transition(.scale)
                     
