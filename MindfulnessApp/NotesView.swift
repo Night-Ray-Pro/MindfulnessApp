@@ -104,13 +104,15 @@ struct NotesView: View {
                                 HStack{
                                     ForEach(0..<3){ num in
                                         Button{
-                                            sortOrder = num
+                                            withAnimation{
+                                                sortOrder = num
+                                            }
                                         }label: {
                                             Text(sortButtons[num])
                                                 .frame(width:100, height:45)
                                                 .overlay {
                                                     RoundedRectangle(cornerRadius: 33)
-                                                        .stroke(buttonOverlayColor, lineWidth: 2)
+                                                        .stroke(buttonOverlayColor, lineWidth: sortOrder == num ? 2:0)
                                                     
                                                 }
                                         }
@@ -128,12 +130,9 @@ struct NotesView: View {
 //                            .background(.red)
                             
                             ForEach(1..<10){ num in
-                                RoundedRectangle(cornerRadius: 20)
-                                    .frame(width: 352, height: 293)
-                                    .foregroundStyle(.ultraThinMaterial)
-                                    .padding(.bottom, 30)
+                                DisplayEntryView()
                                     .id(num)
-                                    .preferredColorScheme(.light)
+                                    
                                 
                             }
                         }

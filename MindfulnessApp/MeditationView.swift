@@ -258,8 +258,10 @@ struct MeditationView: View {
             .toolbarColorScheme(.dark, for: .tabBar)
         }
         .onAppear{
+            isBreathing = false
             isBreathing.toggle()
         }
+       
         .toolbar(tabbarVisibility, for: .tabBar)
         .animation(.easeInOut(duration:0.2), value: tabbarVisibility)
         .accentColor(.white)

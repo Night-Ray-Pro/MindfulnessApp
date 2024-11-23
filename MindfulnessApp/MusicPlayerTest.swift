@@ -44,9 +44,11 @@ struct MusicPlayerTest: View {
 //                .padding(.horizontal)
                 
                 HStack{
-                    Button(action: {
-                        togglePlayPause()
-                    }) {
+                    Button{
+                        withAnimation{
+                            togglePlayPause()
+                        }
+                    }label: {
                         ZStack{
                             Circle()
                                 .fill(.black.opacity(0))
