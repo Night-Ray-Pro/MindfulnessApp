@@ -10,6 +10,12 @@ import SwiftUI
 struct MeditationView: View {
     @State private var tabbarVisibility = Visibility.visible
     @State private var opacity = 1.0
+    @State private var playbackDuration: Int = 5
+    @State private var selectedTheme: Int = 0
+    let duration: [Int] = [5, 10, 15, 20]
+    let themes = ["relax", "focus"]
+    let emotes = ["angry", "worried", "sad", "sleepy", "mind"]
+    @State private var selectedEmotion: Int = 4
     var body: some View {
         NavigationStack{
             ZStack{
@@ -46,20 +52,164 @@ struct MeditationView: View {
                 VStack{
                     
                     Spacer()
+                    ZStack{
+                        RoundedRectangle(cornerRadius: 22)
+                            .frame(width: 330, height: 106)
+                            .foregroundStyle(.ultraThickMaterial)
+                            .foregroundStyle(.ultraThinMaterial)
+                            .padding(7)
+                            
+                            
+                        VStack(alignment: .leading){
+                            Text("How are you feeling?")
+                                .foregroundStyle(Color("MeditationFontColor"))
+                                .font(.system(size: 16, weight: .bold, design: .rounded))
+                                .padding(.horizontal, 10)
+                                
+                            
+                            HStack{
+                                ForEach(0..<5){ num in
+                                    Spacer()
+                                    Button{
+                                        withAnimation{
+                                            selectedEmotion = num
+                                        }
+                                    } label: {
+                                        VStack(alignment: .center){
+                                            Image("\(emotes[num])Vector")
+                                                .resizable()
+                                                .frame(width:44, height: 44)
+                                                .scaledToFit()
+                                                .overlay {
+                                                    RoundedRectangle(cornerRadius: 10)
+                                                        .stroke(Color("MeditationFontColor"), lineWidth: selectedEmotion == num ? 1 : 0)
+                                                }
+                                            
+                                            Text(emotes[num].capitalizedSentence)
+                                                .foregroundStyle(Color("MeditationFontColor"))
+                                                .font(.system(size: selectedEmotion == num ? 12 : 10, weight: .bold, design: .rounded))
+                                        }
+                                        
+                                    }
+                                    
+                                }
+                                Spacer()
+                            }
+                            .frame(width:300)
+                            
+                        }
+//                        .padding(.vertical)
+                        
+                    }
+                    .opacity(opacity)
+                    .animation(.easeInOut(duration:opacity == 1.0 ? 0.5:0.01).delay(0.3), value: opacity)
+//                    .background(.red)
+                    .buttonStyle(.plain)
                     
-                    RoundedRectangle(cornerRadius: 22)
-                        .frame(width: 330, height: 106)
-                        .foregroundStyle(.ultraThinMaterial)
-                        .padding(7)
-                        .opacity(opacity)
-                        .animation(.easeInOut(duration:opacity == 1.0 ? 0.5:0.01).delay(0.3), value: opacity)
-                    
-                    RoundedRectangle(cornerRadius: 22)
-                        .frame(width: 330, height: 221)
-                        .foregroundStyle(.ultraThinMaterial)
-                        .padding(7)
-                        .opacity(opacity)
-                        .animation(.easeInOut(duration:opacity == 1.0 ? 0.5:0.01).delay(0.3), value: opacity)
+                    ZStack{
+                        RoundedRectangle(cornerRadius: 22)
+                            .frame(width: 330, height: 241)
+                            .foregroundStyle(.ultraThickMaterial)
+                            .padding(7)
+                            
+                        VStack(alignment: .leading){
+                            Text("Duration")
+                                .foregroundStyle(Color("MeditationFontColor"))
+                                .font(.system(size: 16, weight: .bold, design: .rounded))
+                                .padding(.horizontal, 10)
+                                .padding(.top, 10)
+                            
+                        
+                            
+                            HStack{
+                                ForEach(duration, id: \.self){ num in
+                                    Spacer()
+                                    Button{
+                                        withAnimation{
+                                            playbackDuration = num
+                                        }
+                                    } label: {
+                                        VStack(alignment: .center){
+                                            Text("\(num)")
+                                                .foregroundStyle(Color("MeditationFontColor"))
+                                                .font(.system(size: playbackDuration == num ? 17 : 15, weight: .bold, design: .rounded))
+                                                
+                                            
+                                            Text("min")
+                                                .foregroundStyle(Color("MeditationFontColor"))
+                                                .font(.system(size: playbackDuration == num ? 12 : 10, weight: .bold, design: .rounded))
+                                        }
+                                        .frame(width: 60, height: 50)
+                                        .overlay {
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .stroke(Color("MeditationFontColor"), lineWidth: playbackDuration == num ? 1 : 0)
+                                        }
+                                        
+                                    }
+                                    
+                                }
+                                Spacer()
+                            }
+                            .frame(width:300)
+                            
+                            
+                            Rectangle()
+                                .frame(width: 269, height: 1, alignment: .center)
+                                .foregroundStyle(Color("MeditationFontColor"))
+                                .frame(width: 300, height: 1, alignment: .center)
+                                .padding(.vertical, 5)
+                            
+                            
+                            Text("Theme")
+                                .foregroundStyle(Color("MeditationFontColor"))
+                                .font(.system(size: 16, weight: .bold, design: .rounded))
+                                .padding(.horizontal, 10)
+                            
+                            HStack{
+                                ForEach(0..<2){ num in
+                                    Spacer()
+                                    Button{
+                                        withAnimation{
+                                            selectedTheme = num
+                                        }
+                                    } label: {
+                                        VStack(alignment: .center){
+                                            if num == 0{
+                                                Image("\(themes[num])FlowiVector")
+                                                    .resizable()
+                                                    .frame(width: 45, height: 45)
+                                                    .scaledToFit()
+                                            }else{
+                                                Image("\(themes[num])FlowiVector")
+                                                    .resizable()
+                                                    .frame(width: 52, height: 52)
+                                                    .scaledToFit()
+                                            }
+                                            
+                                            Text("\(themes[num].capitalizedSentence)")
+                                                .foregroundStyle(Color("MeditationFontColor"))
+                                                .font(.system(size: selectedTheme == num ? 17 : 16, weight: .bold, design: .rounded))
+                                        }
+                                        .frame(height: 100)
+//                                        .background(.red)
+                                        
+                                        
+                                    }
+                                    
+                                }
+                                Spacer()
+                            }
+                            .frame(width:300)
+                            
+                        }
+                        .padding(.vertical)
+                    }
+                    .opacity(opacity)
+                    .animation(.easeInOut(duration:opacity == 1.0 ? 0.5:0.01).delay(0.3), value: opacity)
+                    .padding(.vertical,-20)
+//                    .background(.red)
+                    .buttonStyle(.plain)
+//                    .background(content: .red)
                     
                     NavigationLink {
                         MusicPlayerView()
@@ -76,22 +226,23 @@ struct MeditationView: View {
                         ZStack{
                             Group{
                                 RoundedRectangle(cornerRadius: 22)
-                                    .foregroundStyle(.ultraThinMaterial)
+                                    .foregroundStyle(.ultraThickMaterial)
                                     
                                 Text("START")
-                                    .font(.title)
+                                    .font(.system(size: 24, weight: .bold, design: .rounded))
                                     .fontWeight(.bold)
                                     .foregroundStyle(Color("MeditationFontColor"))
                                 
                             }
                             .frame(width: 195, height: 58)
-                            .padding(.bottom, 35.0)
+                            .padding(.bottom, 30.0)
                             .padding(.top, 7)
                             .opacity(opacity)
                             .animation(.easeInOut(duration:opacity == 1.0 ? 0.5:0.01).delay(0.3), value: opacity)
                             
                         }
                     }
+//                    .background(.red)
             
                 }
                 .preferredColorScheme(.light)
@@ -104,6 +255,17 @@ struct MeditationView: View {
         .toolbar(tabbarVisibility, for: .tabBar)
         .animation(.easeInOut(duration:0.2), value: tabbarVisibility)
         .accentColor(.white)
+    }
+}
+
+extension String {
+    var capitalizedSentence: String {
+        // 1
+        let firstLetter = self.prefix(1).capitalized
+        // 2
+        let remainingLetters = self.dropFirst().lowercased()
+        // 3
+        return firstLetter + remainingLetters
     }
 }
 

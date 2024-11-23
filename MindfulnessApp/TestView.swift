@@ -10,54 +10,84 @@ import SwiftUI
 struct TestView: View {
     @State private var number = 1
     @State private var testBool = true
+    let testString = "hello"
     
     var body: some View {
-        ScrollView{
+        ZStack{
+        Rectangle()
+            .foregroundStyle(Color("MeditationBackground"))
+            .ignoresSafeArea()
+        
+        //SandCircles
+            VStack{
+                Spacer()
+                
+                Image(.meditationVector2)
+                    .resizable()
+                    .scaledToFit()
+                    .ignoresSafeArea()
+            }
+            
+            VStack{
+                Spacer()
+                RoundedRectangle(cornerRadius: 22)
+                    .foregroundStyle(.ultraThinMaterial)
+                    .frame(width:300, height: 300)
+            }
+            
+           
+                
+        
+        }
+//        ScrollView{
     
-                ZStack{
-                    VStack{
-                        Rectangle()
-                            .fill(Color.red)
-                            .frame(width: 200, height: 200)
-                            .clipShape(.rect(cornerRadius: 10))
-                            .rotationEffect(.degrees(!testBool ? 0:Double(Int.random(in: -10...10))))
-                    }
-                    VStack{
-                        Rectangle()
-                            .fill(Color.green)
-                            .frame(width: 200, height: 200)
-                            .clipShape(.rect(cornerRadius: 10))
-                            .rotationEffect(.degrees(!testBool ? 0:Double(Int.random(in: -10...10))))
-    //                        .padding(.top,200)
-                    }
-                    .offset(y:testBool ? 0:210)
-                    VStack{
-                        Rectangle()
-                            .fill(Color.blue)
-                            .frame(width: 200, height: 200)
-                            .clipShape(.rect(cornerRadius: 10))
-                            .rotationEffect(.degrees(!testBool ? 0:Double(Int.random(in: -10...10))))
-                    }
-                    .offset(y: testBool ? 0:420)
-                    VStack{
-                        Rectangle()
-                            .fill(Color.blue)
-                            .frame(width: 200, height: 200)
-                            .clipShape(.rect(cornerRadius: 10))
-                            .rotationEffect(.degrees(!testBool ? 0:Double(Int.random(in: -10...10))))
-                    }
-                    .offset(y: testBool ? 0:630)
-                }
-                .frame(maxWidth: .infinity)
-                .onTapGesture {
-                    number += 1
-                    withAnimation{
-                        testBool.toggle()
-                    }
-                }
+//                ZStack{
+//                    
+//                    VStack{
+//                        Rectangle()
+//                            .fill(Color.red)
+//                            .frame(width: 200, height: 200)
+//                            .clipShape(.rect(cornerRadius: 10))
+//                            .rotationEffect(.degrees(!testBool ? 0:Double(Int.random(in: -10...10))))
+//                    }
+//                    VStack{
+//                        Rectangle()
+//                            .fill(Color.green)
+//                            .frame(width: 200, height: 200)
+//                            .clipShape(.rect(cornerRadius: 10))
+//                            .rotationEffect(.degrees(!testBool ? 0:Double(Int.random(in: -10...10))))
+//    //                        .padding(.top,200)
+//                    }
+//                    .offset(y:testBool ? 0:210)
+//                    VStack{
+//                        Rectangle()
+//                            .fill(Color.blue)
+//                            .frame(width: 200, height: 200)
+//                            .clipShape(.rect(cornerRadius: 10))
+//                            .rotationEffect(.degrees(!testBool ? 0:Double(Int.random(in: -10...10))))
+//                    }
+//                    .offset(y: testBool ? 0:420)
+//                    VStack{
+//                        Rectangle()
+//                            .fill(Color.blue)
+//                            .frame(width: 200, height: 200)
+//                            .clipShape(.rect(cornerRadius: 10))
+//                            .rotationEffect(.degrees(!testBool ? 0:Double(Int.random(in: -10...10))))
+//                    }
+//                    .offset(y: testBool ? 0:630)
+//                    
+//                    Text(testString.capitalizedSentence)
+//                }
+//                .frame(maxWidth: .infinity)
+//                .onTapGesture {
+//                    number += 1
+//                    withAnimation{
+//                        testBool.toggle()
+//                    }
+//                }
             
 //            Text("\(number)")
-        }
+//        }
     }
 }
 
