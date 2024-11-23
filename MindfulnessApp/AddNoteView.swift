@@ -16,7 +16,7 @@ struct AddNoteView: View {
     @State private var location = String()
     @State private var content = String()
     @State private var photo : PhotosPickerItem?
-    @State private var image : Image?
+    @State private var imageData : Data?
     @FocusState private var isFocused: Bool
     @FocusState private var isFocusedContent: Bool
     @State private var sheetIsShowing: Bool = false
@@ -67,8 +67,9 @@ struct AddNoteView: View {
                             }
                             
                             PhotosPicker(selection: $photo, matching: .images){
-                                if let image{
-                                    image
+                                if let imageData,
+                                   let uiimage = UIImage(data: imageData){
+                                    Image(uiImage: uiimage)
                                         .resizable()
                                         .scaledToFill()
                                         .frame(width: 150, height: 150)
@@ -102,9 +103,9 @@ struct AddNoteView: View {
                             .buttonStyle(.plain)
                             .onChange(of: photo) {
                                 Task{
-                                    if let loadedImage = try? await photo?.loadTransferable(type: Image.self){
+                                    if let loadedImage = try? await photo?.loadTransferable(type: Data.self){
                                         withAnimation{
-                                            self.image = loadedImage
+                                            self.imageData = loadedImage
                                         }
                                     }
                                 }
@@ -137,10 +138,7 @@ struct AddNoteView: View {
                     }
                     .scrollDismissesKeyboard(.interactively)
                 }
-                .onTapGesture {
-//                    isFocused = true
                 
-            }
         }
         .sheet(isPresented: $sheetIsShowing){
             MapView(locationName: $location)
@@ -181,11 +179,8 @@ struct TextEditorView: View {
                 })
             
             TextEditor(text: $string)
-//                .frame(minHeight:400)
                 .frame(height: max(400,textEditorHeight))
                 .border(.clear)
-//                .font(.system(size: 16, weight: .regular, design: .rounded))
-//                .background(.red)
             
             if string.isEmpty {
                 
@@ -199,9 +194,6 @@ struct TextEditorView: View {
             }
             
         }
-//        .font(.system(size: 16, weight: .regular, design: .rounded))
-//        .frame(minHeight:400)
-//        .background(.blue)
         .onPreferenceChange(ViewHeightKey.self) { textEditorHeight = $0 }
     }
 }
