@@ -52,166 +52,183 @@ struct SleepCalculatorView: View {
                         RoundedRectangle(cornerRadius: 20)
                             .foregroundStyle(.ultraThinMaterial)
                             .preferredColorScheme(.light)
-                        
-                        VStack{
-                            
-                            DatePicker(selection: $wakeUp, displayedComponents: [.hourAndMinute]) {
-                                Text("Wake up time")
-                                    .foregroundStyle(.white)
-                                    .font(.system(size: 20, weight: .regular, design: .rounded))
-                            }
-                            .disabled(isCalculated)
-                            .datePickerStyle(GraphicalDatePickerStyle())
-                            .accentColor(.white.opacity(0.5))
-                            .environment(\.colorScheme, .dark)
-                            
-                            Rectangle()
-                                .foregroundStyle(.white.opacity(0.8))
-                                .frame(width: 298, height: 1)
-                            //                                .padding()
-                            
-                            Text("DESIRED AMMOUNT OF SLEEP")
-                                .foregroundStyle(.white.opacity(0.6))
-                                .font(.system(size: 16, weight: .light, design: .rounded))
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            HStack{
-                                Button{
-                                    sleepAmount -= 1
-                                } label: {
-                                    Image(systemName: "minus")
-                                        .resizable()
+                        if !isCalculated{
+                            VStack{
+                                
+                                DatePicker(selection: $wakeUp, displayedComponents: [.hourAndMinute]) {
+                                    Text("Wake up time")
                                         .foregroundStyle(.white)
-                                        .scaledToFit()
-                                        .frame(width: 16, height: 16)
-                                        .padding(.horizontal,10)
-                                        .padding(.vertical, 6)
-                                        .overlay {
-                                            RoundedRectangle(cornerRadius: 10)
-                                                .stroke(.white, lineWidth: 1)
-                                        }
-                                    
+                                        .font(.system(size: 20, weight: .regular, design: .rounded))
                                 }
                                 .disabled(isCalculated)
+                                .datePickerStyle(GraphicalDatePickerStyle())
+                                .accentColor(.white.opacity(0.5))
+                                .environment(\.colorScheme, .dark)
                                 
-                                Spacer()
-                                Text("\(Int(sleepAmount)) hours")
-                                    .font(.system(size: 20, weight: .regular, design: .rounded))
-                                    .foregroundStyle(.white)
-                                Spacer()
-                                
-                                Button{
-                                    sleepAmount += 1
-                                } label: {
-                                    Image(systemName: "plus")
-                                        .resizable()
-                                        .foregroundStyle(.white)
-                                        .scaledToFit()
-                                        .frame(width: 16, height: 16)
-                                        .padding(.horizontal,10)
-                                        .padding(.vertical, 6)
-                                        .overlay {
-                                            RoundedRectangle(cornerRadius: 10)
-                                                .stroke(.white, lineWidth: 1)
-                                        }
-                                    
-                                }
-                                .disabled(isCalculated)
-                            }
-                            .padding()
-                            
-                            Rectangle()
-                                .foregroundStyle(.white.opacity(0.8))
-                                .frame(width: 298, height: 1)
-                            //                                .padding()
-                            Text("CUPS OF COFFEE")
-                                .foregroundStyle(.white.opacity(0.6))
-                                .font(.system(size: 16, weight: .light, design: .rounded))
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            HStack{
-                                Button{
-                                    coffeAmount -= 1
-                                } label: {
-                                    Image(systemName: "minus")
-                                        .resizable()
-                                        .foregroundStyle(.white)
-                                        .scaledToFit()
-                                        .frame(width: 16, height: 16)
-                                        .padding(.horizontal,10)
-                                        .padding(.vertical, 6)
-                                        .overlay {
-                                            RoundedRectangle(cornerRadius: 10)
-                                                .stroke(.white, lineWidth: 1)
-                                        }
-                                    
-                                }
-                                .disabled(isCalculated)
-                                
-                                Spacer()
-                                Group{
-                                    Text("\(coffeAmount)")
-                                    
-                                    
-                                    Image(systemName: "cup.and.saucer")
-                                    
-                                }
-                                .font(.system(size: 20, weight: .regular, design: .rounded))
-                                .foregroundStyle(.white)
-                                Spacer()
-                                
-                                Button{
-                                    coffeAmount += 1
-                                } label: {
-                                    Image(systemName: "plus")
-                                        .resizable()
-                                        .foregroundStyle(.white)
-                                        .scaledToFit()
-                                        .frame(width: 16, height: 16)
-                                        .padding(.horizontal,10)
-                                        .padding(.vertical, 6)
-                                        .overlay {
-                                            RoundedRectangle(cornerRadius: 10)
-                                                .stroke(.white, lineWidth: 1)
-                                        }
-                                    
-                                }
-                                .disabled(isCalculated)
-                            }
-                            .padding()
-                            
-                            if isCalculated{
                                 Rectangle()
                                     .foregroundStyle(.white.opacity(0.8))
                                     .frame(width: 298, height: 1)
+                                //                                .padding()
+                                
+                                Text("DESIRED AMMOUNT OF SLEEP")
+                                    .foregroundStyle(.white.opacity(0.6))
+                                    .font(.system(size: 16, weight: .light, design: .rounded))
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                HStack{
+                                    Button{
+                                        sleepAmount -= 1
+                                    } label: {
+                                        Image(systemName: "minus")
+                                            .resizable()
+                                            .foregroundStyle(.white)
+                                            .scaledToFit()
+                                            .frame(width: 16, height: 16)
+                                            .padding(.horizontal,10)
+                                            .padding(.vertical, 6)
+                                            .overlay {
+                                                RoundedRectangle(cornerRadius: 10)
+                                                    .stroke(.white, lineWidth: 1)
+                                            }
+                                        
+                                    }
+                                    .disabled(isCalculated)
+                                    
+                                    Spacer()
+                                    Text("\(Int(sleepAmount)) hours")
+                                        .font(.system(size: 20, weight: .regular, design: .rounded))
+                                        .foregroundStyle(.white)
+                                    Spacer()
+                                    
+                                    Button{
+                                        sleepAmount += 1
+                                    } label: {
+                                        Image(systemName: "plus")
+                                            .resizable()
+                                            .foregroundStyle(.white)
+                                            .scaledToFit()
+                                            .frame(width: 16, height: 16)
+                                            .padding(.horizontal,10)
+                                            .padding(.vertical, 6)
+                                            .overlay {
+                                                RoundedRectangle(cornerRadius: 10)
+                                                    .stroke(.white, lineWidth: 1)
+                                            }
+                                        
+                                    }
+                                    .disabled(isCalculated)
+                                }
+                                .padding()
+                                
+                                Rectangle()
+                                    .foregroundStyle(.white.opacity(0.8))
+                                    .frame(width: 298, height: 1)
+                                //                                .padding()
+                                Text("CUPS OF COFFEE")
+                                    .foregroundStyle(.white.opacity(0.6))
+                                    .font(.system(size: 16, weight: .light, design: .rounded))
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                HStack{
+                                    Button{
+                                        coffeAmount -= 1
+                                    } label: {
+                                        Image(systemName: "minus")
+                                            .resizable()
+                                            .foregroundStyle(.white)
+                                            .scaledToFit()
+                                            .frame(width: 16, height: 16)
+                                            .padding(.horizontal,10)
+                                            .padding(.vertical, 6)
+                                            .overlay {
+                                                RoundedRectangle(cornerRadius: 10)
+                                                    .stroke(.white, lineWidth: 1)
+                                            }
+                                        
+                                    }
+                                    .disabled(isCalculated)
+                                    
+                                    Spacer()
+                                    Group{
+                                        Text("\(coffeAmount)")
+                                        
+                                        
+                                        Image(systemName: "cup.and.saucer")
+                                        
+                                    }
+                                    .font(.system(size: 20, weight: .regular, design: .rounded))
+                                    .foregroundStyle(.white)
+                                    Spacer()
+                                    
+                                    Button{
+                                        coffeAmount += 1
+                                    } label: {
+                                        Image(systemName: "plus")
+                                            .resizable()
+                                            .foregroundStyle(.white)
+                                            .scaledToFit()
+                                            .frame(width: 16, height: 16)
+                                            .padding(.horizontal,10)
+                                            .padding(.vertical, 6)
+                                            .overlay {
+                                                RoundedRectangle(cornerRadius: 10)
+                                                    .stroke(.white, lineWidth: 1)
+                                            }
+                                        
+                                    }
+                                    .disabled(isCalculated)
+                                }
+                                .padding()
+                                
+                                //                            if isCalculated{
+                                //                                Rectangle()
+                                //                                    .foregroundStyle(.white.opacity(0.8))
+                                //                                    .frame(width: 298, height: 1)
+                                //                                Text(alertMessage)
+                                //                                    .foregroundStyle(.white)
+                                //                                    .font(.system(size: 20, weight: .regular, design: .rounded))
+                                //                                    .padding(.top, 10)
+                                //                                Button{
+                                //                                    withAnimation{
+                                //                                        isCalculated.toggle()
+                                //                                    }
+                                //                                } label: {
+                                //                                    Text("Recalculate")
+                                //                                        .foregroundStyle(.white)
+                                //                                        .font(.system(size: 24, weight: .bold, design: .rounded))
+                                //                                        .padding(.vertical, 13)
+                                //                                        .padding(.horizontal, 30)
+                                //                                        .overlay {
+                                //                                            RoundedRectangle(cornerRadius: 20)
+                                //                                                .stroke(.white, lineWidth: 1)
+                                //                                        }
+                                //                                }
+                                //                                .padding(.bottom, 5)
+                                //                            }
+                                
+                            }
+                            .padding()
+                        }else{
+                            VStack{
+                                Text("Your ideal sleep time is:")
+                                    .foregroundStyle(.white)
+                                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                                Rectangle()
+                                    .foregroundStyle(.white.opacity(0.8))
+                                    .frame(width: 298, height: 1)
+                                Spacer()
                                 Text(alertMessage)
                                     .foregroundStyle(.white)
-                                    .font(.system(size: 20, weight: .regular, design: .rounded))
-                                    .padding(.top, 10)
-                                Button{
-                                    withAnimation{
-                                        isCalculated.toggle()
-                                    }
-                                } label: {
-                                    Text("Recalculate")
-                                        .foregroundStyle(.white)
-                                        .font(.system(size: 24, weight: .bold, design: .rounded))
-                                        .padding(.vertical, 13)
-                                        .padding(.horizontal, 30)
-                                        .overlay {
-                                            RoundedRectangle(cornerRadius: 20)
-                                                .stroke(.white, lineWidth: 1)
-                                        }
-                                }
-                                .padding(.bottom, 5)
+                                    .font(.system(size: 60, weight: .bold, design: .rounded))
+                                Spacer()
                             }
-                            
+                            .padding()
+                            .padding(.top,10)
                         }
-                        .padding()
                     }
-                    .frame(width: 352, height: isCalculated ? 373 : 293)
+                    .frame(width: 352, height: 293)
                     .padding(.top, 22.0)
-                    .padding(.bottom, isCalculated ? 35.0 : 0.0)
+                    .padding(.bottom, 35.0)
                     
-                    if !isCalculated{
+                   
                         Button{
                             calculateBedTime()
                             withAnimation{
@@ -223,7 +240,7 @@ struct SleepCalculatorView: View {
                                     .foregroundStyle(.ultraThinMaterial)
                                 
                                     .preferredColorScheme(.light)
-                                Text("Calculate")
+                                Text(isCalculated ? "Recalculate" : "Calculate")
                                     .foregroundStyle(.white)
                                     .font(.system(size: 24, weight: .bold, design: .rounded))
                             }
@@ -232,7 +249,7 @@ struct SleepCalculatorView: View {
                             .padding(.bottom, 35.0)
                         }
                         .transition(.scale)
-                    }
+                    
                 }
                 
                 

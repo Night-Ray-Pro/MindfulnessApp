@@ -30,9 +30,14 @@ struct MapView: View {
                         let newPosition = MapCameraPosition.region(context.region)
                         position = newPosition
                     }
-                Circle()
-                    .foregroundStyle(.red)
-                    .frame(width: 20, height: 20)
+                Image(.mapPointVector)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 50, height: 100)
+                    .offset(y: -40)
+//                Circle()
+//                    .foregroundStyle(.red)
+//                    .frame(width: 20, height: 20)
                 //            Button{
                 //                let location2 = CLLocation(latitude: position.region?.center.latitude ?? 0.0, longitude: position.region?.center.longitude ?? 0.0)
                 //
