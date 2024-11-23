@@ -94,6 +94,7 @@ struct NotesView: View {
                                 .frame(width: 352, height: 50)
                                 .foregroundStyle(.ultraThinMaterial)
                                 .id(0)
+                                .preferredColorScheme(.light)
                             
                             ForEach(1..<10){ num in
                                 RoundedRectangle(cornerRadius: 20)
@@ -101,6 +102,7 @@ struct NotesView: View {
                                     .foregroundStyle(.ultraThinMaterial)
                                     .padding(.bottom, 30)
                                     .id(num)
+                                    .preferredColorScheme(.light)
                                 
                             }
                         }

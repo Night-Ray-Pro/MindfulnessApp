@@ -94,6 +94,7 @@ struct MeditationView: View {
                     }
             
                 }
+                .preferredColorScheme(.light)
                 
             }
             .toolbarBackground(Color("Meditation"), for: .tabBar)
