@@ -17,7 +17,7 @@ struct NotesView: View {
     @State private var opacity = 1.0
     @State private var isScrolling = false
     @State private var sortOrder = 0
-    let sortButtons = ["Day", "Monthh", "Year"]
+    let sortButtons = ["Day", "Month", "Year"]
     var body: some View {
         NavigationStack{
             ZStack{
