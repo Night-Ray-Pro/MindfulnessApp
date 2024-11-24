@@ -14,9 +14,22 @@
 		C47E0AD32CE67543003F84CC /* MindfulnessApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MindfulnessApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		C49F0DC82CF2C0DF00A987C3 /* Exceptions for "MindfulnessApp" folder in "MindfulnessApp" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = C47E0AD22CE67543003F84CC /* MindfulnessApp */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		C47E0AD52CE67543003F84CC /* MindfulnessApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				C49F0DC82CF2C0DF00A987C3 /* Exceptions for "MindfulnessApp" folder in "MindfulnessApp" target */,
+			);
 			path = MindfulnessApp;
 			sourceTree = "<group>";
 		};
@@ -264,6 +277,7 @@
 				DEVELOPMENT_TEAM = 5H75TGB6G5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MindfulnessApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -294,6 +308,7 @@
 				DEVELOPMENT_TEAM = 5H75TGB6G5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MindfulnessApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

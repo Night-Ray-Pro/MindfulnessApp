@@ -62,6 +62,16 @@ struct LightView: View{
                     .scaledToFit()
                     
             }
+            
+            VStack{
+                Text("Morning!")
+                    .foregroundStyle(.white)
+                    .font(.system(size: 48, weight: .semibold, design: .rounded))
+                Text("Oskar")
+                    .foregroundStyle(.white)
+                    .font(.system(size: 32, weight: .semibold, design: .rounded))
+                Spacer()
+            }
 
         }
         .bottomSheet(bottomSheetPosition: self.$position, switchablePositions: [
@@ -90,6 +100,7 @@ struct DarkView: View{
         
         var body: some View {
             ZStack{
+                //Gradient
                 VStack{
                     Rectangle()
                         .frame(height:310)
@@ -97,7 +108,7 @@ struct DarkView: View{
                         .ignoresSafeArea()
                     Spacer()
                 }
-                
+                //Graphics
                 VStack{
                     Spacer()
                     
@@ -106,6 +117,16 @@ struct DarkView: View{
                         .scaledToFit()
                         
                         
+                }
+                //Text
+                VStack{
+                    Text("Evening!")
+                        .foregroundStyle(.white)
+                        .font(.system(size: 48, weight: .semibold, design: .rounded))
+                    Text("Oskar")
+                        .foregroundStyle(.white)
+                        .font(.system(size: 32, weight: .semibold, design: .rounded))
+                    Spacer()
                 }
 
             }

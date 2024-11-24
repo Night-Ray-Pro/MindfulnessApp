@@ -77,7 +77,7 @@ struct NotesView: View {
 
                     
                     Text("I’m creating the life of my dreams.")
-                        .font(.system(size: 12, weight: .regular, design: .default))
+                            .font(.system(size: 12, weight: .medium, design: .rounded))
                         .foregroundStyle(.white)
                         .padding(.top, -5)
                         .padding(.bottom, 15)

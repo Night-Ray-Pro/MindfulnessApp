@@ -58,7 +58,8 @@ struct SleepCalculatorView: View {
                                 DatePicker(selection: $wakeUp, displayedComponents: [.hourAndMinute]) {
                                     Text("Wake up time")
                                         .foregroundStyle(.white)
-                                        .font(.system(size: 20, weight: .regular, design: .rounded))
+                                        .font(.system(size: 22, weight: .bold, design: .rounded))
+
                                 }
                                 .disabled(isCalculated)
                                 .datePickerStyle(GraphicalDatePickerStyle())
@@ -70,9 +71,9 @@ struct SleepCalculatorView: View {
                                     .frame(width: 298, height: 1)
                                 //                                .padding()
                                 
-                                Text("DESIRED AMMOUNT OF SLEEP")
+                                Text("Desired ammount of sleep")
                                     .foregroundStyle(.white.opacity(0.6))
-                                    .font(.system(size: 16, weight: .light, design: .rounded))
+                                    .font(.system(size: 16, weight: .bold, design: .rounded))
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                 HStack{
                                     Button{
@@ -95,7 +96,7 @@ struct SleepCalculatorView: View {
                                     
                                     Spacer()
                                     Text("\(Int(sleepAmount)) hours")
-                                        .font(.system(size: 20, weight: .regular, design: .rounded))
+                                        .font(.system(size: 22, weight: .bold, design: .rounded))
                                         .foregroundStyle(.white)
                                     Spacer()
                                     
@@ -123,9 +124,9 @@ struct SleepCalculatorView: View {
                                     .foregroundStyle(.white.opacity(0.8))
                                     .frame(width: 298, height: 1)
                                 //                                .padding()
-                                Text("CUPS OF COFFEE")
+                                Text("Cups of coffee")
                                     .foregroundStyle(.white.opacity(0.6))
-                                    .font(.system(size: 16, weight: .light, design: .rounded))
+                                    .font(.system(size: 16, weight: .bold, design: .rounded))
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                 HStack{
                                     Button{
@@ -149,6 +150,7 @@ struct SleepCalculatorView: View {
                                     Spacer()
                                     Group{
                                         Text("\(coffeAmount)")
+                                            .font(.system(size: 22, weight: .bold, design: .rounded))
                                         
                                         
                                         Image(systemName: "cup.and.saucer")
@@ -215,9 +217,22 @@ struct SleepCalculatorView: View {
                                     .foregroundStyle(.white.opacity(0.8))
                                     .frame(width: 298, height: 1)
                                 Spacer()
-                                Text(alertMessage)
-                                    .foregroundStyle(.white)
-                                    .font(.system(size: 60, weight: .bold, design: .rounded))
+                                ZStack{
+                                    Image(.clockVector)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 260, height: 180)
+                                        .offset(y:-5)
+                                        
+                                    
+//
+                                    Text(alertMessage)
+                                        .foregroundStyle(.white)
+                                        .font(Font.custom("alarmClock", size: 60))
+//                                        .font(.system(size: 60, weight: .bold, design: .rounded))
+                                        
+                                }
+                                
                                 Spacer()
                             }
                             .padding()
