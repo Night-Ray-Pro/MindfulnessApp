@@ -136,7 +136,7 @@ struct SleepCalculatorView: View {
                                             .resizable()
                                             .foregroundStyle(.white)
                                             .scaledToFit()
-                                            .frame(width: 16, height: 16)
+                                            .frame(width: 20, height: 20)
                                             .padding(.horizontal,10)
                                             .padding(.vertical, 6)
                                             .overlay {
