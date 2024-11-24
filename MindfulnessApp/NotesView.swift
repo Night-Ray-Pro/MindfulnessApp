@@ -101,24 +101,29 @@ struct NotesView: View {
                                     .foregroundStyle(.ultraThinMaterial)
                                     .id(0)
                                     .preferredColorScheme(.light)
-                                HStack{
-                                    ForEach(0..<3){ num in
-                                        Button{
-                                            withAnimation{
-                                                sortOrder = num
-                                            }
-                                        }label: {
-                                            Text(sortButtons[num])
-                                                .frame(width:100, height:45)
-                                                .overlay {
-                                                    RoundedRectangle(cornerRadius: 33)
-                                                        .stroke(buttonOverlayColor, lineWidth: sortOrder == num ? 2:0)
-                                                    
+                                ZStack{
+                                    HStack{
+                                        ForEach(0..<3){ num in
+                                            Button{
+                                                withAnimation(.snappy(duration: 0.4, extraBounce:0.01)){
+                                                    sortOrder = num
                                                 }
+                                            }label: {
+                                                Text(sortButtons[num])
+                                                    .frame(width:100, height:45)
+                                                    
+                                            }
+                                            num == 2 ? nil:Spacer()
                                         }
-                                        num == 2 ? nil:Spacer()
-                                    }
                                     
+                                    }
+                                    HStack{
+                                        sortOrder == 0 ? nil:Spacer()
+                                        RoundedRectangle(cornerRadius: 33)
+                                            .stroke(buttonOverlayColor, lineWidth: 2)
+                                            .frame(width:100, height:45)
+                                        sortOrder == 2 ? nil:Spacer()
+                                    }
                                     
                                 }
                                 .padding(.horizontal,2)
