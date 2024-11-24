@@ -133,7 +133,11 @@ struct DarkView: View{
             .bottomSheet(bottomSheetPosition: self.$position, switchablePositions: [
                 .relative(0.51),
                 .relativeTop(0.975)
-            ], title: "Title")  {
+            ], headerContent: {
+                Text("Quote of the Day")
+                    .font(.system(size: 30, weight: .bold, design: .rounded))
+                    .padding([.horizontal, .bottom])
+            })  {
                 ScrollView {
                     ForEach(1..<10) { num in
                         Text("This is \(num) line")

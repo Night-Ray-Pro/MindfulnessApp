@@ -152,8 +152,16 @@ struct NotesView: View {
                 
                 VStack{
                     Spacer()
-                    Image(.journalVector2)
-                        .opacity(isScrolling ? 0:1)
+                    
+                    HStack{
+                        Image(.leftFlowiJournal)
+                            .offset(x:-35)
+                        Spacer()
+                        Image(.rightFlowiJournal)
+                            .offset(x:12)
+                    }
+                    .offset(y:50)
+                    .opacity(isScrolling ? 0:1)
                         
                 }
                 .opacity(opacity)
