@@ -16,7 +16,10 @@ struct NotesView: View {
     @State private var tabbarVisibility = Visibility.visible
     @State private var opacity = 1.0
     @State private var isScrolling = false
+    @State private var isSearching = false
+    @State private var searchString = String()
     @State private var sortOrder = 0
+    @FocusState private var isFocused: Bool
     let sortButtons = ["Day", "Month", "Year"]
     var body: some View {
         NavigationStack{
@@ -57,13 +60,33 @@ struct NotesView: View {
                         Spacer()
                         
                         Button {
-                            //
+                            withAnimation{
+                                if isSearching == true{
+                                    isFocused = false
+                                }else {
+                                    isFocused = true
+                                }
+                                searchString = String()
+                                isSearching.toggle()
+                                
+                            }
+                            
+                            print(isFocused)
                         } label: {
-                            Image(systemName: "magnifyingglass")
-                                .resizable()
-                                .frame(width: 30, height: 30)
-                                .foregroundStyle(.white)
-                               
+                            
+                            if isSearching == true{
+                                Image(systemName: "line.3.horizontal.decrease.circle")
+                                    .resizable()
+                                    .frame(width: 30, height: 30)
+                                    .foregroundStyle(.white)
+                                
+                            }else{
+                                Image(systemName: "magnifyingglass")
+                                    .resizable()
+                                    .frame(width: 30, height: 30)
+                                    .foregroundStyle(.white)
+                            }
+//                               
                         }
                         
                     }
@@ -101,35 +124,46 @@ struct NotesView: View {
                                     .foregroundStyle(.ultraThinMaterial)
                                     .id(0)
                                     .preferredColorScheme(.light)
-                                ZStack{
-                                    HStack{
-                                        ForEach(0..<3){ num in
-                                            Button{
-                                                withAnimation(.snappy(duration: 0.4, extraBounce:0.01)){
-                                                    sortOrder = num
+                                
+                                if isSearching{
+                                    //filter buttons
+                                    TextField("Search", text: $searchString)
+                                        .focused($isFocused)
+                                        .padding(.horizontal,10)
+                                        .foregroundStyle(.white)
+                                        .font(.system(size: 16, weight: .medium, design: .rounded))
+                                }else{
+                                    ZStack{
+                                        HStack{
+                                            ForEach(0..<3){ num in
+                                                Button{
+                                                    withAnimation(.snappy(duration: 0.4, extraBounce:0.01)){
+                                                        sortOrder = num
+                                                    }
+                                                }label: {
+                                                    Text(sortButtons[num])
+                                                        .frame(width:100, height:45)
+                                                        
                                                 }
-                                            }label: {
-                                                Text(sortButtons[num])
-                                                    .frame(width:100, height:45)
-                                                    
+                                                num == 2 ? nil:Spacer()
                                             }
-                                            num == 2 ? nil:Spacer()
+                                        
                                         }
-                                    
+                                        HStack{
+                                            sortOrder == 0 ? nil:Spacer()
+                                            RoundedRectangle(cornerRadius: 33)
+                                                .stroke(buttonOverlayColor, lineWidth: 2)
+                                                .frame(width:100, height:45)
+                                            sortOrder == 2 ? nil:Spacer()
+                                        }
+                                        
                                     }
-                                    HStack{
-                                        sortOrder == 0 ? nil:Spacer()
-                                        RoundedRectangle(cornerRadius: 33)
-                                            .stroke(buttonOverlayColor, lineWidth: 2)
-                                            .frame(width:100, height:45)
-                                        sortOrder == 2 ? nil:Spacer()
-                                    }
-                                    
+                                    .padding(.horizontal,2)
+                                    .foregroundStyle(.white)
+                                    .font(.system(size: 20, weight: .bold, design: .rounded))
+    //                                .background(.red)
                                 }
-                                .padding(.horizontal,2)
-                                .foregroundStyle(.white)
-                                .font(.system(size: 20, weight: .bold, design: .rounded))
-//                                .background(.red)
+                               
                             }
                             .frame(width: 352, height: 50)
 //                            .background(.red)
@@ -141,6 +175,7 @@ struct NotesView: View {
                                 
                             }
                         }
+                        .scrollDismissesKeyboard(.immediately)
                         .opacity(opacity)
                         .animation(.easeInOut(duration:opacity == 1.0 ? 0.5:0.01).delay(0.3), value: opacity)
                         .scrollIndicators(.hidden)
@@ -176,6 +211,7 @@ struct NotesView: View {
             .toolbarBackground(Color("Notes"), for: .tabBar)
             .toolbarBackground(.visible, for: .tabBar)
             .toolbarColorScheme(.dark, for: .tabBar)
+            
         }
         .toolbar(tabbarVisibility, for: .tabBar)
         .animation(.easeInOut(duration:0.2), value: tabbarVisibility)
