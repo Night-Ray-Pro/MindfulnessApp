@@ -33,6 +33,7 @@ struct SleepCalculatorView: View {
                     Rectangle()
                         .calculatorViewGradient()
                         .ignoresSafeArea()
+                    
                 }
                 //SVG image
                 VStack{
@@ -52,6 +53,7 @@ struct SleepCalculatorView: View {
                         RoundedRectangle(cornerRadius: 20)
                             .foregroundStyle(.ultraThinMaterial)
                             .preferredColorScheme(.light)
+                            .frame(width: 352, height: 293)
                         if !isCalculated{
                             VStack{
                                 
