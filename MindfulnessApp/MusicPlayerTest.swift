@@ -7,6 +7,8 @@
 
 import SwiftUI
 import AVFoundation
+import MediaPlayer
+import UIKit
 
 //var player: AVAudioPlayer!
 //var isPlaying: Bool = false
@@ -30,28 +32,52 @@ struct MusicPlayerTest: View {
             VStack{
                 //playlist graphic setup
                 
-//                HStack{
-//                    Text(formatTime(time: currentTime))
-//                        .font(.caption)
-//                        .foregroundColor(.black.opacity(0.5))
-//                    
-//                    Spacer()
-//                    
-//                    Text(formatTime(time: totalTime))
-//                        .font(.caption)
-//                        .foregroundColor(.black.opacity(0.5))
-//                }
-//                .padding(.horizontal)
-                
+                Slider(value: $currentTime, in: 0 ... totalTime, step: 1)
+                    .accentColor(.black.opacity(0.5))
+                    .padding(.horizontal)
+
                 HStack{
-                    Button{
-                        withAnimation{
-                            togglePlayPause()
+                    Text(formatTime(time: currentTime))
+                        .font(.caption)
+                        .foregroundColor(.black.opacity(0.5))
+                    
+                    Spacer()
+                    
+                    Text(formatTime(time: totalTime))
+                        .font(.caption)
+                        .foregroundColor(.black.opacity(0.5))
+                }
+                .padding(.horizontal)
+                
+                //button graphic setup
+                HStack{
+                    
+                    Button(action: {
+                        skipBackward()
+                    }) {
+                        Image(systemName: "10.arrow.trianglehead.counterclockwise")
+                            .font(.title2)
+                            .foregroundColor(.black)
+                            .padding()
+                    }
+                    
+                    Button(action: {
+                        withAnimation(.bouncy) {
+                            skipToPreviousSong()
                         }
-                    }label: {
-                        ZStack{
+                    }) {
+                        Image(systemName: "backward.fill")
+                            .font(.title2)
+                            .foregroundColor(.black)
+                            .padding()
+                    }
+                    
+                    Button(action: {
+                        togglePlayPause()
+                    }) {
+                        ZStack {
                             Circle()
-                                .fill(.black.opacity(0))
+                                .fill(.black.opacity(0.2))
                                 .frame(width: 85, height: 85)
                             
                             Image(systemName: isPlaying ? "pause.circle.fill" : "play.circle.fill")
@@ -60,8 +86,28 @@ struct MusicPlayerTest: View {
                                 .padding()
                         }
                     }
+                    
+                    Button(action: {
+                        skipToNextSong()
+                    }) {
+                        Image(systemName: "forward.fill")
+                            .font(.title2)
+                            .foregroundColor(.black)
+                            .padding()
+                    }
+                    
+                    Button(action: {
+                        skipForward()
+                    }) {
+                        Image(systemName: "10.arrow.trianglehead.clockwise")
+                            .font(.title2)
+                            .foregroundColor(.black)
+                            .padding()
+                    }
                 }
+                .padding(.top, 30)
             }
+            .padding()
         }
         .onAppear {
             setupAudioPlayer()
@@ -69,9 +115,9 @@ struct MusicPlayerTest: View {
         .onDisappear {
             stopAudio()
         }
-//        .onChange(of: audioPlayer?.isPlaying) { _ in
-//            startTimer()
-//        }
+        .onChange(of: audioPlayer?.isPlaying) {
+            startTimer()
+        }
     }
     
     func formatTime(time: Double) -> String {
