@@ -27,14 +27,23 @@ struct MusicPlayerTest: View {
     let songURL = Bundle.main.url(forResource: "MeditationMusic", withExtension: "mp3")!
     
     var body: some View {
-        ZStack{
+        Group{
             //background graphic setup
             VStack{
                 //playlist graphic setup
                 
-                Slider(value: $currentTime, in: 0 ... totalTime, step: 1)
-                    .accentColor(.black.opacity(0.5))
-                    .padding(.horizontal)
+//                Slider(value: $currentTime, in: 0 ... totalTime, step: 1)
+//                    .accentColor(.black.opacity(0.5))
+//                    .padding(.horizontal)
+                Slider(value:Binding(get:{
+                    self.currentTime
+                }, set:{ newValue in
+                    self.currentTime = newValue
+                    //
+                    //Add Function
+                    updateAudioPlayerTime(newTime: newValue)
+                    //
+                }), in: 0 ... totalTime, step: 1)
 
                 HStack{
                     Text(formatTime(time: currentTime))
@@ -194,6 +203,14 @@ struct MusicPlayerTest: View {
     func stopAudio() {
         audioPlayer?.stop()
         audioPlayer = nil
+    }
+    
+    func updateAudioPlayerTime(newTime: Double){
+        guard let player = audioPlayer else {return}
+        togglePlayPause()
+        player.currentTime = newTime
+        currentTime = newTime
+        togglePlayPause()
     }
 }
 
