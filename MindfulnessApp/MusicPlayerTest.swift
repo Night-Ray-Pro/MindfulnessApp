@@ -28,128 +28,181 @@ struct MusicPlayerTest: View {
     let songURL = Bundle.main.url(forResource: "MeditationMusic", withExtension: "mp3")!
     
     var body: some View {
-        Group{
-            //background graphic setup
-            VStack{
-                //playlist graphic setup
-                
-//                Slider(value: $currentTime, in: 0 ... totalTime, step: 1)
-//
-                Slider(value:Binding(get:{
-                    self.currentTime
-                }, set:{ newValue in
-                    self.currentTime = newValue
-                    //
-                    //Add Function
-                    updateAudioPlayerTime(newTime: newValue)
-                    //
-                }), in: 0 ... totalTime, step: 1)
-                .accentColor(.gray)
-                
-                .padding(.horizontal)
 
-                HStack{
-                    Text(formatTime(time: currentTime))
-                        .font(.caption)
-                        .foregroundColor(.black.opacity(0.5))
-                    
-                    Spacer()
-                    
-                    Text(formatTime(time: totalTime))
-                        .font(.caption)
-                        .foregroundColor(.black.opacity(0.5))
-                }
-                .padding(.horizontal)
+            ZStack{
                 
-                //button graphic setup
-                HStack{
-                    
-                    Button(action: {
-                        skipBackward()
-                    }) {
-                        Image(systemName: "10.arrow.trianglehead.counterclockwise")
-                            .font(.title2)
-                            .foregroundColor(.black)
-                            .padding()
-                    }
-                    
-                    Button(action: {
-                        withAnimation(.bouncy) {
-                            skipToPreviousSong()
-                        }
-                    }) {
-                        Image(systemName: "backward.fill")
-                            .font(.title2)
-                            .foregroundColor(.black)
-                            .padding()
-                    }
-                    
-                    Button(action: {
-                        togglePlayPause()
-                    }) {
-                        ZStack {
-                            Circle()
-                                .fill(.black.opacity(0.2))
-                                .frame(width: 85, height: 85)
-                            
-                            Image(systemName: isPlaying ? "pause.circle.fill" : "play.circle.fill")
-                                .font(.system(size: 60))
-                                .foregroundColor(.black)
-                                .padding()
-                        }
-                    }
-                    
-                    Button(action: {
-                        skipToNextSong()
-                    }) {
-                        Image(systemName: "forward.fill")
-                            .font(.title2)
-                            .foregroundColor(.black)
-                            .padding()
-                    }
-                    
-                    Button(action: {
-                        skipForward()
-                    }) {
-                        Image(systemName: "10.arrow.trianglehead.clockwise")
-                            .font(.title2)
-                            .foregroundColor(.black)
-                            .padding()
-                    }
-                }
-                .padding(.top, 30)
+                RoundedRectangle(cornerRadius: 33)
+                    .foregroundStyle(.ultraThinMaterial)
                 
-                HStack{
-                    Image(systemName: "speaker.fill")
+                //background graphic setup
+                VStack{
+                    HStack{
+                        VStack(alignment: .leading){
+                            Text("Song title")
+                                .font(.system(size: 16, weight: .medium, design: .rounded))
+//                                .padding(.bottom,1)
+                            Text("Author")
+                                .font(.system(size: 13, weight: .medium, design: .rounded))
+                        }
+                        .padding(.horizontal, 15)
+                        
+                        .foregroundStyle(.white)
+                        Spacer()
+                    }
+                    //playlist graphic setup
+                    
+                    //                Slider(value: $currentTime, in: 0 ... totalTime, step: 1)
+                    //
                     Slider(value:Binding(get:{
-                        self.volume
+                        self.currentTime
                     }, set:{ newValue in
-                        self.volume = newValue
+                        self.currentTime = newValue
                         //
                         //Add Function
-                        updateAudioPlayerVolume(newVolume: newValue)
+                        updateAudioPlayerTime(newTime: newValue)
                         //
-                    }), in: 0 ... 1, step: 0.01)
-                    .accentColor(.gray)
-                    Image(systemName: "speaker.wave.3.fill")
+                    }), in: 0 ... totalTime, step: 1)
+                    .foregroundColor(.black)
+                    .onAppear{
+                        let thumbImage = UIImage(systemName: "circle.fill")
+
+                        UISlider.appearance().setThumbImage(thumbImage, for: .normal)
+                    }
+                    .accentColor(.white)
+                    .padding(.vertical,10)
+                    .padding(.horizontal,20)
+                    
+                    HStack{
+                        Text(formatTime(time: currentTime))
+                            .font(.system(size: 15, design: .rounded))
+                            .foregroundColor(.white)
+                        
+                        Spacer()
+                        
+                        Text(formatTime(time: totalTime))
+                            .font(.system(size: 15, design: .rounded))
+                            .foregroundColor(.white)
+                    }
+                    .padding(.horizontal,20)
+                    
+                    //button graphic setup
+                    HStack{
+                        
+                        Button(action: {
+                            skipBackward()
+                        }) {
+                            Image(systemName: "10.arrow.trianglehead.counterclockwise")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 25, height: 25)
+                                .foregroundColor(.white)
+                        }
+                        
+                        Button(action: {
+                            withAnimation(.bouncy) {
+                                skipToPreviousSong()
+                            }
+                        }) {
+                            Image(systemName: "backward.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 36, height: 29)
+                                .foregroundColor(.white)
+                                .padding(.leading, 30)
+                        }
+                        
+                        Button(action: {
+                            togglePlayPause()
+                        }) {
+                            
+                            Image(systemName: isPlaying ? "pause.fill" : "play.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 29, height: 38)
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 30)
+                            
+                            
+                        }
+                        
+                        Button(action: {
+                            skipToNextSong()
+                        }) {
+                            Image(systemName: "forward.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 36, height: 29)
+                                .foregroundColor(.white)
+                                .padding(.trailing, 30)
+                        }
+                        
+                        Button(action: {
+                            skipForward()
+                        }) {
+                            Image(systemName: "10.arrow.trianglehead.clockwise")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 25, height: 25)
+                                .foregroundColor(.white)
+                        }
+                    }
+                    .padding(.top, 20)
+                    
+                    HStack{
+                        Image(systemName: "speaker.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 14, height: 12)
+                            .foregroundStyle(.white)
+                        
+                        Slider(value:Binding(get:{
+                            self.volume
+                        }, set:{ newValue in
+                            self.volume = newValue
+                            //
+                            //Add Function
+                            updateAudioPlayerVolume(newVolume: newValue)
+                            //
+                        }), in: 0 ... 1, step: 0.01)
+                        .accentColor(.white)
+                        .onAppear{
+                            let thumbImage = UIImage(systemName: "circle.fill")
+
+                            UISlider.appearance().setThumbImage(thumbImage, for: .normal)
+                        }
+                        
+                        Image(systemName: "speaker.wave.3.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 14, height: 12)
+                            .foregroundStyle(.white)
+                    }
+                    .padding(.horizontal, 30)
+                    .padding(.top, 30)
+                    //                Button("Test Volume"){
+                    //                    guard let player = audioPlayer else {return}
+                    //                    player.volume = 0.1
+                    //                }
                 }
-                .padding()
-//                Button("Test Volume"){
-//                    guard let player = audioPlayer else {return}
-//                    player.volume = 0.1
-//                }
+                //            .background(.red)
+                //            .padding(.horizontal,30)
+                //            .background(.blue)
             }
-            .padding()
-        }
-        .onAppear {
-            setupAudioPlayer()
-        }
-        .onDisappear {
-            stopAudio()
-        }
-        .onChange(of: audioPlayer?.isPlaying) {
-            startTimer()
-        }
+            
+            .frame(width: 356, height: 299)
+            .padding(.bottom, 19)
+            .onAppear {
+                setupAudioPlayer()
+            }
+            .onDisappear {
+                stopAudio()
+            }
+            .onChange(of: audioPlayer?.isPlaying) {
+                startTimer()
+            }
+            
+            
+        
     }
     
     func formatTime(time: Double) -> String {
@@ -246,6 +299,7 @@ struct MusicPlayerTest: View {
        
     }
 }
+    
 
 #Preview {
     MusicPlayerTest()

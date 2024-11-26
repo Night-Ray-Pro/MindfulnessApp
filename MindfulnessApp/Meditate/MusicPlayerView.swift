@@ -18,15 +18,9 @@ struct MusicPlayerView: View {
             
             VStack{
                 Spacer()
-                ZStack{
-                    RoundedRectangle(cornerRadius: 33)
-                        .foregroundStyle(.ultraThinMaterial)
-                        .frame(width: 356, height: 299)
-                        .padding(.bottom, 19)
-                    Button("Cancel"){
-                        //
-                    }
-                }
+                
+                MusicPlayerTest()
+                
             }
             .ignoresSafeArea()
         }
