@@ -19,6 +19,7 @@ struct NotesView: View {
     @State private var isSearching = false
     @State private var searchString = String()
     @State private var sortOrder = 0
+    @State private var image: Image?
     @FocusState private var isFocused: Bool
     let sortButtons = ["Day", "Month", "Year"]
     var body: some View {
@@ -34,6 +35,7 @@ struct NotesView: View {
                         
                         NavigationLink {
                             AddNoteView()
+//                            TestView(choosenImage: $image)
 //                            TestView()
 //                                .navigationTitle("test")
 //                                .toolbarColorScheme(.dark, for: .navigationBar)

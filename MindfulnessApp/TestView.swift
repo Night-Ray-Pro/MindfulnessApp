@@ -16,28 +16,157 @@ struct Results : Codable{
 struct Hit : Codable{
     var id : Int
     var previewURL : String
-    var previewWidth : Int
-    var previewHeight : Int
-    var webformatURL : String
+    var webformatWidth : Int
+    var webformatHeight : Int
+    var largeImageURL : String
 }
 
 struct TestView: View {
+    @Binding var choosenImages : [Data]
+    @State private var isSelected = [Int]()
+    @State private var photosURL = [String]()
     @State private var number = 1
     @State private var testBool = true
     let testString = "hello"
     @State private var selectedButton: Int? = 1
     @State private var pulsate = false
     @State private var results: Results?
+    @State private var searchPrompt = String()
+    @Environment(\.dismiss) var dismiss
     var body: some View {
-        Text(results?.hits.first?.previewURL ?? "Hello World")
-            .task {
-                await loadData()
+        NavigationStack{
+            VStack{
+                TextField("\(Image(systemName: "magnifyingglass"))  Search online library...", text: $searchPrompt)
+                    .textFieldStyle(.plain)
+                    .onChange(of: searchPrompt, { oldValue, newValue in
+                        Task{
+                            await loadData()
+                        }
+                    })
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 7.5)
+                    .background(Color.gray.opacity(0.25).cornerRadius(10))
+                    .font(.system(size: 17, weight: .regular))
+                //                    .textFieldStyle(.roundedBorder)
+                    .padding(.bottom)
+                    .padding(.horizontal,18)
+                
             }
+            //            .background(.red)
+            ScrollView{
+                
+                if let photoData = results{
+                    VStack{
+                        ForEach(photoData.hits, id: \.self.id){ hit in
+                            
+                            
+                            AsyncImage(url: URL(string:hit.largeImageURL)) { image in
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                                    .overlay{
+                                        if isSelected.contains(hit.id){
+                                            Rectangle()
+                                                .stroke(Color.blue, lineWidth: 4)
+                                        }
+                                    }
+                                    .overlay(alignment: .bottomTrailing){
+                                        if isSelected.contains(hit.id){
+                                            
+                                            
+                                            Image(systemName: "checkmark.circle.fill")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(width: 30, height: 30)
+                                                .foregroundStyle(.blue)
+                                                .padding()
+                                        }
+                                        
+                                        
+                                        //
+                                    }
+                                    .onTapGesture {
+                                        if isSelected.contains(hit.id){
+                                            if let index = isSelected.firstIndex(of: hit.id){
+                                                isSelected.remove(at: index)
+                                                photosURL.remove(at: index)
+                                            }
+                                            
+                                        } else {
+                                            isSelected.append(hit.id)
+                                            photosURL.append(hit.largeImageURL)
+                                        }
+                                    }
+                                    .padding(.vertical,10)
+                                
+                            } placeholder: {
+                                ProgressView()
+                                
+                            }
+                        }
+                        
+                        
+                        
+                    }
+                    
+                } else{
+                    ContentUnavailableView("No photos found", systemImage: "camera.on.rectangle.fill")
+                }
             }
-
-            /// Starts the pulsating animation for the currently selected button.
+            .padding(.horizontal, 26)
+//            .padding()
+            .navigationTitle("PixelBay Library")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar{
+                ToolbarItem(placement: .confirmationAction){
+                    Button("Add"){
+                        choosenImages.removeAll()
+                        fetchImageData(from: photosURL)
+                        dismiss()
+                    }
+                    
+                    .disabled(isSelected.isEmpty)
+                }
+                ToolbarItem(placement: .cancellationAction){
+                    Button("Cancel"){
+                        dismiss()
+                    }
+                }
+            }
+            .scrollDismissesKeyboard(.interactively)
+        }
+        
+        
+    }
+    // Fetching image data
+    func fetchImageData(from photosURL: [String]){
+        for photo in photosURL{
+            Task{
+                do{
+                    let url = URL(string: photo)
+                    let (data, _) = try await URLSession.shared.data(from: url!)
+                    DispatchQueue.main.async {
+                        self.choosenImages.append(data)
+                    }
+                }catch {
+                    print("Error fetching image data: \(error)")
+                }
+            }
+        }
+//         Task {
+//             do {
+//                 let (data, _) = try await URLSession.shared.data(from: url)
+//                 DispatchQueue.main.async {
+//                     return data
+//                 }
+//             } catch {
+//                 print("Error fetching image data: \(error)")
+//             }
+//         }
+     }
+//             Starts the pulsating animation for the currently selected button.
              func loadData() async {
-                 guard let url = URL(string: "https://pixabay.com/api/?key=47290689-3f6c05edc5963c3c49947b2b2&q=yellow+flowers&image_type=photo&pretty=true") else { print("wrong url"); return}
+                 guard let url = URL(string: "https://pixabay.com/api/?key=47290689-3f6c05edc5963c3c49947b2b2&q=\(searchPrompt.replacingOccurrences(of: " ", with: "+"))&image_type=photo&pretty=true") else { print("wrong url"); return}
                  do{
                      let (data, _) = try await URLSession.shared.data(from: url)
                          print(data)
@@ -118,5 +247,11 @@ struct TestView: View {
 //}
 
 #Preview {
-    TestView()
+//    var image: Image?
+    let exampleData: [Data] = [
+                UIImage(systemName: "star")?.jpegData(compressionQuality: 1.0),
+                UIImage(systemName: "moon")?.jpegData(compressionQuality: 1.0),
+                UIImage(systemName: "sun.max")?.jpegData(compressionQuality: 1.0)
+            ].compactMap { $0 } // Remove any nil values
+    TestView(choosenImages: .constant(exampleData))
 }
