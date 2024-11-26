@@ -21,6 +21,7 @@ struct MusicPlayerTest: View {
     @State private var isPlaying: Bool = false
     @State private var audioPlayer: AVAudioPlayer?
     @State private var timer: Timer?
+    @State private var volume: Double = 0.5
     
     @AppStorage("currentSongIndex") var currentSongIndex: Int = 0
     
@@ -33,8 +34,7 @@ struct MusicPlayerTest: View {
                 //playlist graphic setup
                 
 //                Slider(value: $currentTime, in: 0 ... totalTime, step: 1)
-//                    .accentColor(.black.opacity(0.5))
-//                    .padding(.horizontal)
+//
                 Slider(value:Binding(get:{
                     self.currentTime
                 }, set:{ newValue in
@@ -44,6 +44,9 @@ struct MusicPlayerTest: View {
                     updateAudioPlayerTime(newTime: newValue)
                     //
                 }), in: 0 ... totalTime, step: 1)
+                .accentColor(.gray)
+                
+                .padding(.horizontal)
 
                 HStack{
                     Text(formatTime(time: currentTime))
@@ -115,6 +118,26 @@ struct MusicPlayerTest: View {
                     }
                 }
                 .padding(.top, 30)
+                
+                HStack{
+                    Image(systemName: "speaker.fill")
+                    Slider(value:Binding(get:{
+                        self.volume
+                    }, set:{ newValue in
+                        self.volume = newValue
+                        //
+                        //Add Function
+                        updateAudioPlayerVolume(newVolume: newValue)
+                        //
+                    }), in: 0 ... 1, step: 0.01)
+                    .accentColor(.gray)
+                    Image(systemName: "speaker.wave.3.fill")
+                }
+                .padding()
+//                Button("Test Volume"){
+//                    guard let player = audioPlayer else {return}
+//                    player.volume = 0.1
+//                }
             }
             .padding()
         }
@@ -168,16 +191,21 @@ struct MusicPlayerTest: View {
     
     func skipForward() {
         guard let player = audioPlayer else {return}
+        togglePlayPause()
         let newTime = min(player.currentTime + 10, totalTime)
         player.currentTime = newTime
         currentTime = newTime
+        togglePlayPause()
     }
     
     func skipBackward() {
+        
         guard let player = audioPlayer else {return}
+        togglePlayPause()
         let newTime = max(player.currentTime - 10, 0)
         player.currentTime = newTime
         currentTime = newTime
+        togglePlayPause()
     }
     
     func skipToNextSong() {
@@ -209,8 +237,13 @@ struct MusicPlayerTest: View {
         guard let player = audioPlayer else {return}
         togglePlayPause()
         player.currentTime = newTime
-        currentTime = newTime
         togglePlayPause()
+    }
+    
+    func updateAudioPlayerVolume(newVolume: Double){
+        guard let player = audioPlayer else {return}
+        player.volume = Float(newVolume)
+       
     }
 }
 
