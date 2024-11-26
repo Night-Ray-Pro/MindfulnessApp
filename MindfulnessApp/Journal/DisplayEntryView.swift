@@ -12,7 +12,7 @@ struct DisplayEntryView: View {
     let contentColor = Color(red: 139 / 255, green: 101 / 255, blue: 207 / 255)
     let date = Date.now
     let weekDay = Calendar.current.component(.weekday, from: Date.now) - 1
-    let weekDaysNames = ["Mon", "Tues", "Weds", "Thurs", "Fri", "Sat", "Sun"]
+    let weekDaysNames = ["Sun", "Mon", "Tues", "Weds", "Thurs", "Fri", "Sat"]
     let title = "Long Testing Title"
     let locationName = "TestLocation"
     let image = Image("testImage")
@@ -29,10 +29,10 @@ struct DisplayEntryView: View {
                         HStack{
                             Text(weekDaysNames[weekDay])
                                 .foregroundStyle(dateColor)
-                                .font(.system(size: 20, weight: .bold, design: .rounded))
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
                             Text(date.formatted(date: .abbreviated, time: .omitted))
                                 .foregroundStyle(.white)
-                                .font(.system(size: 20, weight: .medium, design: .rounded))
+                                .font(.system(size: 18, weight: .medium, design: .rounded))
                         }
 //                        .background(.red)
 //                        .padding(.bottom,3)

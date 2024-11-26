@@ -7,72 +7,47 @@
 
 import SwiftUI
 
+struct Results : Codable{
+    var total : Int
+    var totalHits : Int
+    var hits : [Hit]
+}
+
+struct Hit : Codable{
+    var id : Int
+    var previewURL : String
+    var previewWidth : Int
+    var previewHeight : Int
+    var webformatURL : String
+}
+
 struct TestView: View {
     @State private var number = 1
     @State private var testBool = true
     let testString = "hello"
     @State private var selectedButton: Int? = 1
     @State private var pulsate = false
-    
+    @State private var results: Results?
     var body: some View {
-
-
-        
-            
-
-            
-                HStack(spacing: 40) {
-                    // First Button
-                    Button(action: {
-                       
-                            selectedButton = 1
-                            startPulsating()
-                        
-                    }) {
-                        Text("Button 1")
-                            .padding()
-                            .background(Circle().fill(selectedButton == 1 ? Color.blue : Color.gray))
-                            .foregroundColor(.white)
-                            .scaleEffect(selectedButton == 1 && pulsate ? 1.2 : 1.0)
-                            .animation(
-                                selectedButton == 1 && pulsate
-                                    ? Animation.easeInOut(duration: 0.6).repeatForever(autoreverses: true)
-                                    : .default,
-                                value: pulsate
-                            )
-                    }
-
-                    // Second Button
-                    Button(action: {
-                        
-                            selectedButton = 2
-                            startPulsating()
-                        
-                    }) {
-                        Text("Button 2")
-                            .padding()
-                            .background(Circle().fill(selectedButton == 2 ? Color.green : Color.gray))
-                            .foregroundColor(.white)
-                            .scaleEffect(selectedButton == 2 && pulsate ? 1.2 : 1.0)
-                            .animation(
-                                selectedButton == 2 && pulsate
-                                    ? Animation.easeInOut(duration: 0.6).repeatForever(autoreverses: true)
-                                    : .default,
-                                value: pulsate
-                            )
-                    }
-                }
-                .onAppear{
-                    pulsate.toggle()}
-                .padding()
+        Text(results?.hits.first?.previewURL ?? "Hello World")
+            .task {
+                await loadData()
+            }
             }
 
             /// Starts the pulsating animation for the currently selected button.
-            private func startPulsating() {
-                pulsate = false // Stop any existing pulsation
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    pulsate = true // Restart the animation for the new button
-                }
+             func loadData() async {
+                 guard let url = URL(string: "https://pixabay.com/api/?key=47290689-3f6c05edc5963c3c49947b2b2&q=yellow+flowers&image_type=photo&pretty=true") else { print("wrong url"); return}
+                 do{
+                     let (data, _) = try await URLSession.shared.data(from: url)
+                         print(data)
+                     if let decodedResponse = try? JSONDecoder().decode(Results.self, from: data) {
+                         results = decodedResponse
+                     }
+                     
+                 }catch{
+                     print("error while getting data")
+                 }
             }
         }
 
