@@ -33,6 +33,7 @@ struct MusicPlayerTest: View {
                 
                 RoundedRectangle(cornerRadius: 33)
                     .foregroundStyle(.ultraThinMaterial)
+                    .preferredColorScheme(.light)
                 
                 //background graphic setup
                 VStack{
