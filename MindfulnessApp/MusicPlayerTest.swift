@@ -32,6 +32,7 @@ struct MusicPlayerTest: View {
     @State private var audioPlayer: AVAudioPlayer?
     @State private var timer: Timer?
     @State private var volume: Double = 1.0
+    @State private var wasPlaying: Bool = false
     
     @AppStorage("currentSongIndex") var currentSongIndex: Int = 0
     
@@ -62,18 +63,37 @@ struct MusicPlayerTest: View {
                     }
                     //playlist graphic setup
                     
-                    //                Slider(value: $currentTime, in: 0 ... totalTime, step: 1)
+                    Slider(value: $currentTime, in: 0 ... totalTime, step: 0.1){ edyting in
+                        if edyting{
+                            stopTimer()
+                            if isPlaying{
+                                wasPlaying = true
+                                togglePlayPause()
+                            }
+                        }else{
+                            updateAudioPlayerTime(newTime: currentTime)
+                            startTimer()
+                            if wasPlaying{
+                                togglePlayPause()
+                            }
+                            wasPlaying = false
+                            
+                        }
+                        print(edyting)
+                    }
                     //
-                    Slider(value:Binding(get:{
-                        self.currentTime
-                    }, set:{ newValue in
-                        self.currentTime = newValue
-                        //
-                        //Add Function
-                        updateAudioPlayerTime(newTime: newValue)
-                        //
-                    }), in: 0 ... totalTime, step: 0.1)
-                    .foregroundColor(.black)
+//                    Slider(value:Binding(get:{
+//                        self.currentTime
+//                    }, set:{ newValue in
+//                        self.currentTime = newValue
+//                        //
+//                        //Add Function
+//                        Task{
+//                            await updateAudioPlayerTime(newTime: newValue)
+//                        }
+//                        //
+//                    }), in: 0 ... totalTime, step: 1)
+//                    .foregroundColor(.black)
                     .onAppear{
                         let thumbImage = UIImage(systemName: "circle.fill")?
                             .withTintColor(.white, renderingMode: .alwaysOriginal)
@@ -212,12 +232,13 @@ struct MusicPlayerTest: View {
             .onAppear {
                 setupAudioPlayer()
                 togglePlayPause()
+//                startTimer()
             }
             .onDisappear {
                 stopAudio()
             }
             .onChange(of: audioPlayer?.isPlaying) {
-                startTimer()
+//                startTimer()
             }
             
             
@@ -231,6 +252,7 @@ struct MusicPlayerTest: View {
     }
     
     func setupAudioPlayer() {
+        startTimer()
         guard let songURL = Bundle.main.url(forResource: songsURL[currentSongIndex], withExtension: "mp3") else {
             print("Error: Song file not found")
             return
@@ -247,17 +269,26 @@ struct MusicPlayerTest: View {
     }
     
     func startTimer() {
+        print("Timer has started")
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             guard let player = audioPlayer else { return }
             currentTime = player.currentTime
         }
     }
     
+    func stopTimer() {
+        print("Timer has stopped")
+        timer?.invalidate()
+        timer = nil
+    }
+    
     func togglePlayPause() {
         guard let player = audioPlayer else {return}
         if isPlaying {
+//            stopTimer()
             player.pause()
         } else {
+//            startTimer()
             player.play()
         }
         isPlaying.toggle()
@@ -309,9 +340,9 @@ struct MusicPlayerTest: View {
     
     func updateAudioPlayerTime(newTime: Double){
         guard let player = audioPlayer else {return}
-        togglePlayPause()
+//        togglePlayPause()
         player.currentTime = newTime
-        togglePlayPause()
+//        togglePlayPause()
     }
     
     func updateAudioPlayerVolume(newVolume: Double){

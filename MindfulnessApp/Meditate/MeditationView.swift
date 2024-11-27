@@ -121,36 +121,44 @@ struct MeditationView: View {
                                 .padding(.top, 10)
                             
                         
-                            
-                            HStack{
-                                ForEach(duration, id: \.self){ num in
-                                    Spacer()
-                                    Button{
-                                        withAnimation{
-                                            playbackDuration = num
-                                        }
-                                    } label: {
-                                        VStack(alignment: .center){
-                                            Text("\(num)")
-                                                .foregroundStyle(Color("MeditationFontColor"))
-                                                .font(.system(size: playbackDuration == num ? 17 : 15, weight: .bold, design: .rounded))
+                            //Timing buttons
+                            ZStack{
+                                
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color("MeditationFontColor"), lineWidth: 1)
+                                    .frame(width: 60, height: 50)
+                                
+                                HStack{
+                                    ForEach(duration, id: \.self){ num in
+                                        Spacer()
+                                        Button{
+                                            withAnimation{
+                                                playbackDuration = num
+                                            }
+                                        } label: {
+                                            VStack(alignment: .center){
+                                                Text("\(num)")
+                                                    .foregroundStyle(Color("MeditationFontColor"))
+                                                    .font(.system(size: playbackDuration == num ? 17 : 15, weight: .bold, design: .rounded))
                                                 
+                                                
+                                                Text("min")
+                                                    .foregroundStyle(Color("MeditationFontColor"))
+                                                    .font(.system(size: playbackDuration == num ? 12 : 10, weight: .bold, design: .rounded))
+                                            }
+                                            .frame(width: 60, height: 50)
+                                            .overlay {
+                                                RoundedRectangle(cornerRadius: 10)
+                                                    .stroke(Color("MeditationFontColor"), lineWidth: playbackDuration == num ? 1 : 0)
+                                            }
                                             
-                                            Text("min")
-                                                .foregroundStyle(Color("MeditationFontColor"))
-                                                .font(.system(size: playbackDuration == num ? 12 : 10, weight: .bold, design: .rounded))
-                                        }
-                                        .frame(width: 60, height: 50)
-                                        .overlay {
-                                            RoundedRectangle(cornerRadius: 10)
-                                                .stroke(Color("MeditationFontColor"), lineWidth: playbackDuration == num ? 1 : 0)
                                         }
                                         
                                     }
-                                    
+                                    Spacer()
                                 }
-                                Spacer()
                             }
+                            .background(.red)
                             .frame(width:300)
                             
                             
@@ -166,6 +174,7 @@ struct MeditationView: View {
                                 .font(.system(size: 16, weight: .bold, design: .rounded))
                                 .padding(.horizontal, 10)
                             
+                            //Flowi buttons
                             HStack{
                                 ForEach(0..<2){ num in
                                     Spacer()
