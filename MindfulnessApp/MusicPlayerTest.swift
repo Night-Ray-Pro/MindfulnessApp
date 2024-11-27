@@ -10,8 +10,18 @@ import AVFoundation
 import MediaPlayer
 import UIKit
 
-//var player: AVAudioPlayer!
-//var isPlaying: Bool = false
+
+struct VolumeSliderView: UIViewRepresentable {
+    func makeUIView(context: Context) -> MPVolumeView {
+        let volumeView = MPVolumeView()
+        volumeView.showsVolumeSlider = true
+        return volumeView
+    }
+    
+    func updateUIView(_ uiView: MPVolumeView, context: Context) {
+        // No update needed
+    }
+}
 
 let songsURL = ["MeditationMusic"]
 
@@ -21,7 +31,7 @@ struct MusicPlayerTest: View {
     @State private var isPlaying: Bool = false
     @State private var audioPlayer: AVAudioPlayer?
     @State private var timer: Timer?
-    @State private var volume: Double = 0.5
+    @State private var volume: Double = 1.0
     
     @AppStorage("currentSongIndex") var currentSongIndex: Int = 0
     
@@ -41,12 +51,12 @@ struct MusicPlayerTest: View {
                         VStack(alignment: .leading){
                             Text("Song title")
                                 .font(.system(size: 16, weight: .medium, design: .rounded))
-//                                .padding(.bottom,1)
+                                .padding(.bottom, 2)
+//
                             Text("Author")
                                 .font(.system(size: 13, weight: .medium, design: .rounded))
                         }
                         .padding(.horizontal, 15)
-                        
                         .foregroundStyle(.white)
                         Spacer()
                     }
@@ -62,14 +72,17 @@ struct MusicPlayerTest: View {
                         //Add Function
                         updateAudioPlayerTime(newTime: newValue)
                         //
-                    }), in: 0 ... totalTime, step: 1)
+                    }), in: 0 ... totalTime, step: 0.1)
                     .foregroundColor(.black)
                     .onAppear{
-                        let thumbImage = UIImage(systemName: "circle.fill")
-
+                        let thumbImage = UIImage(systemName: "circle.fill")?
+                            .withTintColor(.white, renderingMode: .alwaysOriginal)
+                            .resized(to: CGSize(width: 18, height: 18))
+                       
                         UISlider.appearance().setThumbImage(thumbImage, for: .normal)
+                        UISlider.appearance().minimumTrackTintColor = .white
+                        UISlider.appearance().maximumTrackTintColor = .lightGray
                     }
-                    .accentColor(.white)
                     .padding(.vertical,10)
                     .padding(.horizontal,20)
                     
@@ -100,7 +113,7 @@ struct MusicPlayerTest: View {
                         }
                         
                         Button(action: {
-                            withAnimation(.bouncy) {
+                            withAnimation {
                                 skipToPreviousSong()
                             }
                         }) {
@@ -149,35 +162,39 @@ struct MusicPlayerTest: View {
                     }
                     .padding(.top, 20)
                     
-                    HStack{
+                    HStack(alignment: .center){
                         Image(systemName: "speaker.fill")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 14, height: 12)
+                            .frame(width: 12, height: 14)
                             .foregroundStyle(.white)
+                        VolumeSliderView()
+                            .frame(height: 14)
+//                            .background(.red)
+                            .padding(.bottom,5)
                         
-                        Slider(value:Binding(get:{
-                            self.volume
-                        }, set:{ newValue in
-                            self.volume = newValue
-                            //
-                            //Add Function
-                            updateAudioPlayerVolume(newVolume: newValue)
-                            //
-                        }), in: 0 ... 1, step: 0.01)
-                        .accentColor(.white)
-                        .onAppear{
-                            let thumbImage = UIImage(systemName: "circle.fill")
-
-                            UISlider.appearance().setThumbImage(thumbImage, for: .normal)
-                        }
+//                            .background(.red)
+//                            .frame(height: 50)
+                        
+//                        Slider(value:Binding(get:{
+//                            self.volume
+//                        }, set:{ newValue in
+//                            self.volume = newValue
+//                            //
+//                            //Add Function
+//                            updateAudioPlayerVolume(newVolume: newValue)
+//                            //
+//                        }), in: 0 ... 1, step: 0.01)
+//                        .accentColor(.white)
+                      
                         
                         Image(systemName: "speaker.wave.3.fill")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 14, height: 12)
+                            .frame(width: 20, height: 15)
                             .foregroundStyle(.white)
                     }
+//                    .frame(minWidth: 12, maxWidth: .infinity)
                     .padding(.horizontal, 30)
                     .padding(.top, 30)
                     //                Button("Test Volume"){
@@ -194,6 +211,7 @@ struct MusicPlayerTest: View {
             .padding(.bottom, 19)
             .onAppear {
                 setupAudioPlayer()
+                togglePlayPause()
             }
             .onDisappear {
                 stopAudio()
@@ -218,6 +236,8 @@ struct MusicPlayerTest: View {
             return
         }
         do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
+            try AVAudioSession.sharedInstance().setActive(true)
             audioPlayer = try AVAudioPlayer(contentsOf: songURL)
             audioPlayer?.prepareToPlay()
             totalTime = audioPlayer?.duration ?? 0

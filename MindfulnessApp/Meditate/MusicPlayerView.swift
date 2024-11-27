@@ -15,11 +15,18 @@ struct MusicPlayerView: View {
             Image(.musicPlayerVector)
                 .resizable()
                 .ignoresSafeArea()
-            
+            VStack{
+                Text("Relax")
+                    .foregroundStyle(.white)
+                    .font(.system(size: 48, weight: .bold, design: .rounded))
+//                    .padding(10)
+                Spacer()
+            }
             VStack{
                 Spacer()
                 
                 MusicPlayerTest()
+                    .padding(.bottom,15)
                 
             }
             .ignoresSafeArea()
