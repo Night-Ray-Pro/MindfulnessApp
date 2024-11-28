@@ -66,11 +66,12 @@ struct NewAddNoteView: View {
                                                             .resizable()
                                                             .scaledToFill()
                                                             .frame(width: 150, height: 160)
+                                                            .clipShape(.rect(cornerRadius: 10))
                                                     }
                                                 }
                                             }
                                             .tabViewStyle(.page)
-                                            .frame(width: 150, height: 150)
+                                            .frame(width: 150, height: 160)
                                             .clipShape(.rect(cornerRadius: 10))
                                             .indexViewStyle(.page(backgroundDisplayMode: .interactive))
                                             
