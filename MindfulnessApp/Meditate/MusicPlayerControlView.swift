@@ -11,10 +11,21 @@ import MediaPlayer
 import UIKit
 
 
+struct VolumeSliderView: UIViewRepresentable {
+    func makeUIView(context: Context) -> MPVolumeView {
+        let volumeView = MPVolumeView()
+        volumeView.showsVolumeSlider = true
+        return volumeView
+    }
+    
+    func updateUIView(_ uiView: MPVolumeView, context: Context) {
+        // No update needed
+    }
+}
 
+let songsURL = ["MeditationMusic"]
 
-
-struct MusicPlayerTest: View {
+struct MusicPlayerControlView: View {
     @State private var currentTime: Double = 0
     @State private var totalTime: Double = 236
     @State private var isPlaying: Bool = false
@@ -343,5 +354,5 @@ struct MusicPlayerTest: View {
     
 
 #Preview {
-    MusicPlayerTest()
+    MusicPlayerControlView()
 }

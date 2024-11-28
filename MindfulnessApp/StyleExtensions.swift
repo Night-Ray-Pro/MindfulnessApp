@@ -118,3 +118,58 @@ extension UIImage {
         return resizedImage
     }
 }
+
+struct NewTextEditorView: View {
+    
+    @Binding var string: String
+    @State var textEditorHeight : CGFloat = 20
+    
+    var body: some View {
+        
+        ZStack(alignment: .topLeading) {
+            
+            Text(string)
+                .foregroundColor(.clear)
+                .padding(10)
+                .background(GeometryReader {
+                    Color.clear.preference(key: NewViewHeightKey.self,
+                                           value: $0.frame(in: .local).size.height)
+                })
+            
+            TextEditor(text: $string)
+                .frame(width: 322, height: max(240,textEditorHeight))
+                .border(.clear)
+            
+            if string.isEmpty {
+                
+                Text("Content...")
+//                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                    .foregroundColor(.black.opacity(0.5))
+                    .disabled(true)
+                    .opacity(0.6)
+                    .padding(.top, 8.5)
+                    .padding(.leading, 5)
+            }
+            
+        }
+        .onPreferenceChange(NewViewHeightKey.self) { textEditorHeight = $0 }
+    }
+}
+
+struct NewViewHeightKey: PreferenceKey {
+    static var defaultValue: CGFloat { 0 }
+    static func reduce(value: inout Value, nextValue: () -> Value) {
+        value = value + nextValue()
+    }
+}
+
+struct CustomDetent: CustomPresentationDetent {
+    static func height(in context: Context) -> CGFloat? {
+        return context.maxDetentValue - 1
+    }
+}
+
+// In case it will be needed
+//    .presentationDetents([
+//        .custom(CustomDetent.self) // or .fraction(0.999)
+//    ])

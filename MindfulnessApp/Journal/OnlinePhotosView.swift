@@ -7,7 +7,21 @@
 
 import SwiftUI
 
-struct TestView: View {
+struct Results : Codable{
+    var total : Int
+    var totalHits : Int
+    var hits : [Hit]
+}
+
+struct Hit : Codable{
+    var id : Int
+    var previewURL : String
+    var webformatWidth : Int
+    var webformatHeight : Int
+    var largeImageURL : String
+}
+
+struct OnlinePhotosView: View {
     @FocusState private var isFocused: Bool
     @Binding var choosenImages : [Data]
     @State private var isSelected = [Int]()
@@ -177,7 +191,7 @@ struct TestView: View {
 //        ScrollView{
     
 //                ZStack{
-//                    
+//
 //                    VStack{
 //                        Rectangle()
 //                            .fill(Color.red)
@@ -210,7 +224,7 @@ struct TestView: View {
 //                            .rotationEffect(.degrees(!testBool ? 0:Double(Int.random(in: -10...10))))
 //                    }
 //                    .offset(y: testBool ? 0:630)
-//                    
+//
 //                    Text(testString.capitalizedSentence)
 //                }
 //                .frame(maxWidth: .infinity)
@@ -230,7 +244,7 @@ struct TestView: View {
 //    @State private var date = Date.now
 ////    let components = DateComponents(year: 2024, month: 11, day: 22)
 //    @State private var month: Int = 0
-//    
+//
 //    var body: some View {
 //        Button("Tap me"){
 //            month = Calendar.current.component(.month, from: date)
@@ -246,5 +260,5 @@ struct TestView: View {
                 UIImage(systemName: "moon")?.jpegData(compressionQuality: 1.0),
                 UIImage(systemName: "sun.max")?.jpegData(compressionQuality: 1.0)
             ].compactMap { $0 } // Remove any nil values
-    TestView(choosenImages: .constant(exampleData))
+    OnlinePhotosView(choosenImages: .constant(exampleData))
 }

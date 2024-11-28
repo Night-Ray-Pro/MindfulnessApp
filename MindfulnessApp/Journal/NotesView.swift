@@ -34,13 +34,13 @@ struct NotesView: View {
                     HStack{
                         
                         NavigationLink {
-                            AddNoteView()
+                            NewAddNoteView()
 //                            TestView(choosenImage: $image)
 //                            TestView()
 //                                .navigationTitle("test")
 //                                .toolbarColorScheme(.dark, for: .navigationBar)
-                            .toolbarBackground(Color(red: 216 / 255, green: 161 / 255, blue: 223 / 255), for: .navigationBar)
-                            .toolbarBackground(.automatic, for: .navigationBar)
+                                .toolbarBackground(Color(red: 146 / 255, green: 128 / 255, blue: 193 / 255), for: .navigationBar)
+                                .toolbarBackground(.visible, for: .navigationBar)
                             
                                 .onAppear {
                                         tabbarVisibility = .hidden

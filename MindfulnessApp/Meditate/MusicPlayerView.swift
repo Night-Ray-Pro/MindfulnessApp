@@ -25,7 +25,7 @@ struct MusicPlayerView: View {
             VStack{
                 Spacer()
                 
-                MusicPlayerTest()
+                MusicPlayerControlView()
                     .padding(.bottom,15)
                 
             }
