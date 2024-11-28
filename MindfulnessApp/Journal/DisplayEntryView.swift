@@ -8,23 +8,39 @@
 import SwiftUI
 
 struct DisplayEntryView: View {
+    let note: JournalEntry
     let dateColor = Color(red: 188 / 255, green: 135 / 255, blue: 233 / 255)
     let contentColor = Color(red: 139 / 255, green: 101 / 255, blue: 207 / 255)
-    let date = Date.now
-    let weekDay = Calendar.current.component(.weekday, from: Date.now) - 1
     let weekDaysNames = ["Sun", "Mon", "Tues", "Weds", "Thurs", "Fri", "Sat"]
-    let title = "Long Testing Title"
-    let locationName = "TestLocation"
+    
+    //
+    
+    let date: Date
+    let weekDay: Int
+    let title: String
+    let locationName: String?
+    let imageData: [Data]?
     let image = Image("testImage")
-    let content = "I found a quiet bench and watched as squirrels scampered up the trunks, their bushy tails twitching with excitement. A family of ducks waddled by, their tiny ducklings trailing behind. The serenity of the scene was truly captivating. As the sun began to set, casting long shadows across the park, I couldn't help but feel a sense of peace and gratitude for such a beautiful day."
+    let content: String
+    
+    init(note: JournalEntry) {
+        self.note = note
+        self.date = note.date
+        self.weekDay = Calendar.current.component(.weekday, from: note.date) - 1
+        self.title = note.title
+        self.locationName = note.location
+        self.content = note.content
+        self.imageData = note.photoData
+        
+    }
+    
     var body: some View {
         ZStack{
-            RoundedRectangle(cornerRadius: 20)
-                .foregroundStyle(.ultraThinMaterial)
-                .preferredColorScheme(.light)
+           
             VStack{
                 HStack{
-                    Spacer()
+                    imageData == nil ? Spacer():nil
+                    
                     VStack{
                         HStack{
                             Text(weekDaysNames[weekDay])
@@ -38,38 +54,57 @@ struct DisplayEntryView: View {
 //                        .padding(.bottom,3)
                         
                         Text(title)
+//                            .frame(maxWidth: 322, maxHeight: 220, alignment: .topLeading)
                             .multilineTextAlignment(.center)
                             .foregroundStyle(.white)
                             .font(.system(size: 30, weight: .bold, design: .rounded))
-                            .padding(.vertical, title.count > 10 ? 0:5)
-//                            .background(.red)
+                            .padding(.bottom,10)
+//                            .padding(.vertical, title.count > 10 ? -20:5)
+                            .background(.red)
 //                            .frame(maxHeight: 130)
                        
-
-                        
-                        Text(locationName)
-//                            .background(.red)
-//                            .padding(.top,5)
-                            .foregroundStyle(.gray.opacity(0.8))
-                            .font(.system(size: 15, weight: .medium, design: .rounded))
-                    }
-                    .frame(maxHeight: 142)
-//                    
-                    Spacer()
-                    image
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 142, height: 142)
-                        .clipShape(.rect(cornerRadius: 12))
-                        .overlay{
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(dateColor, lineWidth: 2)
+                        VStack{
+                            if locationName?.isEmpty == true || locationName != nil{
+                                Group{
+                                    Text(locationName ?? "")
+                                    //                            .background(.red)
+                                        .foregroundStyle(.gray.opacity(0.8))
+                                        .font(.system(size: 15, weight: .medium, design: .rounded))
+                                    //                                .padding(5)
+                                }
+                                //                            .padding(10)
+                                .background(.purple)
+                            }
                         }
+                        .padding(.bottom, 10)
+                            
+                        
+                    }
+//                    .frame(maxHeight: 142)
+//                    
+                    
+                    if let data = imageData?.first,
+                        let uiimage = UIImage(data: data){
+                        Spacer()
+                        Image(uiImage: uiimage)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 142, height: 142)
+                            .clipShape(.rect(cornerRadius: 12))
+                            .overlay{
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(dateColor, lineWidth: 2)
+                            }
+                    }
+                    
+                        
                 }
-                Spacer()
+                .background(.green)
+
+//                Spacer()
                 Text(content)
-                    .frame(maxWidth: 332, maxHeight: 120, alignment: .topLeading)
-//                    .background(.red)
+                    .frame(maxWidth: 322/*, maxHeight: 120*/, alignment: .topLeading)
+                    .background(.red)
                     .font(.system(size: 12, weight: .medium, design: .rounded))
                     .foregroundStyle(contentColor)
                 
@@ -78,11 +113,21 @@ struct DisplayEntryView: View {
             
             
         }
-        .frame(width: 352, height: 293)
-        .padding(.bottom, 30)
+        .frame(minWidth: 352)
+        
+        
+        .background{
+            RoundedRectangle(cornerRadius: 20)
+                .foregroundStyle(.black)
+                .preferredColorScheme(.light)
+        }
+        .frame(maxHeight: 293)
+        
+        .padding(.bottom, 20)
+        
     }
 }
 
 #Preview {
-    DisplayEntryView()
+    DisplayEntryView(note: JournalEntry(title: "Test TitleTest TitleTest TitleTest Title", content: "Test BodyTestTest ", location: "Cracow"))
 }

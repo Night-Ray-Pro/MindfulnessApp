@@ -7,11 +7,12 @@
 
 import SwiftUI
 import PhotosUI
+import SwiftData
 
-struct NewAddNoteView: View {
-    @State private var title = String()
-    @State private var location = String()
-    @State private var content = String()
+struct EditNoteView: View {
+    @Environment(\.dismiss) var dismiss
+    @Environment(\.modelContext) var modelContext
+    @Bindable var note: JournalEntry
     @State private var photo = [PhotosPickerItem]()
     @State private var imageData = [Data]()
     @FocusState private var isFocused: Bool
@@ -20,7 +21,16 @@ struct NewAddNoteView: View {
     @State private var browsePhotos: Bool = false
     @State private var isTryingToAddPhoto = false
     @State private var isPhotoPickerShowing = false
-    @State private var isThePhotoBoxShowing = false
+    @State private var isThePhotoBoxShowing:Bool
+    
+    init(note: JournalEntry) {
+        self.note = note
+        if note.photoData == nil || note.photoData?.isEmpty == true {
+            isThePhotoBoxShowing = false
+        } else{
+            isThePhotoBoxShowing = true
+        }
+    }
     
     var body: some View {
         ZStack{
@@ -39,7 +49,7 @@ struct NewAddNoteView: View {
                                     
                                     HStack{
                                         
-                                        TextField("Title...", text: $title, axis:.vertical)
+                                        TextField("Title...", text: $note.title, axis:.vertical)
                                             .padding(.bottom, isThePhotoBoxShowing ? 0 : 20)
                                             .frame(minHeight: 160, alignment: isThePhotoBoxShowing ? .center : .bottom)
                                         //                                    .background(.blue)
@@ -49,10 +59,10 @@ struct NewAddNoteView: View {
                                             .padding(10)
                                             .background(.red.opacity(0.0))
                                             .font(.system(size: isThePhotoBoxShowing ? 30 : 40, weight: .semibold, design: .rounded))
-                                            .onChange(of: title, {
-                                                guard let newValueLastChar = title.last else { return }
+                                            .onChange(of: note.title, {
+                                                guard let newValueLastChar = note.title.last else { return }
                                                 if newValueLastChar == "\n" {
-                                                    title.removeLast()
+                                                    note.title.removeLast()
                                                     isFocusedContent = true
                                                 }
                                             })
@@ -60,7 +70,7 @@ struct NewAddNoteView: View {
                                         // Photos tab view
                                         if isThePhotoBoxShowing{
                                             TabView{
-                                                ForEach(imageData, id: \.self){ imageResource in
+                                                ForEach(note.photoData!, id: \.self){ imageResource in
                                                     if let uiimage = UIImage(data: imageResource){
                                                         Image(uiImage: uiimage)
                                                             .resizable()
@@ -80,22 +90,25 @@ struct NewAddNoteView: View {
                                     }
                                     .frame(maxWidth: 343)
                                     //for animation reasons
-                                    .onChange(of: imageData){
+                                    .onChange(of: note.photoData){
                                         withAnimation(.easeInOut(duration: 0.4)){
                                             isThePhotoBoxShowing = true
                                         }
                                     }
                                     .onChange(of: photo) {
                                         Task{
-                                            imageData.removeAll()
+                                            if note.photoData == nil{
+                                                note.photoData = [Data]()
+                                            }
+//                                            imageData.removeAll()
                                             for item in photo{
                                                 if let loadedImage = try? await item.loadTransferable(type: Data.self){
                                                     withAnimation{
-                                                        self.imageData.append(loadedImage)
+                                                        note.photoData!.append(loadedImage)
                                                     }
                                                 }
                                             }
-                                            
+                                            photo.removeAll()
                                         }
                                     }
                                     
@@ -104,20 +117,20 @@ struct NewAddNoteView: View {
                                     
                                     // Date and location Text
                                     HStack{
-                                        Text(Date.now.formatted(date: .abbreviated, time: .omitted))
+                                        Text(note.date.formatted(date: .abbreviated, time: .omitted))
                                             .foregroundStyle(.white)
                                             .font(.system(size: 15, weight: .semibold, design: .rounded))
                                         
                                         Spacer()
                                         
-                                        Text(location)
-                                            .animation(.easeInOut, value: location)
+                                        Text(note.location ?? "")
+                                            .animation(.easeInOut, value: note.location)
                                             .foregroundStyle(.white)
                                             .font(.system(size: 15, weight: .semibold, design: .rounded))
                                     }
                                     .frame(width: 322)
                                     
-                                    NewTextEditorView(string: $content)
+                                    NewTextEditorView(string: $note.content)
                                         .focused($isFocusedContent)
                                         .scrollDisabled(true)
                                         .font(.system(size: 15, weight: .medium, design: .rounded))
@@ -140,6 +153,7 @@ struct NewAddNoteView: View {
                                         Spacer()
                                         VStack{
                                             Button{
+                                                
                                                 withAnimation{
                                                     isTryingToAddPhoto.toggle()
                                                 }
@@ -190,20 +204,23 @@ struct NewAddNoteView: View {
                 }
                 .photosPicker(isPresented: $isPhotoPickerShowing, selection: $photo, matching: .images)
                 .sheet(isPresented: $browsePhotos){
-                    OnlinePhotosView(choosenImages: $imageData)
+                    OnlinePhotosView(choosenImages: $note.photoData)
                 }
                 .sheet(isPresented: $sheetIsShowing){
-                    MapView(locationName: $location)
+                    MapView(locationName: $note.location, latitude: $note.latitude, longitude: $note.longitude)
                 }
                 .onAppear{
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        isFocused = true
+                        if note.title.isEmpty{
+                            isFocused = true
+                        }
                     }
                 }
                 .preferredColorScheme(.light)
                 .toolbar{
                     Button{
-                        //
+                        modelContext.delete(note)
+                        dismiss()
                     } label: {
                         Image(systemName: "trash")
                             .foregroundStyle(.white)
@@ -216,5 +233,14 @@ struct NewAddNoteView: View {
 }
 
 #Preview {
-    NewAddNoteView()
+    do{
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try ModelContainer(for: JournalEntry.self, configurations: config)
+        let note = JournalEntry()
+        return EditNoteView(note: note)
+            .modelContainer(container)
+    }catch{
+        return Text("Cant start the canvas")
+    }
+    
 }

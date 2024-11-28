@@ -23,7 +23,7 @@ struct Hit : Codable{
 
 struct OnlinePhotosView: View {
     @FocusState private var isFocused: Bool
-    @Binding var choosenImages : [Data]
+    @Binding var choosenImages : [Data]?
     @State private var isSelected = [Int]()
     @State private var photosURL = [String]()
     @State private var number = 1
@@ -34,6 +34,13 @@ struct OnlinePhotosView: View {
     @State private var results: Results?
     @State private var searchPrompt = String()
     @Environment(\.dismiss) var dismiss
+    
+//    init(choosenImages: [Data]?) {
+//        self.choosenImages = choosenImages
+//        if self.choosenImages == nil{
+//            self.choosenImages = [Data]()
+//        }
+//    }
     var body: some View {
         NavigationStack{
             VStack{
@@ -122,7 +129,10 @@ struct OnlinePhotosView: View {
             .toolbar{
                 ToolbarItem(placement: .confirmationAction){
                     Button("Add"){
-                        choosenImages.removeAll()
+//                        choosenImages.removeAll()
+                        if choosenImages == nil{
+                            choosenImages = [Data]()
+                        }
                         fetchImageData(from: photosURL)
                         dismiss()
                     }
@@ -153,7 +163,7 @@ struct OnlinePhotosView: View {
                     let url = URL(string: photo)
                     let (data, _) = try await URLSession.shared.data(from: url!)
                     DispatchQueue.main.async {
-                        self.choosenImages.append(data)
+                        self.choosenImages!.append(data)
                     }
                 }catch {
                     print("Error fetching image data: \(error)")

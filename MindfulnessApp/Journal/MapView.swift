@@ -10,16 +10,17 @@ import MapKit
 
 
 struct MapView: View {
-    @Binding var locationName : String
+    @Binding var locationName : String?
+    @Binding var latitude: Double?
+    @Binding var longitude: Double?
     @Environment(\.dismiss) var dismiss
-    
-    let location = CLLocation(latitude: 50.255441390654724, longitude: 19.02279275205155)
     @State private var position = MapCameraPosition.region(
         MKCoordinateRegion(
             center: CLLocationCoordinate2D(latitude: 50.255441390654724, longitude: 19.02279275205155),
             span: MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1)
         )
     )
+    
     var body: some View {
         NavigationStack{
             ZStack{
@@ -35,30 +36,17 @@ struct MapView: View {
                     .scaledToFit()
                     .frame(width: 50, height: 100)
                     .offset(y: -40)
-//                Circle()
-//                    .foregroundStyle(.red)
-//                    .frame(width: 20, height: 20)
-                //            Button{
-                //                let location2 = CLLocation(latitude: position.region?.center.latitude ?? 0.0, longitude: position.region?.center.longitude ?? 0.0)
-                //
-                //                CLGeocoder().reverseGeocodeLocation(location2) { placemarks, error in
-                //                    if let placemark = placemarks?.first{
-                //                        print(placemark.locality ?? "NotFound", placemark.country ?? "NotFound")
-                //                    }
-                //                }
-                //            } label: {
-                //                Text("Test")
-                //                    .font(.title)
-                //            }
             }
             .navigationTitle("Add Location")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar{
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done"){
-                        let location2 = CLLocation(latitude: position.region?.center.latitude ?? 0.0, longitude: position.region?.center.longitude ?? 0.0)
+                        let location = CLLocation(latitude: position.region?.center.latitude ?? 0.0, longitude: position.region?.center.longitude ?? 0.0)
+                        latitude = position.region?.center.latitude
+                        longitude = position.region?.center.longitude
                         
-                        CLGeocoder().reverseGeocodeLocation(location2) { placemarks, error in
+                        CLGeocoder().reverseGeocodeLocation(location) { placemarks, error in
                             if let placemark = placemarks?.first{
                                 print(placemark.locality ?? "NotFound", placemark.country ?? "NotFound")
                                 locationName = "\(placemark.locality ?? "NotFound"), \(placemark.country ?? "NotFound")"
@@ -81,5 +69,5 @@ struct MapView: View {
 }
 
 #Preview {
-    MapView(locationName: .constant("London"))
+    MapView(locationName: .constant("London"), latitude: .constant(51.507222), longitude: .constant(-0.1275))
 }

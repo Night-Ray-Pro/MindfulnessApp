@@ -5,13 +5,12 @@
 //  Created by Oskar Kapuśniak on 16/11/24.
 //
 
+import SwiftData
 import SwiftUI
 
-//enum SortOrder{
-//    case day, month, year
-//}
-
 struct NotesView: View {
+    @Environment(\.modelContext) var modelContext
+    @Query(sort: \JournalEntry.date) var notes: [JournalEntry]
     let buttonOverlayColor = Color(red: 177 / 255, green: 147 / 255, blue: 233 / 255)
     @State private var tabbarVisibility = Visibility.visible
     @State private var opacity = 1.0
@@ -20,10 +19,12 @@ struct NotesView: View {
     @State private var searchString = String()
     @State private var sortOrder = 0
     @State private var image: Image?
+    @State private var path = [JournalEntry]()
     @FocusState private var isFocused: Bool
     let sortButtons = ["Day", "Month", "Year"]
+    
     var body: some View {
-        NavigationStack{
+        NavigationStack(path: $path){
             ZStack{
                 Image(.journalVector)
                     .resizable()
@@ -33,24 +34,10 @@ struct NotesView: View {
                     ScrollViewReader { value in
                     HStack{
                         
-                        NavigationLink {
-                            NewAddNoteView()
-//                            TestView(choosenImage: $image)
-//                            TestView()
-//                                .navigationTitle("test")
-//                                .toolbarColorScheme(.dark, for: .navigationBar)
-                                .toolbarBackground(Color(red: 146 / 255, green: 128 / 255, blue: 193 / 255), for: .navigationBar)
-                                .toolbarBackground(.visible, for: .navigationBar)
-                            
-                                .onAppear {
-                                        tabbarVisibility = .hidden
-                                        opacity = 0.0
-                                }
-                                .onDisappear{
-                                        tabbarVisibility = .visible
-                                    opacity = 1.0
-                                }
-                                
+                        Button{
+                            let newNote = JournalEntry()
+                            modelContext.insert(newNote)
+                            path = [newNote]
                         } label: {
                             Image(systemName: "square.and.pencil")
                                 .resizable()
@@ -163,18 +150,26 @@ struct NotesView: View {
                                     .padding(.horizontal,2)
                                     .foregroundStyle(.white)
                                     .font(.system(size: 20, weight: .bold, design: .rounded))
-    //                                .background(.red)
+
                                 }
                                
                             }
                             .frame(width: 352, height: 50)
-//                            .background(.red)
+
                             
-                            ForEach(1..<10){ num in
-                                DisplayEntryView()
-                                    .id(num)
-                                    
-                                
+                            
+                            // Display all notes
+//                            ForEach(1..<10){ num in
+//                                DisplayEntryView()
+//                                    .id(num)
+//                                    
+//                                
+//                            }
+                            ForEach(notes){note in
+                                NavigationLink(value: note){
+                                    DisplayEntryView(note: note)
+                                        .id(note.id)
+                                }
                             }
                         }
                         .scrollDismissesKeyboard(.immediately)
@@ -210,10 +205,32 @@ struct NotesView: View {
                 .animation(.easeInOut(duration:opacity == 1.0 ? 0.5:0.01).delay(0.3), value: opacity)
                 .ignoresSafeArea()
             }
+            .navigationDestination(for: JournalEntry.self){ entry in
+                EditNoteView(note: entry)
+                    .toolbarBackground(Color(red: 146 / 255, green: 128 / 255, blue: 193 / 255), for: .navigationBar)
+                    .toolbarBackground(.visible, for: .navigationBar)
+                
+                    .onAppear {
+                        tabbarVisibility = .hidden
+                        opacity = 0.0
+                    }
+                    .onDisappear{
+                        tabbarVisibility = .visible
+                        opacity = 1.0
+                    }
+            
+            }
             .toolbarBackground(Color("Notes"), for: .tabBar)
             .toolbarBackground(.visible, for: .tabBar)
             .toolbarColorScheme(.dark, for: .tabBar)
             
+        }
+        .onAppear{
+            do{
+                try modelContext.save()
+            }catch{
+                print("cant save")
+            }
         }
         .toolbar(tabbarVisibility, for: .tabBar)
         .animation(.easeInOut(duration:0.2), value: tabbarVisibility)
