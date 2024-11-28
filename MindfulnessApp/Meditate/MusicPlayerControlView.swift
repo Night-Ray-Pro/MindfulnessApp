@@ -316,6 +316,7 @@ struct MusicPlayerControlView: View {
     func skipToNextSong() {
         Task {
             togglePlayPause()
+            stopTimer()
             stopAudio()
             currentSongIndex = (currentSongIndex + 1) % songsURL.count
             setupAudioPlayer()
@@ -326,6 +327,7 @@ struct MusicPlayerControlView: View {
     func skipToPreviousSong() {
         Task {
             togglePlayPause()
+            stopTimer()
             stopAudio()
             currentSongIndex = (currentSongIndex - 1 + songsURL.count) % songsURL.count
             setupAudioPlayer()

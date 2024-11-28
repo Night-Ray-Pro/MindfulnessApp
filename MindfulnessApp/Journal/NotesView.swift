@@ -10,7 +10,7 @@ import SwiftUI
 
 struct NotesView: View {
     @Environment(\.modelContext) var modelContext
-    @Query(sort: \JournalEntry.date) var notes: [JournalEntry]
+    @Query(sort: \JournalEntry.date, order: .reverse) var notes: [JournalEntry]
     let buttonOverlayColor = Color(red: 177 / 255, green: 147 / 255, blue: 233 / 255)
     @State private var tabbarVisibility = Visibility.visible
     @State private var opacity = 1.0
@@ -168,9 +168,13 @@ struct NotesView: View {
                             ForEach(notes){note in
                                 NavigationLink(value: note){
                                     DisplayEntryView(note: note)
+//                                    TestView(note: note)
                                         .id(note.id)
                                 }
                             }
+                            Spacer()
+                                .frame(height:300)
+//                            .padding(.bottom, 20)
                         }
                         .scrollDismissesKeyboard(.immediately)
                         .opacity(opacity)

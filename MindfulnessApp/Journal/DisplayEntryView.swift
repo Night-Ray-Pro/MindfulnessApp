@@ -1,13 +1,7 @@
-//
-//  DisplayEntryView.swift
-//  MindfulnessApp
-//
-//  Created by Oskar Kapuśniak on 23/11/24.
-//
-
 import SwiftUI
 
 struct DisplayEntryView: View {
+    
     let note: JournalEntry
     let dateColor = Color(red: 188 / 255, green: 135 / 255, blue: 233 / 255)
     let contentColor = Color(red: 139 / 255, green: 101 / 255, blue: 207 / 255)
@@ -31,17 +25,12 @@ struct DisplayEntryView: View {
         self.locationName = note.location
         self.content = note.content
         self.imageData = note.photoData
-        
     }
-    
+        
     var body: some View {
-        ZStack{
-           
-            VStack{
-                HStack{
-                    imageData == nil ? Spacer():nil
-                    
-                    VStack{
+     
+                    VStack(spacing: 0) {
+                        // First Text Field
                         HStack{
                             Text(weekDaysNames[weekDay])
                                 .foregroundStyle(dateColor)
@@ -49,85 +38,85 @@ struct DisplayEntryView: View {
                             Text(date.formatted(date: .abbreviated, time: .omitted))
                                 .foregroundStyle(.white)
                                 .font(.system(size: 18, weight: .medium, design: .rounded))
-                        }
-//                        .background(.red)
-//                        .padding(.bottom,3)
-                        
-                        Text(title)
-//                            .frame(maxWidth: 322, maxHeight: 220, alignment: .topLeading)
-                            .multilineTextAlignment(.center)
-                            .foregroundStyle(.white)
-                            .font(.system(size: 30, weight: .bold, design: .rounded))
-                            .padding(.bottom,10)
-//                            .padding(.vertical, title.count > 10 ? -20:5)
-                            .background(.red)
-//                            .frame(maxHeight: 130)
-                       
-                        VStack{
+                            Spacer()
                             if locationName?.isEmpty == true || locationName != nil{
-                                Group{
+                               
                                     Text(locationName ?? "")
-                                    //                            .background(.red)
                                         .foregroundStyle(.gray.opacity(0.8))
-                                        .font(.system(size: 15, weight: .medium, design: .rounded))
-                                    //                                .padding(5)
-                                }
-                                //                            .padding(10)
-                                .background(.purple)
+                                        .font(.system(size: 12, weight: .medium, design: .rounded))
+
+                                
                             }
                         }
-                        .padding(.bottom, 10)
+                        .padding([.top, .horizontal])
+                        .padding(.bottom, 15)
+                        HStack{
+                            Spacer()
+                            Text(note.title)
+                                .foregroundStyle(.white)
+                                .font(.system(size: imageData!.isEmpty ? 36: 29, weight: .bold, design: .rounded))
+                                .multilineTextAlignment(.center)
+                                .lineLimit(nil)
+                                .frame(height: dynamicHeight(size: 36, for: note.title, min: 50, max: 160))
+
+                            Spacer()
+                            
+                            if let data = imageData?.first,
+                                let uiimage = UIImage(data: data){
+                                Image(uiImage: uiimage)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 142, height: 142)
+                                    .clipShape(.rect(cornerRadius: 12))
+                                    .overlay{
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .stroke(dateColor, lineWidth: 2)
+                                    }
+                            }
+
+                        }
+                        .padding(.horizontal)
+                            .frame(maxWidth: .infinity)
                             
                         
-                    }
-//                    .frame(maxHeight: 142)
-//                    
-                    
-                    if let data = imageData?.first,
-                        let uiimage = UIImage(data: data){
-                        Spacer()
-                        Image(uiImage: uiimage)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 142, height: 142)
-                            .clipShape(.rect(cornerRadius: 12))
-                            .overlay{
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(dateColor, lineWidth: 2)
-                            }
+                        // Second Text Field
+                        Text(note.content)
+                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                            .foregroundStyle(contentColor)
+                            .lineLimit(nil)
+                            .padding(.horizontal)
+                            .padding(.vertical)
+                            .foregroundStyle(.white)
+                            .frame(width: 353,height: dynamicHeight(size: 13, for: note.content, min: 50, max: 140), alignment: .leading)
+                            .multilineTextAlignment(.leading)
                     }
                     
-                        
-                }
-                .background(.green)
 
-//                Spacer()
-                Text(content)
-                    .frame(maxWidth: 322/*, maxHeight: 120*/, alignment: .topLeading)
-                    .background(.red)
-                    .font(.system(size: 12, weight: .medium, design: .rounded))
-                    .foregroundStyle(contentColor)
+                    .frame(width:353)
+                    .background{
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(.ultraThinMaterial)
+                    }
+                    .padding(.bottom,20)
+                    
+    
                 
             }
-            .padding(10)
             
-            
-        }
-        .frame(minWidth: 352)
-        
-        
-        .background{
-            RoundedRectangle(cornerRadius: 20)
-                .foregroundStyle(.black)
-                .preferredColorScheme(.light)
-        }
-        .frame(maxHeight: 293)
-        
-        .padding(.bottom, 20)
-        
-    }
+            /// A function to calculate dynamic height for a text based on its content.
+    private func dynamicHeight(size: Int, for text: String, min: CGFloat, max: CGFloat) -> CGFloat {
+           let textSize = CGSize(width: UIScreen.main.bounds.width - 32, height: CGFloat.greatestFiniteMagnitude)
+        let textAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: CGFloat(size))]
+           let boundingRect = (text as NSString).boundingRect(
+               with: textSize,
+               options: .usesLineFragmentOrigin,
+               attributes: textAttributes,
+               context: nil
+           )
+           return Swift.min(Swift.max(boundingRect.height + 32, min), max) // Explicitly call Swift.min and Swift.max
+       }
 }
 
 #Preview {
-    DisplayEntryView(note: JournalEntry(title: "Test TitleTest TitleTest TitleTest Title", content: "Test BodyTestTest ", location: "Cracow"))
+    DisplayEntryView(note: JournalEntry(title: "Test title big", content: "Test BodyTestTest ", location: "Cracow"))
 }
