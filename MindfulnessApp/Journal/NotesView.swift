@@ -108,72 +108,79 @@ struct NotesView: View {
                         
                         Spacer()
                         ScrollView{
-                            ZStack{
-                                RoundedRectangle(cornerRadius: 35)
-                                    .foregroundStyle(.ultraThinMaterial)
-                                    .id(0)
-                                    .preferredColorScheme(.light)
-                                
-                                if isSearching{
-                                    //filter buttons
-                                    TextField("Search", text: $searchString)
-                                        .focused($isFocused)
-                                        .padding(.horizontal,10)
-                                        .foregroundStyle(.white)
-                                        .font(.system(size: 16, weight: .medium, design: .rounded))
-                                }else{
-                                    ZStack{
-                                        HStack{
-                                            ForEach(0..<3){ num in
-                                                Button{
-                                                    withAnimation(.snappy(duration: 0.4, extraBounce:0.01)){
-                                                        sortOrder = num
-                                                    }
-                                                }label: {
-                                                    Text(sortButtons[num])
-                                                        .frame(width:100, height:45)
+                            LazyVStack{
+                                ZStack{
+                                    RoundedRectangle(cornerRadius: 35)
+                                        .foregroundStyle(.ultraThinMaterial)
+                                        .id(0)
+                                        .preferredColorScheme(.light)
+                                    
+                                    if isSearching{
+                                        //filter buttons
+                                        TextField("Search", text: $searchString)
+                                            .focused($isFocused)
+                                            .padding(.horizontal,10)
+                                            .foregroundStyle(.white)
+                                            .font(.system(size: 16, weight: .medium, design: .rounded))
+                                    }else{
+                                        ZStack{
+                                            HStack{
+                                                ForEach(0..<3){ num in
+                                                    Button{
+                                                        withAnimation(.snappy(duration: 0.4, extraBounce:0.01)){
+                                                            sortOrder = num
+                                                        }
+                                                    }label: {
+                                                        Text(sortButtons[num])
+                                                            .frame(width:100, height:45)
                                                         
+                                                    }
+                                                    num == 2 ? nil:Spacer()
                                                 }
-                                                num == 2 ? nil:Spacer()
+                                                
                                             }
-                                        
+                                            HStack{
+                                                sortOrder == 0 ? nil:Spacer()
+                                                RoundedRectangle(cornerRadius: 33)
+                                                    .stroke(buttonOverlayColor, lineWidth: 2)
+                                                    .frame(width:100, height:45)
+                                                sortOrder == 2 ? nil:Spacer()
+                                            }
+                                            
                                         }
-                                        HStack{
-                                            sortOrder == 0 ? nil:Spacer()
-                                            RoundedRectangle(cornerRadius: 33)
-                                                .stroke(buttonOverlayColor, lineWidth: 2)
-                                                .frame(width:100, height:45)
-                                            sortOrder == 2 ? nil:Spacer()
-                                        }
+                                        .padding(.horizontal,2)
+                                        .foregroundStyle(.white)
+                                        .font(.system(size: 20, weight: .bold, design: .rounded))
                                         
                                     }
-                                    .padding(.horizontal,2)
-                                    .foregroundStyle(.white)
-                                    .font(.system(size: 20, weight: .bold, design: .rounded))
-
+                                    
                                 }
-                               
-                            }
-                            .frame(width: 352, height: 50)
-
-                            
-                            
-                            // Display all notes
-//                            ForEach(1..<10){ num in
-//                                DisplayEntryView()
-//                                    .id(num)
-//                                    
-//                                
-//                            }
-                            ForEach(notes){note in
-                                NavigationLink(value: note){
-                                    DisplayEntryView(note: note)
-//                                    TestView(note: note)
-                                        .id(note.id)
+                                .frame(width: 352, height: 50)
+                                
+                                
+                                
+                                // Display all notes
+                                //                            ForEach(1..<10){ num in
+                                //                                DisplayEntryView()
+                                //                                    .id(num)
+                                //                                    
+                                //                                
+                                //                            }
+                                ForEach(notes){note in
+                                    NavigationLink(value: note){
+                                        //                                    Text("Testing puropses")
+                                        
+                                        
+                                        DisplayEntryView(note: note)
+                                        //                                    TestView(note: note)
+                                            .padding(.bottom, note.id == notes.last?.id ? 300 : 0)
+                                            .padding(.top, note.id == notes.first?.id ? 10 : 0)
+                                            .id(note.id)
+                                    }
                                 }
                             }
-                            Spacer()
-                                .frame(height:300)
+//                            Spacer()
+//                                .frame(height:300)
 //                            .padding(.bottom, 20)
                         }
                         .scrollDismissesKeyboard(.immediately)

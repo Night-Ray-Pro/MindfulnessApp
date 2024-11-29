@@ -9,6 +9,7 @@ import SwiftUI
 import BottomSheet
 
 struct HomeView: View {
+    @Environment(\.scenePhase) var scenePhase
     @State private var hour:Int = Calendar.current.component(.hour, from: .now)
     @State private var mode: Bool = true
     
@@ -26,12 +27,26 @@ struct HomeView: View {
             .toolbarBackground(.visible, for: .tabBar)
             .toolbarColorScheme(.dark, for: .tabBar)
         }
+        .onChange(of: scenePhase) { oldPhase, newPhase in
+            if newPhase == .active {
+                withAnimation{
+                    setMode()
+                }
+//                print("Active")
+            }
+//                        } else if newPhase == .inactive {
+//                            print("Inactive")
+//                        } else if newPhase == .background {
+//                            print("Background")
+//                        }
+        }
         .onAppear{
             setMode()
         }
     }
     
     func setMode(){
+//        print("settingMode")
         hour = Calendar.current.component(.hour, from: .now)
         if hour > 5 && hour < 18{
             mode = true
