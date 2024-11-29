@@ -37,6 +37,7 @@ struct NotesView: View {
                             let newNote = JournalEntry()
                             modelContext.insert(newNote)
                             path = [newNote]
+                            print(notes.count)
                         } label: {
                             Image(systemName: "square.and.pencil")
                                 .resizable()
@@ -107,7 +108,7 @@ struct NotesView: View {
                         
                         Spacer()
                         ScrollView{
-                            LazyVStack{
+                    
                                 ZStack{
                                     RoundedRectangle(cornerRadius: 35)
                                         .foregroundStyle(.ultraThinMaterial)
@@ -157,23 +158,29 @@ struct NotesView: View {
                                 .frame(width: 352, height: 50)
                                 
                                 
-                                
+//                                ForEach(1..<5){ num in
+//                                    Text("Hi")
+//                                        .id(num)
+//                                }
                                 ForEach(notes){note in
                                     NavigationLink(value: note){
 
                                         // DayView
                                         DisplayEntryView(note: note)
+                                           
                                             .padding(.bottom, note.id == notes.last?.id ? 300 : 0)
                                             .padding(.top, note.id == notes.first?.id ? 10 : 0)
-                                            .id(note.id)
+//                                        Text("Hii")
+                                            
                                         //MonthView
                                         //...code
                                         
                                         //YearView
                                         //...code
                                     }
+                                    .id(note.id)
                                 }
-                            }
+                            
 
                         }
                         .scrollDismissesKeyboard(.immediately)
