@@ -23,7 +23,8 @@ struct VolumeSliderView: UIViewRepresentable {
     }
 }
 
-let songsURL = ["MeditationMusic"]
+let songsURL = ["Melodic Piano Atmosphere", "Weightless", "Morning Light", "Emerald Isle", "Healing Flute", "First Step"]
+let artists = ["Bobby Cole", "Marconi Union", "Ambient Feelings", "Laura Sullivan", "Iftekharul Anam", "Hans Zimmer"]
 
 struct MusicPlayerControlView: View {
     @State private var currentTime: Double = 0
@@ -36,7 +37,7 @@ struct MusicPlayerControlView: View {
     
     @AppStorage("currentSongIndex") var currentSongIndex: Int = 0
     
-    let songURL = Bundle.main.url(forResource: "MeditationMusic", withExtension: "mp3")!
+    //let songURL = Bundle.main.url(forResource: "Melodic Piano Atmosphere", withExtension: "mp3")!
     
     var body: some View {
 
@@ -50,11 +51,11 @@ struct MusicPlayerControlView: View {
                 VStack{
                     HStack{
                         VStack(alignment: .leading){
-                            Text("Song title")
+                            Text(songsURL[currentSongIndex])
                                 .font(.system(size: 16, weight: .medium, design: .rounded))
                                 .padding(.bottom, 2)
 //
-                            Text("Author")
+                            Text(artists[currentSongIndex])
                                 .font(.system(size: 13, weight: .medium, design: .rounded))
                         }
                         .padding(.horizontal, 15)
