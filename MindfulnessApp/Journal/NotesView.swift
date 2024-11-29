@@ -18,7 +18,6 @@ struct NotesView: View {
     @State private var isSearching = false
     @State private var searchString = String()
     @State private var sortOrder = 0
-    @State private var image: Image?
     @State private var path = [JournalEntry]()
     @FocusState private var isFocused: Bool
     let sortButtons = ["Day", "Month", "Year"]
@@ -159,29 +158,23 @@ struct NotesView: View {
                                 
                                 
                                 
-                                // Display all notes
-                                //                            ForEach(1..<10){ num in
-                                //                                DisplayEntryView()
-                                //                                    .id(num)
-                                //                                    
-                                //                                
-                                //                            }
                                 ForEach(notes){note in
                                     NavigationLink(value: note){
-                                        //                                    Text("Testing puropses")
-                                        
-                                        
+
+                                        // DayView
                                         DisplayEntryView(note: note)
-                                        //                                    TestView(note: note)
                                             .padding(.bottom, note.id == notes.last?.id ? 300 : 0)
                                             .padding(.top, note.id == notes.first?.id ? 10 : 0)
                                             .id(note.id)
+                                        //MonthView
+                                        //...code
+                                        
+                                        //YearView
+                                        //...code
                                     }
                                 }
                             }
-//                            Spacer()
-//                                .frame(height:300)
-//                            .padding(.bottom, 20)
+
                         }
                         .scrollDismissesKeyboard(.immediately)
                         .opacity(opacity)
