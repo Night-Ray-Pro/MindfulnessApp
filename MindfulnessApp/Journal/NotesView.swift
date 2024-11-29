@@ -11,6 +11,17 @@ import SwiftUI
 struct NotesView: View {
     @Environment(\.modelContext) var modelContext
     @Query(sort: \JournalEntry.date, order: .reverse) var notes: [JournalEntry]
+    private var filteredNotes: [JournalEntry]{
+        if searchString.isEmpty{
+            return notes
+        }else{
+            
+            return notes.filter{ $0.title.localizedStandardContains(searchString) ||
+                $0.content.localizedStandardContains(searchString) ||
+                $0.location?.localizedStandardContains(searchString) ?? false}
+            
+        }
+    }
     let buttonOverlayColor = Color(red: 177 / 255, green: 147 / 255, blue: 233 / 255)
     @State private var tabbarVisibility = Visibility.visible
     @State private var opacity = 1.0
@@ -162,7 +173,7 @@ struct NotesView: View {
 //                                    Text("Hi")
 //                                        .id(num)
 //                                }
-                                ForEach(notes){note in
+                                ForEach(filteredNotes){note in
                                     NavigationLink(value: note){
 
                                         // DayView
@@ -179,7 +190,9 @@ struct NotesView: View {
                                         //...code
                                     }
                                     .id(note.id)
+                                    .animation(.easeInOut, value: filteredNotes)
                                 }
+                                
                             
 
                         }
