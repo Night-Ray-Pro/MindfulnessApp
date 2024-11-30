@@ -12,6 +12,8 @@ struct NewNotesView: View {
     @Environment(\.modelContext) var modelContext
     @Query(sort: \JournalEntry.date, order: .reverse) var notes: [JournalEntry]
     let buttonOverlayColor = Color(red: 177 / 255, green: 147 / 255, blue: 233 / 255)
+    @State private var currentWorkItem: DispatchWorkItem?
+    @State private var isForEachVisible = true
     @State private var tabbarVisibility = Visibility.visible
     @State private var opacity = 1.0
     @State private var isScrolling = false
@@ -161,6 +163,7 @@ struct NewNotesView: View {
                                                     Button{
                                                         withAnimation(.snappy(duration: 0.4, extraBounce:0.01)){
                                                             sortOrder = num
+                                                            handleButtonPress()
                                                         }
                                                     }label: {
                                                         Text(String(describing: num))
@@ -199,18 +202,23 @@ struct NewNotesView: View {
 //                                }
                             
 //                                DayView(searchString: searchString)
-                            if isFocused {
-                                Text("")
+                            if !isFocused && isForEachVisible{
+                                DayView(searchString: searchString2)
+                                    .transition(.opacity)
+                               
+                               
                             }else{
-                                ForEach(filteredNotes) { note in
-                                    NavigationLink(value: note) {
-                                        //                            Text("Hi")
-                                        TestView(note: note) // Replace with your desired view
-                                            .padding(.bottom, note.id == notes.last?.id ? 300 : 0)
-                                            .padding(.top, note.id == notes.first?.id ? 10 : 0)
-                                            .animation(.easeInOut, value: notes)
-                                    }
-                                }
+                                
+                                Text("")
+//                                ForEach(filteredNotes) { note in
+//                                    NavigationLink(value: note) {
+//                                        //                            Text("Hi")
+//                                        TestView(note: note) // Replace with your desired view
+//                                            .padding(.bottom, note.id == notes.last?.id ? 300 : 0)
+//                                            .padding(.top, note.id == notes.first?.id ? 10 : 0)
+//                                            .animation(.easeInOut, value: notes)
+//                                    }
+//                                }
                             }
                            
                             
@@ -218,6 +226,7 @@ struct NewNotesView: View {
                             
 
                         }
+                        .animation(.easeInOut, value: isForEachVisible)
                         .scrollDismissesKeyboard(.immediately)
                         .opacity(opacity)
                         .animation(.easeInOut(duration:opacity == 1.0 ? 0.5:0.01).delay(0.3), value: opacity)
@@ -274,6 +283,35 @@ struct NewNotesView: View {
         .animation(.easeInOut(duration:0.2), value: tabbarVisibility)
         .accentColor(.white)
     }
+    
+    private func handleButtonPress() {
+           // Cancel any ongoing work
+           currentWorkItem?.cancel()
+
+           // Hide the ForEach
+           withAnimation {
+               isForEachVisible = false
+           }
+
+           // Create a new DispatchWorkItem
+           let workItem = DispatchWorkItem {
+               // Update content
+//               updateContent()
+
+               // Show the ForEach again after a delay
+               DispatchQueue.main.async {
+                   withAnimation {
+                       isForEachVisible = true
+                   }
+               }
+           }
+
+           // Assign the new work item to the state variable
+           currentWorkItem = workItem
+
+           // Execute the work item after a delay
+           DispatchQueue.main.asyncAfter(deadline: .now() + 0.8, execute: workItem)
+       }
 }
 
 #Preview {
