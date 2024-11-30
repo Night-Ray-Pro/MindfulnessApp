@@ -22,6 +22,8 @@ struct EditNoteView: View {
     @State private var isTryingToAddPhoto = false
     @State private var isPhotoPickerShowing = false
     @State private var isThePhotoBoxShowing:Bool
+    @State private var titleText: String
+    @State private var contentText: String
     
     init(note: JournalEntry) {
         self.note = note
@@ -30,6 +32,8 @@ struct EditNoteView: View {
         } else{
             isThePhotoBoxShowing = true
         }
+        self.titleText = note.title
+        self.contentText = note.content
     }
     
     var body: some View {
@@ -49,7 +53,7 @@ struct EditNoteView: View {
                                     
                                     HStack{
                                         
-                                        TextField("Title...", text: $note.title, axis:.vertical)
+                                        TextField("Title...", text: $titleText, axis:.vertical)
                                             .padding(.bottom, isThePhotoBoxShowing ? 0 : 20)
                                             .frame(minHeight: 160, alignment: isThePhotoBoxShowing ? .center : .bottom)
                                         //                                    .background(.blue)
@@ -59,13 +63,13 @@ struct EditNoteView: View {
                                             .padding(10)
                                             .background(.red.opacity(0.0))
                                             .font(.system(size: isThePhotoBoxShowing ? 30 : 40, weight: .semibold, design: .rounded))
-                                            .onChange(of: note.title, {
-                                                guard let newValueLastChar = note.title.last else { return }
-                                                if newValueLastChar == "\n" {
-                                                    note.title.removeLast()
-                                                    isFocusedContent = true
-                                                }
-                                            })
+//                                            .onChange(of: note.title, {
+//                                                guard let newValueLastChar = note.title.last else { return }
+//                                                if newValueLastChar == "\n" {
+//                                                    note.title.removeLast()
+//                                                    isFocusedContent = true
+//                                                }
+//                                            })
                                         
                                         // Photos tab view
                                         if isThePhotoBoxShowing{
@@ -130,7 +134,7 @@ struct EditNoteView: View {
                                     }
                                     .frame(width: 322)
                                     
-                                    NewTextEditorView(string: $note.content)
+                                    NewTextEditorView(string: $contentText)
                                         .focused($isFocusedContent)
                                         .scrollDisabled(true)
                                         .font(.system(size: 15, weight: .medium, design: .rounded))
@@ -228,6 +232,10 @@ struct EditNoteView: View {
                     }
                 }
             }
+        }
+        .onDisappear{
+            note.title = titleText
+            note.content = contentText
         }
     }
 }

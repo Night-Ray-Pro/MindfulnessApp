@@ -11,26 +11,18 @@ import SwiftUI
 struct NotesView: View {
     @Environment(\.modelContext) var modelContext
     @Query(sort: \JournalEntry.date, order: .reverse) var notes: [JournalEntry]
-    private var filteredNotes: [JournalEntry]{
-        if searchString.isEmpty{
-            return notes
-        }else{
-            
-            return notes.filter{ $0.title.localizedStandardContains(searchString) ||
-                $0.content.localizedStandardContains(searchString) ||
-                $0.location?.localizedStandardContains(searchString) ?? false}
-            
-        }
-    }
     let buttonOverlayColor = Color(red: 177 / 255, green: 147 / 255, blue: 233 / 255)
     @State private var tabbarVisibility = Visibility.visible
     @State private var opacity = 1.0
     @State private var isScrolling = false
     @State private var isSearching = false
     @State private var searchString = String()
-    @State private var sortOrder = 0
+    @State private var sortOrder = sortViews.Day
     @State private var path = [JournalEntry]()
     @FocusState private var isFocused: Bool
+    enum sortViews: CaseIterable {
+        case Day, Month, Year
+    }
     let sortButtons = ["Day", "Month", "Year"]
     
     var body: some View {
@@ -136,26 +128,26 @@ struct NotesView: View {
                                     }else{
                                         ZStack{
                                             HStack{
-                                                ForEach(0..<3){ num in
+                                                ForEach(sortViews.allCases, id: \.self){ num in
                                                     Button{
                                                         withAnimation(.snappy(duration: 0.4, extraBounce:0.01)){
                                                             sortOrder = num
                                                         }
                                                     }label: {
-                                                        Text(sortButtons[num])
+                                                        Text(String(describing: num))
                                                             .frame(width:100, height:45)
                                                         
                                                     }
-                                                    num == 2 ? nil:Spacer()
+                                                    num == .Year ? nil:Spacer()
                                                 }
                                                 
                                             }
                                             HStack{
-                                                sortOrder == 0 ? nil:Spacer()
+                                                sortOrder == .Day ? nil:Spacer()
                                                 RoundedRectangle(cornerRadius: 33)
                                                     .stroke(buttonOverlayColor, lineWidth: 2)
                                                     .frame(width:100, height:45)
-                                                sortOrder == 2 ? nil:Spacer()
+                                                sortOrder == .Year ? nil:Spacer()
                                             }
                                             
                                         }
@@ -173,25 +165,15 @@ struct NotesView: View {
 //                                    Text("Hi")
 //                                        .id(num)
 //                                }
-                                ForEach(filteredNotes){note in
-                                    NavigationLink(value: note){
-
-                                        // DayView
-                                        DisplayEntryView(note: note)
-                                           
-                                            .padding(.bottom, note.id == notes.last?.id ? 300 : 0)
-                                            .padding(.top, note.id == notes.first?.id ? 10 : 0)
-//                                        Text("Hii")
-                                            
-                                        //MonthView
-                                        //...code
-                                        
-                                        //YearView
-                                        //...code
-                                    }
-                                    .id(note.id)
-                                    .animation(.easeInOut, value: filteredNotes)
-                                }
+                            switch sortOrder {
+                            case .Day:
+                                DayView(searchString: searchString)
+                            case .Month:
+                                Text("MonthView")
+                            case .Year:
+                                Text("YearView")
+                            }
+                            
                                 
                             
 
