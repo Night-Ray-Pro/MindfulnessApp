@@ -19,17 +19,17 @@ struct NewNotesView: View {
     @State private var isScrolling = false
     @State private var isSearching = false
     @State private var searchString = String()
-    @State private var searchString2 = String()
+    
     @State private var sortOrder = sortViews.Day
     @State private var path = [JournalEntry]()
     @FocusState private var isFocused: Bool
     var filteredNotes: [JournalEntry] {
-            if searchString2.isEmpty {
+            if searchString.isEmpty {
                 return notes
             } else {
-                return notes.filter { $0.title.localizedStandardContains(searchString2) ||
-                    $0.content.localizedStandardContains(searchString2) ||
-                    $0.location?.localizedStandardContains(searchString2) ?? false}
+                return notes.filter { $0.title.localizedStandardContains(searchString) ||
+                    $0.content.localizedStandardContains(searchString) ||
+                    $0.location?.localizedStandardContains(searchString) ?? false}
             }
         }
     enum sortViews: CaseIterable {
@@ -85,7 +85,7 @@ struct NewNotesView: View {
                             withAnimation{
                                 if isSearching == true{
                                     isFocused = false
-                                    searchString2 = ""
+                                    searchString = ""
                                 }else {
                                     isFocused = true
                                 }
@@ -142,16 +142,18 @@ struct NewNotesView: View {
                         
                         Spacer()
                         ScrollView{
-                    
+                            VStack{
                                 ZStack{
                                     RoundedRectangle(cornerRadius: 35)
+                                        .frame(width:352)
                                         .foregroundStyle(.ultraThinMaterial)
                                         .id(0)
                                         .preferredColorScheme(.light)
                                     
+                                    
                                     if isSearching{
                                         //filter buttons
-                                        TextField("Search", text: $searchString2)
+                                        TextField("Search", text: $searchString)
                                             .focused($isFocused)
                                             .padding(.horizontal,10)
                                             .foregroundStyle(.white)
@@ -174,7 +176,8 @@ struct NewNotesView: View {
                                                 }
                                                 
                                             }
-                                        
+                                            .frame(width:352)
+                                            
                                             HStack{
                                                 
                                                 RoundedRectangle(cornerRadius: 33)
@@ -193,7 +196,10 @@ struct NewNotesView: View {
                                     }
                                     
                                 }
-                                .frame(width: 352, height: 50)
+                                .frame(width:352, height:50)
+                            }
+                            .frame(maxWidth: .infinity)
+//                            .background(.red)
                                 
                                 
 //                                ForEach(1..<5){ num in
@@ -203,8 +209,25 @@ struct NewNotesView: View {
                             
 //                                DayView(searchString: searchString)
                             if !isFocused && isForEachVisible{
-                                DayView(searchString: searchString2)
-                                    .transition(.opacity)
+//                                DayView(searchString: searchString)
+//                                    .transition(.opacity)
+                                Group{
+                                    switch sortOrder {
+                                    case .Day:
+                                        DayView(searchString: searchString)
+//                                            .transition(.opacity)
+                                    case .Month:
+                                        MonthView(searchString: searchString)
+//                                            .transition(.opacity)
+                                    case .Year:
+//                                        Text("Year")
+                                        YearView(searchString: searchString/*, notes: notes*/)
+                                            
+                                    }
+                                }
+                                .transition(.opacity)
+                                .animation(.easeInOut, value: isForEachVisible)
+                               
                                
                                
                             }else{
@@ -226,7 +249,7 @@ struct NewNotesView: View {
                             
 
                         }
-                        .animation(.easeInOut, value: isForEachVisible)
+                        
                         .scrollDismissesKeyboard(.immediately)
                         .opacity(opacity)
                         .animation(.easeInOut(duration:opacity == 1.0 ? 0.5:0.01).delay(0.3), value: opacity)
@@ -310,7 +333,7 @@ struct NewNotesView: View {
            currentWorkItem = workItem
 
            // Execute the work item after a delay
-           DispatchQueue.main.asyncAfter(deadline: .now() + 0.8, execute: workItem)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8, execute: workItem)
        }
 }
 
