@@ -28,7 +28,7 @@ struct ContentView: View {
                     Image(systemName: "house")
                 }
                 .tag("Home")
-            NotesView()
+            NewNotesView()
                 .tabItem {
                     Image(systemName: "doc.plaintext")
                 }

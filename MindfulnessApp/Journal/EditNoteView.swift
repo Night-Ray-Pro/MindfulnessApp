@@ -63,13 +63,13 @@ struct EditNoteView: View {
                                             .padding(10)
                                             .background(.red.opacity(0.0))
                                             .font(.system(size: isThePhotoBoxShowing ? 30 : 40, weight: .semibold, design: .rounded))
-//                                            .onChange(of: note.title, {
-//                                                guard let newValueLastChar = note.title.last else { return }
-//                                                if newValueLastChar == "\n" {
-//                                                    note.title.removeLast()
-//                                                    isFocusedContent = true
-//                                                }
-//                                            })
+                                            .onChange(of: titleText, {
+                                                guard let newValueLastChar = titleText.last else { return }
+                                                if newValueLastChar == "\n" {
+                                                    titleText.removeLast()
+                                                    isFocusedContent = true
+                                                }
+                                            })
                                         
                                         // Photos tab view
                                         if isThePhotoBoxShowing{

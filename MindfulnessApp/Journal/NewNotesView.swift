@@ -8,7 +8,7 @@
 import SwiftData
 import SwiftUI
 
-struct NotesView: View {
+struct NewNotesView: View {
     @Environment(\.modelContext) var modelContext
     @Query(sort: \JournalEntry.date, order: .reverse) var notes: [JournalEntry]
     let buttonOverlayColor = Color(red: 177 / 255, green: 147 / 255, blue: 233 / 255)
@@ -21,6 +21,15 @@ struct NotesView: View {
     @State private var sortOrder = sortViews.Day
     @State private var path = [JournalEntry]()
     @FocusState private var isFocused: Bool
+    var filteredNotes: [JournalEntry] {
+            if searchString2.isEmpty {
+                return notes
+            } else {
+                return notes.filter { $0.title.localizedStandardContains(searchString2) ||
+                    $0.content.localizedStandardContains(searchString2) ||
+                    $0.location?.localizedStandardContains(searchString2) ?? false}
+            }
+        }
     enum sortViews: CaseIterable {
         case Day, Month, Year
     }
@@ -33,6 +42,24 @@ struct NotesView: View {
                     .resizable()
                     .ignoresSafeArea()
                     .scaledToFill()
+                VStack{
+                    Spacer()
+                    
+                    HStack{
+                        Image(.leftFlowiJournal)
+                            .offset(x:-35)
+                        Spacer()
+                        Image(.rightFlowiJournal)
+                            .offset(x:12)
+                    }
+                    .offset(y:50)
+            
+                        
+                }
+                .ignoresSafeArea()
+                .opacity(opacity)
+                .animation(.easeInOut(duration:opacity == 1.0 ? 0.5:0.01).delay(0.3), value: opacity)
+                
                 VStack{
                     ScrollViewReader { value in
                     HStack{
@@ -56,6 +83,7 @@ struct NotesView: View {
                             withAnimation{
                                 if isSearching == true{
                                     isFocused = false
+                                    searchString2 = ""
                                 }else {
                                     isFocused = true
                                 }
@@ -79,7 +107,7 @@ struct NotesView: View {
                                     .frame(width: 30, height: 30)
                                     .foregroundStyle(.white)
                             }
-//                               
+//
                         }
                         
                     }
@@ -143,12 +171,15 @@ struct NotesView: View {
                                                 }
                                                 
                                             }
+                                        
                                             HStack{
-                                                sortOrder == .Day ? nil:Spacer()
+                                                
                                                 RoundedRectangle(cornerRadius: 33)
                                                     .stroke(buttonOverlayColor, lineWidth: 2)
                                                     .frame(width:100, height:45)
-                                                sortOrder == .Year ? nil:Spacer()
+                                                    .offset(x: sortOrder == .Day ? -124:0)
+                                                    .offset(x: sortOrder == .Year ? 124:0)
+                                                
                                             }
                                             
                                         }
@@ -168,15 +199,19 @@ struct NotesView: View {
 //                                }
                             
 //                                DayView(searchString: searchString)
-                                ForEach(notes) { note in
+                            if isFocused {
+                                Text("")
+                            }else{
+                                ForEach(filteredNotes) { note in
                                     NavigationLink(value: note) {
-            //                            Text("Hi")
+                                        //                            Text("Hi")
                                         TestView(note: note) // Replace with your desired view
                                             .padding(.bottom, note.id == notes.last?.id ? 300 : 0)
                                             .padding(.top, note.id == notes.first?.id ? 10 : 0)
                                             .animation(.easeInOut, value: notes)
                                     }
                                 }
+                            }
                            
                             
                                 
@@ -201,15 +236,7 @@ struct NotesView: View {
                 VStack{
                     Spacer()
                     
-                    HStack{
-                        Image(.leftFlowiJournal)
-                            .offset(x:-35)
-                        Spacer()
-                        Image(.rightFlowiJournal)
-                            .offset(x:12)
-                    }
-                    .offset(y:50)
-                    .opacity(isScrolling ? 0:1)
+                
                         
                 }
                 .opacity(opacity)
@@ -250,5 +277,5 @@ struct NotesView: View {
 }
 
 #Preview {
-    NotesView()
+    NewNotesView()
 }

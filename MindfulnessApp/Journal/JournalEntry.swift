@@ -9,7 +9,7 @@ import SwiftData
 import Foundation
 
 @Model
-class JournalEntry {
+class JournalEntry: Identifiable {
     var id = UUID()
     var title: String
     var content: String
