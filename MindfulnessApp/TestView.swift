@@ -69,8 +69,7 @@ struct TestView: View {
                     }
                 }
             }
-            .onChange(of: visibleRange) { _ in
-                // Update legend dynamically
+            .onChange(of: visibleRange) {
             }
             
             .frame(height: 300)
