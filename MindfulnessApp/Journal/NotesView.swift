@@ -171,7 +171,7 @@ struct NotesView: View {
                                 ForEach(notes) { note in
                                     NavigationLink(value: note) {
             //                            Text("Hi")
-                                        TestView(note: note) // Replace with your desired view
+                                        OptymizedDisplayEntryView(note: note) // Replace with your desired view
                                             .padding(.bottom, note.id == notes.last?.id ? 300 : 0)
                                             .padding(.top, note.id == notes.first?.id ? 10 : 0)
                                             .animation(.easeInOut, value: notes)

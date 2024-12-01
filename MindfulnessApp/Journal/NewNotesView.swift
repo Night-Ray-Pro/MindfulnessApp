@@ -163,7 +163,7 @@ struct NewNotesView: View {
                                             HStack{
                                                 ForEach(sortViews.allCases, id: \.self){ num in
                                                     Button{
-                                                        withAnimation(.snappy(duration: 0.4, extraBounce:0.01)){
+                                                        withAnimation(.smooth(duration: 0.25)){
                                                             sortOrder = num
                                                             handleButtonPress()
                                                         }

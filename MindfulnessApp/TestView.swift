@@ -1,140 +1,101 @@
 import SwiftUI
+import Charts
 
 struct TestView: View {
-    
-    let note: JournalEntry
-    
-    // Static colors to avoid recreating
-    static let dateColor = Color(red: 188 / 255, green: 135 / 255, blue: 233 / 255)
-    static let contentColor = Color(red: 139 / 255, green: 101 / 255, blue: 207 / 255)
-    static let weekDaysNames = ["Sun", "Mon", "Tues", "Weds", "Thurs", "Fri", "Sat"]
-    
-    // Precomputed properties
-    let date: Date
-    let weekDay: Int
-    let title: String
-    let locationName: String?
-    let hasLocation: Bool
-    let imageData: [Data]?
-    let cachedImage: UIImage?
-    let titleHeight: CGFloat
-    let contentHeight: CGFloat
-    
-    init(note: JournalEntry) {
-        self.note = note
-        self.date = note.date
-        self.weekDay = Calendar.current.component(.weekday, from: note.date) - 1
-        self.title = note.title
-        self.locationName = note.location
-        self.hasLocation = !(note.location?.isEmpty ?? true)
-        self.imageData = note.photoData
-        
-        // Precompute heights
-        self.titleHeight = Self.dynamicHeight(size: 36, for: note.title, min: 50, max: 160)
-        self.contentHeight = Self.dynamicHeight(size: 13, for: note.content, min: 50, max: 140)
-        
-        // Cache the first image resized
-        if let data = note.photoData?.first {
-            let targetSize = CGSize(width: 142, height: 142)
-            self.cachedImage = Self.resizeImage(data: data, targetSize: targetSize)
-        } else {
-            self.cachedImage = nil
-        }
+    // Data model for each day
+    struct SleepData: Identifiable {
+        let id = UUID()
+        let date: Date
+        let hours: Double
     }
+
+    // Example data for the month
+    @State private var sleepData: [SleepData] = []
+    @State private var visibleRange: ClosedRange<Int> = 0...6 // Default visible range
+
+    private let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEE" // Short weekday name: Mon, Tue, etc.
+        return formatter
+    }()
     
+    private let fullDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        return formatter
+    }()
+
+    init() {
+        // Populate data dynamically for the current month
+        var data: [SleepData] = []
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        for offset in 0..<30 {
+            if let date = calendar.date(byAdding: .day, value: offset, to: today) {
+                data.append(SleepData(date: date, hours: Double.random(in: 5...9)))
+            }
+        }
+        _sleepData = State(initialValue: data)
+    }
+
     var body: some View {
-        VStack(spacing: 0) {
-            // First Text Field
-            HStack {
-                Text(Self.weekDaysNames[weekDay])
-                    .foregroundStyle(Self.dateColor)
-                    .font(.system(size: 18, weight: .bold, design: .rounded))
-                Text(date.formatted(date: .abbreviated, time: .omitted))
-                    .foregroundStyle(.white)
-                    .font(.system(size: 18, weight: .medium, design: .rounded))
-                Spacer()
-                if hasLocation {
-                    Text(locationName ?? "")
-                        .foregroundStyle(.gray.opacity(0.8))
-                        .font(.system(size: 12, weight: .medium, design: .rounded))
+        VStack {
+            // Dynamic legend for visible range
+            if let firstDate = visibleDays.first?.date, let lastDate = visibleDays.last?.date {
+                Text("\(fullDateFormatter.string(from: firstDate)) - \(fullDateFormatter.string(from: lastDate))")
+                    .font(.headline)
+                    .padding()
+            } else {
+                Text("Scroll to see the range")
+                    .font(.headline)
+                    .padding()
+            }
+
+            // Chart with horizontal scrolling
+            Chart(visibleDays) { data in
+                BarMark(
+                    x: .value("Day", dateFormatter.string(from: data.date)),
+                    y: .value("Hours", data.hours)
+                )
+                .foregroundStyle(.blue)
+            }
+            .chartScrollableAxes(.horizontal)
+//            .chartScrollPositionX(visibleRange.lowerBound)
+            .chartXAxis {
+                AxisMarks { value in
+                    let index = value.index
+                    if let date = visibleDays[safe: index]?.date {
+                        AxisValueLabel(dateFormatter.string(from: date))
+                    }
                 }
             }
-            .padding([.top, .horizontal])
-            .padding(.bottom, 15)
-            
-            HStack {
-                Spacer()
-                Text(note.title)
-                    .foregroundStyle(.white)
-                    .font(.system(size: imageData!.isEmpty ? 36 : 29, weight: .bold, design: .rounded))
-                    .multilineTextAlignment(.center)
-                    .lineLimit(nil)
-                    .frame(height: titleHeight)
-                Spacer()
-                
-                if let cachedImage {
-                    Image(uiImage: cachedImage)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 142, height: 142)
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(Self.dateColor, lineWidth: 2)
-                        }
-                }
+            .onChange(of: visibleRange) { _ in
+                // Update legend dynamically
             }
-            .padding(.horizontal)
-            .frame(maxWidth: .infinity)
             
-            // Second Text Field
-            Text(note.content)
-                .font(.system(size: 12, weight: .medium, design: .rounded))
-                .foregroundStyle(Self.contentColor)
-                .lineLimit(nil)
-                .padding(.horizontal)
-                .padding(.vertical)
-                .foregroundStyle(.white)
-                .frame(width: 353, height: contentHeight, alignment: .leading)
-                .multilineTextAlignment(.leading)
+            .frame(height: 300)
+
+            Spacer()
         }
-        .frame(width: 353)
-        .background {
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundStyle(.ultraThinMaterial)
+        .padding()
+        .onAppear {
+            // Set default visible range
+            visibleRange = 0...min(6, sleepData.count - 1)
         }
-        .padding(.bottom, 20)
     }
-    
-    /// A function to calculate dynamic height for a text based on its content.
-    static func dynamicHeight(size: Int, for text: String, min: CGFloat, max: CGFloat) -> CGFloat {
-        let textSize = CGSize(width: UIScreen.main.bounds.width - 32, height: CGFloat.greatestFiniteMagnitude)
-        let textAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: CGFloat(size))]
-        let boundingRect = (text as NSString).boundingRect(
-            with: textSize,
-            options: .usesLineFragmentOrigin,
-            attributes: textAttributes,
-            context: nil
-        )
-        return Swift.min(Swift.max(boundingRect.height + 32, min), max)
-    }
-    
-    /// A function to resize an image to a target size.
-    static func resizeImage(data: Data, targetSize: CGSize) -> UIImage? {
-        guard let image = UIImage(data: data) else { return nil }
-        let renderer = UIGraphicsImageRenderer(size: targetSize)
-        return renderer.image { _ in
-            image.draw(in: CGRect(origin: .zero, size: targetSize))
-        }
+
+    // Calculate visible days based on the visible range
+    private var visibleDays: [SleepData] {
+        Array(sleepData[visibleRange])
     }
 }
 
+// Extension to safely access array elements
+extension Array {
+    subscript(safe index: Int) -> Element? {
+        indices.contains(index) ? self[index] : nil
+    }
+}
 #Preview {
-    TestView(note: JournalEntry(
-        title: "Test title big",
-        content: "Test BodyTestTest ",
-        date: Date(),
-        location: "Cracow",
-        photoData: []
-    ))
+    TestView()
 }
