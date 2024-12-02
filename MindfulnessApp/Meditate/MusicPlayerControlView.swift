@@ -228,7 +228,9 @@ struct MusicPlayerControlView: View {
             .padding(.bottom, 19)
             .onAppear {
                 setupAudioPlayer()
-                togglePlayPause()
+//                togglePlayPause()
+                setupMusicLibrary()
+                print(musicLibrary)
 //                startTimer()
                 let thumbImage = UIImage(systemName: "circle.fill")?
                     .withTintColor(.white, renderingMode: .alwaysOriginal)
@@ -360,19 +362,19 @@ struct MusicPlayerControlView: View {
     func setupMusicLibrary(){
         switch length{
         case 5:
-            musicLibrary = theme == "relax_5" ? ["relax_5" : "a"] : ["relax_5_2" : "b"]
+            musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
         case 10:
-            musicLibrary = theme == "relax_10" ? ["relax_10" : "c"] : ["relax_10_2" : "d"]
+            musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
         case 15:
-            musicLibrary = theme == "relax_15" ? ["relax_15" : "e"] : ["relax_15_2" : "f"]
+            musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
         case 20:
-            musicLibrary = theme == "relax_20" ? ["relax_20" : "g"] : ["relax_20_2" : "h"]
+            musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
         default:
-            musicLibrary = theme == "relax_5" ? ["relax_5" : "a"] : ["relax_5_2" : "b"]
+            musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
         }
     }
 }
 
 #Preview {
-    MusicPlayerControlView(length: 5, theme: "relax")
+    MusicPlayerControlView(length: 15, theme: "relax")
 }
