@@ -1,93 +1,102 @@
+import Foundation
+
+// Structs matching the JSON response
+struct APIResponse: Codable {
+    let candidates: [Candidate]
+}
+
+struct Candidate: Codable {
+    let content: MyContent
+}
+
+struct MyContent: Codable {
+    let parts: [Part]
+}
+
+struct Part: Codable {
+    let text: String
+}
+
 import SwiftUI
 
 struct TestView: View {
-    @State private var responseText: String = "Waiting for response..."
-    
+    @State private var extractedText: String = "Waiting for response..."
+    var inputString: String
+
     var body: some View {
-        VStack {
-            Text("API Response:")
-                .font(.headline)
-                .padding()
-            
-            Text(responseText)
-                .font(.body)
-                .multilineTextAlignment(.center)
-                .padding()
-            
-            Button(action: {
-                sendAPIRequest()
-            }) {
-                Text("Send API Request")
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
-            }
-        }
+        Text(extractedText)
         .padding()
+        .task {
+            fetchData()
+        }
     }
-    
-    func sendAPIRequest() {
-        // Define the API URL
+
+    // Fetch data from the API
+    func fetchData() {
         guard let url = URL(string: "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyDe_xngdDBgH-QyIgR5xZQks3psMEU-CL4") else {
-            responseText = "Invalid URL."
+            extractedText = "Invalid URL."
             return
         }
-        
-        // Create the request body
+
+        // Prepare the request body
         let requestBody: [String: Any] = [
             "contents": [
                 [
                     "parts": [
-                        ["text": "Explain how AI works"]
+                        ["text": "Rewrite this daily horoscope so it is more consise and sounds better and more like a prediction also do not use the horoscope sign name: \(inputString)"]
                     ]
                 ]
             ]
         ]
-        
-        // Convert the body to JSON data
+
+        // Convert the request body to JSON
         guard let jsonData = try? JSONSerialization.data(withJSONObject: requestBody) else {
-            responseText = "Failed to encode JSON."
+            extractedText = "Failed to encode JSON."
             return
         }
-        
-        // Create the request
+
+        // Configure the request
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = jsonData
-        
+
         // Send the request
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        URLSession.shared.dataTask(with: request) { data, _, error in
             if let error = error {
                 DispatchQueue.main.async {
-                    responseText = "Error: \(error.localizedDescription)"
+                    extractedText = "Error: \(error.localizedDescription)"
                 }
                 return
             }
-            
+
             guard let data = data else {
                 DispatchQueue.main.async {
-                    responseText = "No data received."
+                    extractedText = "No data received."
                 }
                 return
             }
-            
-            // Decode the response
-            if let responseString = String(data: data, encoding: .utf8) {
-                DispatchQueue.main.async {
-                    responseText = responseString
+
+            // Decode the JSON response
+            do {
+                let response = try JSONDecoder().decode(APIResponse.self, from: data)
+                if let firstText = response.candidates.first?.content.parts.first?.text {
+                    DispatchQueue.main.async {
+                        extractedText = firstText
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        extractedText = "No text found in response."
+                    }
                 }
-            } else {
+            } catch {
                 DispatchQueue.main.async {
-                    responseText = "Failed to decode response."
+                    extractedText = "Failed to decode JSON: \(error.localizedDescription)"
                 }
             }
-        }
-        
-        task.resume()
+        }.resume()
     }
 }
 #Preview {
-    TestView()
+    TestView(inputString: "You may find that you're taking a much more daring approach when it comes to love and romance now, Sagittarius. If you aren't, then maybe you should. You will never know the possibilities until you at least give it a try. You may find that there's something spurring you on today. Use that impulse to initiate a new path toward the object of your desire.")
 }

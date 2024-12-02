@@ -14,9 +14,12 @@ struct SheetView: View {
     @State private var horoscope = String()
     var body: some View {
         Text(quote)
+            .padding()
+        if !horoscope.isEmpty{
+            TestView(inputString: horoscope)
+        }
         Image(systemName: phase)
         Text(phase)
-        Text(horoscope)
             .onAppear {
                 Task{
                     await loadMoonData()
