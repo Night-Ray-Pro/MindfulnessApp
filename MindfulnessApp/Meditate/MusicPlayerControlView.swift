@@ -23,10 +23,12 @@ struct VolumeSliderView: UIViewRepresentable {
     }
 }
 
-let songsURL = ["Melodic Piano Atmosphere", "Weightless", "Morning Light", "Emerald Isle", "Healing Flute", "First Step"]
-let artists = ["Bobby Cole", "Marconi Union", "Ambient Feelings", "Laura Sullivan", "Iftekharul Anam", "Hans Zimmer"]
+let songsURL = ["Melodic Piano Atmosphere"]
+let artists = ["Bobby Cole"]
 
 struct MusicPlayerControlView: View {
+    let length: Int
+    let theme: String
     @State private var currentTime: Double = 0
     @State private var totalTime: Double = 236
     @State private var isPlaying: Bool = false
@@ -34,8 +36,7 @@ struct MusicPlayerControlView: View {
     @State private var timer: Timer?
     @State private var volume: Double = 1.0
     @State private var wasPlaying: Bool = false
-    
-    @AppStorage("currentSongIndex") var currentSongIndex: Int = 0
+    @AppStorage("currentSongIndexx") var currentSongIndex: Int = 0
     
     //let songURL = Bundle.main.url(forResource: "Melodic Piano Atmosphere", withExtension: "mp3")!
     
@@ -96,13 +97,7 @@ struct MusicPlayerControlView: View {
 //                    }), in: 0 ... totalTime, step: 1)
 //                    .foregroundColor(.black)
                     .onAppear{
-                        let thumbImage = UIImage(systemName: "circle.fill")?
-                            .withTintColor(.white, renderingMode: .alwaysOriginal)
-                            .resized(to: CGSize(width: 18, height: 18))
-                       
-                        UISlider.appearance().setThumbImage(thumbImage, for: .normal)
-                        UISlider.appearance().minimumTrackTintColor = .white
-                        UISlider.appearance().maximumTrackTintColor = .lightGray
+                        
                     }
                     .padding(.vertical,10)
                     .padding(.horizontal,20)
@@ -234,6 +229,13 @@ struct MusicPlayerControlView: View {
                 setupAudioPlayer()
                 togglePlayPause()
 //                startTimer()
+                let thumbImage = UIImage(systemName: "circle.fill")?
+                    .withTintColor(.white, renderingMode: .alwaysOriginal)
+                    .resized(to: CGSize(width: 18, height: 18))
+               
+                UISlider.appearance().setThumbImage(thumbImage, for: .normal)
+                UISlider.appearance().minimumTrackTintColor = .white
+                UISlider.appearance().maximumTrackTintColor = .lightGray
             }
             .onDisappear {
                 stopAudio()
@@ -357,5 +359,5 @@ struct MusicPlayerControlView: View {
     
 
 #Preview {
-    MusicPlayerControlView()
+    MusicPlayerControlView(length: 5, theme: "relax")
 }

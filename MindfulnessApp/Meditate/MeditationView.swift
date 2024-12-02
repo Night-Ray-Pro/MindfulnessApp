@@ -242,7 +242,7 @@ struct MeditationView: View {
 //                    .background(content: .red)
                     
                     NavigationLink {
-                        MusicPlayerView()
+                        MusicPlayerView(length: playbackDuration, theme: themes[selectedTheme])
                             .onAppear {
                                     tabbarVisibility = .hidden
                                     opacity = 0.0

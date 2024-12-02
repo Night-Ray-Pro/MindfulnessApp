@@ -2,7 +2,7 @@
 import SwiftUI
 
 struct TestView: View {
-    let APIkey = ""
+    let APIkey = "AIzaSyDv_e1yB2_XQV9fqhAlfE6SYd7iYp1fCm0"
     @State private var extractedText: String = "Waiting for response..."
     var inputString: String
 

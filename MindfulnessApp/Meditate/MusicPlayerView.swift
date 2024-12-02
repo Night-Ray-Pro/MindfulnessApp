@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct MusicPlayerView: View {
+    let length: Int
+    let theme: String
     var body: some View {
         
         ZStack{
@@ -25,7 +27,7 @@ struct MusicPlayerView: View {
             VStack{
                 Spacer()
                 
-                MusicPlayerControlView()
+                MusicPlayerControlView(length: length, theme: theme)
                     .padding(.bottom,15)
                 
             }
@@ -36,5 +38,5 @@ struct MusicPlayerView: View {
 }
 
 #Preview {
-    MusicPlayerView()
+    MusicPlayerView(length: 5, theme: "relax")
 }
