@@ -1,21 +1,3 @@
-import Foundation
-
-// Structs matching the JSON response
-struct APIResponse: Codable {
-    let candidates: [Candidate]
-}
-
-struct Candidate: Codable {
-    let content: MyContent
-}
-
-struct MyContent: Codable {
-    let parts: [Part]
-}
-
-struct Part: Codable {
-    let text: String
-}
 
 import SwiftUI
 
@@ -27,12 +9,12 @@ struct TestView: View {
         Text(extractedText)
         .padding()
         .task {
-            fetchData()
+            await fetchData()
         }
     }
 
     // Fetch data from the API
-    func fetchData() {
+    func fetchData() async {
         guard let url = URL(string: "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyDe_xngdDBgH-QyIgR5xZQks3psMEU-CL4") else {
             extractedText = "Invalid URL."
             return
@@ -60,41 +42,19 @@ struct TestView: View {
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = jsonData
-
-        // Send the request
-        URLSession.shared.dataTask(with: request) { data, _, error in
-            if let error = error {
-                DispatchQueue.main.async {
-                    extractedText = "Error: \(error.localizedDescription)"
-                }
-                return
+        
+        do{
+            let (data, _) = try await URLSession.shared.data(for: request)
+            if let decodedResponse = try? JSONDecoder().decode(APIResponse.self, from: data){
+                extractedText = decodedResponse.candidates.first?.content.parts.first?.text ?? "Error"
             }
+            
+            
+        }catch{
+            print(error.localizedDescription)
+        }
 
-            guard let data = data else {
-                DispatchQueue.main.async {
-                    extractedText = "No data received."
-                }
-                return
-            }
-
-            // Decode the JSON response
-            do {
-                let response = try JSONDecoder().decode(APIResponse.self, from: data)
-                if let firstText = response.candidates.first?.content.parts.first?.text {
-                    DispatchQueue.main.async {
-                        extractedText = firstText
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        extractedText = "No text found in response."
-                    }
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    extractedText = "Failed to decode JSON: \(error.localizedDescription)"
-                }
-            }
-        }.resume()
+        
     }
 }
 #Preview {

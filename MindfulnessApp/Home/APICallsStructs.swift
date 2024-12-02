@@ -49,6 +49,20 @@ struct HoroscopeData: Codable {
     }
 }
 
+struct APIResponse: Codable {
+    let candidates: [Candidate]
+}
 
+struct Candidate: Codable {
+    let content: MyContent
+}
+
+struct MyContent: Codable {
+    let parts: [Part]
+}
+
+struct Part: Codable {
+    let text: String
+}
 
 
