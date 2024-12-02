@@ -37,7 +37,7 @@ struct MusicPlayerControlView: View {
     @State private var volume: Double = 1.0
     @State private var wasPlaying: Bool = false
     @State private var musicLibrary = [String:String]()
-    @AppStorage("currentSongIndexx") var currentSongIndex: Int = 0
+    @State var currentSongIndex: Int = 0
     
     //let songURL = Bundle.main.url(forResource: "Melodic Piano Atmosphere", withExtension: "mp3")!
     
@@ -227,10 +227,12 @@ struct MusicPlayerControlView: View {
             .frame(width: 356, height: 299)
             .padding(.bottom, 19)
             .onAppear {
-                setupAudioPlayer()
+               
 //                togglePlayPause()
                 setupMusicLibrary()
-                print(musicLibrary)
+                setupAudioPlayer()
+                print(Array(musicLibrary.keys).sorted()[currentSongIndex])
+                print(songsURL[currentSongIndex])
 //                startTimer()
                 let thumbImage = UIImage(systemName: "circle.fill")?
                     .withTintColor(.white, renderingMode: .alwaysOriginal)
@@ -259,10 +261,12 @@ struct MusicPlayerControlView: View {
     
     func setupAudioPlayer() {
         startTimer()
-        guard let songURL = Bundle.main.url(forResource: songsURL[currentSongIndex], withExtension: "mp3") else {
+        guard let songURL = Bundle.main.url(forResource: Array(musicLibrary.keys).sorted()[currentSongIndex], withExtension: "mp3") else {
             print("Error: Song file not found")
+//            print(songURL)
             return
         }
+        print(songURL)
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
             try AVAudioSession.sharedInstance().setActive(true)
@@ -324,8 +328,9 @@ struct MusicPlayerControlView: View {
             togglePlayPause()
             stopTimer()
             stopAudio()
-            currentSongIndex = (currentSongIndex + 1) % songsURL.count
-            setupAudioPlayer()
+            currentSongIndex = (currentSongIndex + 1) % musicLibrary.count
+//            print(testCurrentSongIndex)
+//            setupAudioPlayer()
             togglePlayPause()
         }
     }
@@ -335,8 +340,8 @@ struct MusicPlayerControlView: View {
             togglePlayPause()
             stopTimer()
             stopAudio()
-            currentSongIndex = (currentSongIndex - 1 + songsURL.count) % songsURL.count
-            setupAudioPlayer()
+            currentSongIndex = (currentSongIndex - 1 + musicLibrary.count) % musicLibrary.count
+//            setupAudioPlayer()
             togglePlayPause()
         }
     }
