@@ -1,98 +1,91 @@
 import SwiftUI
-import Charts
 
 struct TestView: View {
-    // Data model for each day
-    struct SleepData: Identifiable {
-        let id = UUID()
-        let date: Date
-        let hours: Double
-    }
-
-    // Example data for the month
-    @State private var sleepData: [SleepData] = []
-    @State private var visibleRange: ClosedRange<Int> = 0...6 // Default visible range
-
-    private let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEE" // Short weekday name: Mon, Tue, etc.
-        return formatter
-    }()
+    @State private var responseText: String = "Waiting for response..."
     
-    private let fullDateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        return formatter
-    }()
-
-    init() {
-        // Populate data dynamically for the current month
-        var data: [SleepData] = []
-        let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
-        for offset in 0..<30 {
-            if let date = calendar.date(byAdding: .day, value: offset, to: today) {
-                data.append(SleepData(date: date, hours: Double.random(in: 5...9)))
-            }
-        }
-        _sleepData = State(initialValue: data)
-    }
-
     var body: some View {
         VStack {
-            // Dynamic legend for visible range
-            if let firstDate = visibleDays.first?.date, let lastDate = visibleDays.last?.date {
-                Text("\(fullDateFormatter.string(from: firstDate)) - \(fullDateFormatter.string(from: lastDate))")
-                    .font(.headline)
-                    .padding()
-            } else {
-                Text("Scroll to see the range")
-                    .font(.headline)
-                    .padding()
-            }
-
-            // Chart with horizontal scrolling
-            Chart(visibleDays) { data in
-                BarMark(
-                    x: .value("Day", dateFormatter.string(from: data.date)),
-                    y: .value("Hours", data.hours)
-                )
-                .foregroundStyle(.blue)
-            }
-            .chartScrollableAxes(.horizontal)
-//            .chartScrollPositionX(visibleRange.lowerBound)
-            .chartXAxis {
-                AxisMarks { value in
-                    let index = value.index
-                    if let date = visibleDays[safe: index]?.date {
-                        AxisValueLabel(dateFormatter.string(from: date))
-                    }
-                }
-            }
-            .onChange(of: visibleRange) {
-            }
+            Text("API Response:")
+                .font(.headline)
+                .padding()
             
-            .frame(height: 300)
-
-            Spacer()
+            Text(responseText)
+                .font(.body)
+                .multilineTextAlignment(.center)
+                .padding()
+            
+            Button(action: {
+                sendAPIRequest()
+            }) {
+                Text("Send API Request")
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+            }
         }
         .padding()
-        .onAppear {
-            // Set default visible range
-            visibleRange = 0...min(6, sleepData.count - 1)
+    }
+    
+    func sendAPIRequest() {
+        // Define the API URL
+        guard let url = URL(string: "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyDe_xngdDBgH-QyIgR5xZQks3psMEU-CL4") else {
+            responseText = "Invalid URL."
+            return
         }
-    }
-
-    // Calculate visible days based on the visible range
-    private var visibleDays: [SleepData] {
-        Array(sleepData[visibleRange])
-    }
-}
-
-// Extension to safely access array elements
-extension Array {
-    subscript(safe index: Int) -> Element? {
-        indices.contains(index) ? self[index] : nil
+        
+        // Create the request body
+        let requestBody: [String: Any] = [
+            "contents": [
+                [
+                    "parts": [
+                        ["text": "Explain how AI works"]
+                    ]
+                ]
+            ]
+        ]
+        
+        // Convert the body to JSON data
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: requestBody) else {
+            responseText = "Failed to encode JSON."
+            return
+        }
+        
+        // Create the request
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = jsonData
+        
+        // Send the request
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                DispatchQueue.main.async {
+                    responseText = "Error: \(error.localizedDescription)"
+                }
+                return
+            }
+            
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    responseText = "No data received."
+                }
+                return
+            }
+            
+            // Decode the response
+            if let responseString = String(data: data, encoding: .utf8) {
+                DispatchQueue.main.async {
+                    responseText = responseString
+                }
+            } else {
+                DispatchQueue.main.async {
+                    responseText = "Failed to decode response."
+                }
+            }
+        }
+        
+        task.resume()
     }
 }
 #Preview {
