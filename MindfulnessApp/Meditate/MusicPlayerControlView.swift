@@ -37,15 +37,15 @@ struct MusicPlayerControlView: View {
     private var musicLibrary: [String: String] {
          switch length {
          case 5:
-             return theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
+             return theme == "relax" ? ["Whispers of the Ocean" : "Luna Skye", "Serene Horizons" : "River Willow"] : ["Mind's Journey" : "Isaac Tiber", "Focused Horizon" : "Lyra Steele"]
          case 10:
-             return theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
+             return theme == "relax" ? ["Falling Leaves" : "Amber Solace", "Gentle Waves" : "Elara Moon"] : ["Silent Currents" : "Caden Wolff", "In the Moment" : "Calla Stark"]
          case 15:
-             return theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
+             return theme == "relax" ? ["Golden Evening" : "Tobias Driftwood", "Softly Through the Mist" : "Nadia Brook"] : ["Inner Path" : "Zane Solis", "Clear Vision" : "Aidan Hollow"]
          case 20:
-             return theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
+             return theme == "relax" ? ["Calm Before the Dawn" : "Iris Sky", "Echoes of Silence" : "Orion Vail"] : ["Fractured Light" : "Oliver Quinn", "The Quiet Mind" : "Nova Frost"]
          default:
-             return theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
+             return theme == "relax" ? ["Whispers of the Ocean" : "Luna Skye", "Serene Horizons" : "River Willow"] : ["Mind's Journey" : "Isaac Tiber", "Focused Horizon" : "Lyra Steele"]
          }
      }
     
