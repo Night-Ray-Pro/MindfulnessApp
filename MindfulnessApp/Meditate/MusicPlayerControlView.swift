@@ -23,9 +23,6 @@ struct VolumeSliderView: UIViewRepresentable {
     }
 }
 
-//let songsURL = ["Melodic Piano Atmosphere", "Melodic Piano Atmosphere"]
-//let artists = ["Bobby Cole", "Bobby Cole"]
-
 struct MusicPlayerControlView: View {
     let length: Int
     let theme: String
@@ -36,19 +33,9 @@ struct MusicPlayerControlView: View {
     @State private var timer: Timer?
     @State private var volume: Double = 1.0
     @State private var wasPlaying: Bool = false
-//    @State private var musicLibrary = [String:String]()
     @State var currentSongIndex: Int = 0
     private var musicLibrary: [String: String] {
          switch length {
-//         case 5, 10, 15, 20:
-//             return theme == "relax" ?
-//                 ["relax_\(length)": "a", "relax_\(length)_2": "b"] :
-//                 ["focus_\(length)": "a", "focus_\(length)_2": "b"]
-//         default:
-//             return theme == "relax" ?
-//                 ["relax_default": "a", "relax_default_2": "b"] :
-//                 ["focus_default": "a", "focus_default_2": "b"]
-             
          case 5:
              return theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
          case 10:
@@ -62,25 +49,6 @@ struct MusicPlayerControlView: View {
          }
      }
     
-    //let songURL = Bundle.main.url(forResource: "Melodic Piano Atmosphere", withExtension: "mp3")!
-//    init(length: Int, theme: String)
-//    {
-//        switch length{
-//        case 5:
-//            self.musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
-//        case 10:
-//            self.musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
-//        case 15:
-//            self.musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
-//        case 20:
-//            self.musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
-//        default:
-//            self.musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
-//        }
-////        self.musicLibrary = ["relax_\(length)" : "a", "relax_\(length)_2" : "b"]
-////        self.length = length
-//        self.theme = theme
-//    }
     var body: some View {
 
             ZStack{
@@ -93,7 +61,6 @@ struct MusicPlayerControlView: View {
                 VStack{
                     HStack{
                         VStack(alignment: .leading){
-                            //This Text view throws error
                             Text(String(Array(musicLibrary.keys).sorted()[currentSongIndex]))
                                 .font(.system(size: 16, weight: .medium, design: .rounded))
                                 .padding(.bottom, 2)
@@ -105,8 +72,8 @@ struct MusicPlayerControlView: View {
                         .foregroundStyle(.white)
                         Spacer()
                     }
-                    //playlist graphic setup
                     
+                    //slider graphic setup
                     Slider(value: $currentTime, in: 0 ... totalTime, step: 0.1){ edyting in
                         if edyting{
                             stopTimer()
@@ -123,21 +90,7 @@ struct MusicPlayerControlView: View {
                             wasPlaying = false
                             
                         }
-                        print(edyting)
                     }
-                    //
-//                    Slider(value:Binding(get:{
-//                        self.currentTime
-//                    }, set:{ newValue in
-//                        self.currentTime = newValue
-//                        //
-//                        //Add Function
-//                        Task{
-//                            await updateAudioPlayerTime(newTime: newValue)
-//                        }
-//                        //
-//                    }), in: 0 ... totalTime, step: 1)
-//                    .foregroundColor(.black)
                     .onAppear{
                         
                     }
@@ -228,23 +181,7 @@ struct MusicPlayerControlView: View {
                             .foregroundStyle(.white)
                         VolumeSliderView()
                             .frame(height: 14)
-//                            .background(.red)
                             .padding(.bottom,5)
-                        
-//                            .background(.red)
-//                            .frame(height: 50)
-                        
-//                        Slider(value:Binding(get:{
-//                            self.volume
-//                        }, set:{ newValue in
-//                            self.volume = newValue
-//                            //
-//                            //Add Function
-//                            updateAudioPlayerVolume(newVolume: newValue)
-//                            //
-//                        }), in: 0 ... 1, step: 0.01)
-//                        .accentColor(.white)
-                      
                         
                         Image(systemName: "speaker.wave.3.fill")
                             .resizable()
@@ -252,29 +189,19 @@ struct MusicPlayerControlView: View {
                             .frame(width: 20, height: 15)
                             .foregroundStyle(.white)
                     }
-//                    .frame(minWidth: 12, maxWidth: .infinity)
                     .padding(.horizontal, 30)
                     .padding(.top, 30)
-                    //                Button("Test Volume"){
-                    //                    guard let player = audioPlayer else {return}
-                    //                    player.volume = 0.1
-                    //                }
                 }
-                //            .background(.red)
-                //            .padding(.horizontal,30)
-                //            .background(.blue)
             }
             
             .frame(width: 356, height: 299)
             .padding(.bottom, 19)
             .onAppear {
-               
-//                togglePlayPause()
-//                setupMusicLibrary()
+                
+                togglePlayPause()
                 setupAudioPlayer()
-                print(Array(musicLibrary.keys).sorted()[currentSongIndex])
-//                print(songsURL[currentSongIndex])
 //                startTimer()
+                
                 let thumbImage = UIImage(systemName: "circle.fill")?
                     .withTintColor(.white, renderingMode: .alwaysOriginal)
                     .resized(to: CGSize(width: 18, height: 18))
@@ -302,12 +229,11 @@ struct MusicPlayerControlView: View {
     
     func setupAudioPlayer() {
         startTimer()
-        guard let songURL = Bundle.main.url(forResource: /*songsURL[currentSongIndex]*/Array(musicLibrary.keys).sorted()[currentSongIndex], withExtension: "mp3") else {
+        guard let songURL = Bundle.main.url(forResource: Array(musicLibrary.keys).sorted()[currentSongIndex], withExtension: "mp3")
+        else {
             print("Error: Song file not found")
-//            print(songURL)
             return
         }
-        print(songURL)
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
             try AVAudioSession.sharedInstance().setActive(true)
@@ -320,7 +246,6 @@ struct MusicPlayerControlView: View {
     }
     
     func startTimer() {
-        print("Timer has started")
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             guard let player = audioPlayer else { return }
             currentTime = player.currentTime
@@ -328,7 +253,6 @@ struct MusicPlayerControlView: View {
     }
     
     func stopTimer() {
-        print("Timer has stopped")
         timer?.invalidate()
         timer = nil
     }
@@ -370,7 +294,6 @@ struct MusicPlayerControlView: View {
             stopTimer()
             stopAudio()
             currentSongIndex = (currentSongIndex + 1) % musicLibrary.count
-            print(currentSongIndex)
             setupAudioPlayer()
             togglePlayPause()
         }
@@ -394,9 +317,7 @@ struct MusicPlayerControlView: View {
     
     func updateAudioPlayerTime(newTime: Double){
         guard let player = audioPlayer else {return}
-//        togglePlayPause()
         player.currentTime = newTime
-//        togglePlayPause()
     }
     
     func updateAudioPlayerVolume(newVolume: Double){
@@ -404,21 +325,6 @@ struct MusicPlayerControlView: View {
         player.volume = Float(newVolume)
        
     }
-    
-//    func setupMusicLibrary(){
-//        switch length{
-//        case 5:
-//            musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
-//        case 10:
-//            musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
-//        case 15:
-//            musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
-//        case 20:
-//            musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
-//        default:
-//            musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
-//        }
-//    }
 }
 
 #Preview {
