@@ -2,6 +2,7 @@
 import SwiftUI
 
 struct TestView: View {
+    let APIkey = "AIzaSyDe_xngdDBgH-QyIgR5xZQks3psMEU-CL4"
     @State private var extractedText: String = "Waiting for response..."
     var inputString: String
 
@@ -15,7 +16,7 @@ struct TestView: View {
 
     // Fetch data from the API
     func fetchData() async {
-        guard let url = URL(string: "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyDe_xngdDBgH-QyIgR5xZQks3psMEU-CL4") else {
+        guard let url = URL(string: "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=\(APIkey)") else {
             extractedText = "Invalid URL."
             return
         }
