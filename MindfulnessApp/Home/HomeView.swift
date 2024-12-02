@@ -93,17 +93,18 @@ struct LightView: View{
             .relative(0.51),
             .relativeTop(0.975)
         ], headerContent: {
-            Text("Quote of the Day")
+            Text("Dashboard")
                 .font(.system(size: 30, weight: .bold, design: .rounded))
                 .padding([.horizontal, .bottom])
         })  {
-            ScrollView {
-                ForEach(1..<10) { num in
-                    Text("This is \(num) line")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding([.leading, .bottom])
-                }
-            }
+            SheetView()
+//            ScrollView {
+//                ForEach(1..<10) { num in
+//                    Text("This is \(num) line")
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                        .padding([.leading, .bottom])
+//                }
+//            }
         }
 //        .dragIndicatorColor(Color(red: 0.17, green: 0.17, blue: 0.33))
         .customBackground(
@@ -153,17 +154,11 @@ struct DarkView: View{
                 .relative(0.51),
                 .relativeTop(0.975)
             ], headerContent: {
-                Text("Quote of the Day")
+                Text("Dashboard")
                     .font(.system(size: 30, weight: .bold, design: .rounded))
                     .padding([.horizontal, .bottom])
             })  {
-                ScrollView {
-                    ForEach(1..<10) { num in
-                        Text("This is \(num) line")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding([.leading, .bottom])
-                    }
-                }
+                SheetView()
             }
     //        .dragIndicatorColor(Color(red: 0.17, green: 0.17, blue: 0.33))
             .customBackground(

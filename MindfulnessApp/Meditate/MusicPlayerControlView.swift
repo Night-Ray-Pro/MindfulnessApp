@@ -86,7 +86,7 @@ struct MusicPlayerControlView: View {
             ZStack{
                 
                 RoundedRectangle(cornerRadius: 33)
-                    .foregroundStyle(.red)
+                    .foregroundStyle(.ultraThinMaterial)
                     .preferredColorScheme(.light)
                 
                 //background graphic setup
