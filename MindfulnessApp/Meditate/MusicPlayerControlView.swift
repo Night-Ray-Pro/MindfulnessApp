@@ -36,6 +36,7 @@ struct MusicPlayerControlView: View {
     @State private var timer: Timer?
     @State private var volume: Double = 1.0
     @State private var wasPlaying: Bool = false
+    @State private var musicLibrary = [String:String]()
     @AppStorage("currentSongIndexx") var currentSongIndex: Int = 0
     
     //let songURL = Bundle.main.url(forResource: "Melodic Piano Atmosphere", withExtension: "mp3")!
@@ -355,8 +356,22 @@ struct MusicPlayerControlView: View {
         player.volume = Float(newVolume)
        
     }
-}
     
+    func setupMusicLibrary(){
+        switch length{
+        case 5:
+            musicLibrary = theme == "relax_5" ? ["relax_5" : "a"] : ["relax_5_2" : "b"]
+        case 10:
+            musicLibrary = theme == "relax_10" ? ["relax_10" : "c"] : ["relax_10_2" : "d"]
+        case 15:
+            musicLibrary = theme == "relax_15" ? ["relax_15" : "e"] : ["relax_15_2" : "f"]
+        case 20:
+            musicLibrary = theme == "relax_20" ? ["relax_20" : "g"] : ["relax_20_2" : "h"]
+        default:
+            musicLibrary = theme == "relax_5" ? ["relax_5" : "a"] : ["relax_5_2" : "b"]
+        }
+    }
+}
 
 #Preview {
     MusicPlayerControlView(length: 5, theme: "relax")
