@@ -198,8 +198,9 @@ struct MusicPlayerControlView: View {
             .padding(.bottom, 19)
             .onAppear {
                 
-                togglePlayPause()
+                
                 setupAudioPlayer()
+                togglePlayPause()
 //                startTimer()
                 
                 let thumbImage = UIImage(systemName: "circle.fill")?
