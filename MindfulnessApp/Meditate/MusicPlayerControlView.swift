@@ -23,8 +23,8 @@ struct VolumeSliderView: UIViewRepresentable {
     }
 }
 
-let songsURL = ["Melodic Piano Atmosphere", "Melodic Piano Atmosphere"]
-let artists = ["Bobby Cole", "Bobby Cole"]
+//let songsURL = ["Melodic Piano Atmosphere", "Melodic Piano Atmosphere"]
+//let artists = ["Bobby Cole", "Bobby Cole"]
 
 struct MusicPlayerControlView: View {
     let length: Int
@@ -36,28 +36,58 @@ struct MusicPlayerControlView: View {
     @State private var timer: Timer?
     @State private var volume: Double = 1.0
     @State private var wasPlaying: Bool = false
-    @State private var musicLibrary = [String:String]()
+//    @State private var musicLibrary = [String:String]()
     @State var currentSongIndex: Int = 0
+    private var musicLibrary: [String: String] {
+         switch length {
+         case 5, 10, 15, 20:
+             return theme == "relax" ?
+                 ["relax_\(length)": "a", "relax_\(length)_2": "b"] :
+                 ["focus_\(length)": "a", "focus_\(length)_2": "b"]
+         default:
+             return theme == "relax" ?
+                 ["relax_default": "a", "relax_default_2": "b"] :
+                 ["focus_default": "a", "focus_default_2": "b"]
+         }
+     }
     
     //let songURL = Bundle.main.url(forResource: "Melodic Piano Atmosphere", withExtension: "mp3")!
-    
+//    init(length: Int, theme: String)
+//    {
+//        switch length{
+//        case 5:
+//            self.musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
+//        case 10:
+//            self.musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
+//        case 15:
+//            self.musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
+//        case 20:
+//            self.musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
+//        default:
+//            self.musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
+//        }
+////        self.musicLibrary = ["relax_\(length)" : "a", "relax_\(length)_2" : "b"]
+////        self.length = length
+//        self.theme = theme
+//    }
     var body: some View {
 
             ZStack{
                 
                 RoundedRectangle(cornerRadius: 33)
-                    .foregroundStyle(.ultraThinMaterial)
+                    .foregroundStyle(.red)
                     .preferredColorScheme(.light)
                 
                 //background graphic setup
                 VStack{
                     HStack{
                         VStack(alignment: .leading){
-                            Text(songsURL[currentSongIndex])
+                            //This Text view throws error
+                            Text(String(Array(musicLibrary.keys).sorted()[currentSongIndex]))
                                 .font(.system(size: 16, weight: .medium, design: .rounded))
                                 .padding(.bottom, 2)
 //
-                            Text(artists[currentSongIndex])
+                            Text(String(Array(musicLibrary.values).sorted()[currentSongIndex]))
                                 .font(.system(size: 13, weight: .medium, design: .rounded))
                         }
                         .padding(.horizontal, 15)
@@ -229,10 +259,10 @@ struct MusicPlayerControlView: View {
             .onAppear {
                
 //                togglePlayPause()
-                setupMusicLibrary()
+//                setupMusicLibrary()
                 setupAudioPlayer()
                 print(Array(musicLibrary.keys).sorted()[currentSongIndex])
-                print(songsURL[currentSongIndex])
+//                print(songsURL[currentSongIndex])
 //                startTimer()
                 let thumbImage = UIImage(systemName: "circle.fill")?
                     .withTintColor(.white, renderingMode: .alwaysOriginal)
@@ -364,20 +394,20 @@ struct MusicPlayerControlView: View {
        
     }
     
-    func setupMusicLibrary(){
-        switch length{
-        case 5:
-            musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
-        case 10:
-            musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
-        case 15:
-            musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
-        case 20:
-            musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
-        default:
-            musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
-        }
-    }
+//    func setupMusicLibrary(){
+//        switch length{
+//        case 5:
+//            musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
+//        case 10:
+//            musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
+//        case 15:
+//            musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
+//        case 20:
+//            musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
+//        default:
+//            musicLibrary = theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
+//        }
+//    }
 }
 
 #Preview {
