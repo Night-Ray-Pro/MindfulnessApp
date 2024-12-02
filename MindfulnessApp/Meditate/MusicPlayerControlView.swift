@@ -23,8 +23,8 @@ struct VolumeSliderView: UIViewRepresentable {
     }
 }
 
-let songsURL = ["Melodic Piano Atmosphere"]
-let artists = ["Bobby Cole"]
+let songsURL = ["Melodic Piano Atmosphere", "Melodic Piano Atmosphere"]
+let artists = ["Bobby Cole", "Bobby Cole"]
 
 struct MusicPlayerControlView: View {
     let length: Int
@@ -261,7 +261,7 @@ struct MusicPlayerControlView: View {
     
     func setupAudioPlayer() {
         startTimer()
-        guard let songURL = Bundle.main.url(forResource: Array(musicLibrary.keys).sorted()[currentSongIndex], withExtension: "mp3") else {
+        guard let songURL = Bundle.main.url(forResource: /*songsURL[currentSongIndex]*/Array(musicLibrary.keys).sorted()[currentSongIndex], withExtension: "mp3") else {
             print("Error: Song file not found")
 //            print(songURL)
             return
@@ -329,8 +329,8 @@ struct MusicPlayerControlView: View {
             stopTimer()
             stopAudio()
             currentSongIndex = (currentSongIndex + 1) % musicLibrary.count
-//            print(testCurrentSongIndex)
-//            setupAudioPlayer()
+            print(currentSongIndex)
+            setupAudioPlayer()
             togglePlayPause()
         }
     }
@@ -341,7 +341,7 @@ struct MusicPlayerControlView: View {
             stopTimer()
             stopAudio()
             currentSongIndex = (currentSongIndex - 1 + musicLibrary.count) % musicLibrary.count
-//            setupAudioPlayer()
+            setupAudioPlayer()
             togglePlayPause()
         }
     }
