@@ -40,14 +40,25 @@ struct MusicPlayerControlView: View {
     @State var currentSongIndex: Int = 0
     private var musicLibrary: [String: String] {
          switch length {
-         case 5, 10, 15, 20:
-             return theme == "relax" ?
-                 ["relax_\(length)": "a", "relax_\(length)_2": "b"] :
-                 ["focus_\(length)": "a", "focus_\(length)_2": "b"]
+//         case 5, 10, 15, 20:
+//             return theme == "relax" ?
+//                 ["relax_\(length)": "a", "relax_\(length)_2": "b"] :
+//                 ["focus_\(length)": "a", "focus_\(length)_2": "b"]
+//         default:
+//             return theme == "relax" ?
+//                 ["relax_default": "a", "relax_default_2": "b"] :
+//                 ["focus_default": "a", "focus_default_2": "b"]
+             
+         case 5:
+             return theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
+         case 10:
+             return theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
+         case 15:
+             return theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
+         case 20:
+             return theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
          default:
-             return theme == "relax" ?
-                 ["relax_default": "a", "relax_default_2": "b"] :
-                 ["focus_default": "a", "focus_default_2": "b"]
+             return theme == "relax" ? ["relax_\(length)" : "a", "relax_\(length)_2" : "b"] : ["focus_\(length)" : "a", "focus_\(length)_2" : "b"]
          }
      }
     
