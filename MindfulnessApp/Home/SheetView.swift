@@ -13,20 +13,32 @@ struct SheetView: View {
     @State private var sign = "Sagittarius"
     @State private var horoscope = String()
     var body: some View {
-        Text(quote)
-            .padding()
-        if !horoscope.isEmpty{
-            TestView(inputString: horoscope)
-        }
-        Image(systemName: phase)
-        Text(phase)
-            .onAppear {
-                Task{
-                    await loadMoonData()
-                    await loadQuotesData()
-                    await loadHoroscope()
+        ScrollView{
+            ZStack{
+//                Image(.homeSheetDayBackground)
+//                    .resizable()
+//                    .ignoresSafeArea()
+
+                VStack{
+                    Text(quote)
+                        .padding()
+                    if !horoscope.isEmpty{
+                        TestView(inputString: horoscope)
+                    }
+                    Image(systemName: phase)
+                    Text(phase)
+                        .onAppear {
+                            Task{
+                                await loadMoonData()
+                                await loadQuotesData()
+                                await loadHoroscope()
+                            }
+                        }
+                    Spacer()
                 }
+//                .background(.red)
             }
+        }
     }
     func loadMoonData() async{
         let timeStamp = Int(Date().timeIntervalSince1970)
