@@ -511,9 +511,10 @@ struct SheetView: View {
             
 //                    .background(.yellow)
         }
+//        .accentColor(.white)
         .toolbar(tabbarVisibility, for: .tabBar)
         .animation(.easeInOut(duration:0.2), value: tabbarVisibility)
-        .accentColor(.white)
+        
         
     }
     func loadMoonData() async{

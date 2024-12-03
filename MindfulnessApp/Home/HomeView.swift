@@ -27,6 +27,7 @@ struct HomeView: View {
             .toolbarBackground(.visible, for: .tabBar)
             .toolbarColorScheme(.dark, for: .tabBar)
         }
+        .accentColor(.white)
         .onChange(of: scenePhase) { oldPhase, newPhase in
             if newPhase == .active {
                 withAnimation{

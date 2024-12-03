@@ -25,6 +25,7 @@ struct OptymizedDisplayEntryView: View {
     let imageData: [Data]?
     let cachedImage: UIImage?
     let titleHeight: CGFloat
+    let titleHeightSmall: CGFloat
     let contentHeight: CGFloat
     
     init(note: JournalEntry) {
@@ -38,6 +39,7 @@ struct OptymizedDisplayEntryView: View {
         
         // Precompute heights
         self.titleHeight = Self.dynamicHeight(size: 36, for: note.title, min: 50, max: 160)
+        self.titleHeightSmall = Self.dynamicHeight(size: 29, for: note.title, min: 50, max: 160)
         self.contentHeight = Self.dynamicHeight(size: 13, for: note.content, min: 50, max: 140)
         
         // Cache the first image resized
@@ -76,7 +78,7 @@ struct OptymizedDisplayEntryView: View {
                     .font(.system(size: imageData!.isEmpty ? 36 : 29, weight: .bold, design: .rounded))
                     .multilineTextAlignment(.center)
                     .lineLimit(nil)
-                    .frame(height: titleHeight)
+                    .frame(height: imageData!.isEmpty ? titleHeight : titleHeightSmall)
                 Spacer()
                 
                 if let cachedImage {
@@ -123,7 +125,15 @@ struct OptymizedDisplayEntryView: View {
             attributes: textAttributes,
             context: nil
         )
-        return Swift.min(Swift.max(boundingRect.height + 32, min), max)
+        if size == 36{
+            return Swift.min(Swift.max(boundingRect.height + 50, min), max)
+        }
+        if size == 29{
+            return Swift.min(Swift.max(boundingRect.height + 40, min), max)
+        }
+        else{
+            return Swift.min(Swift.max(boundingRect.height + 32, min), max)
+        }
     }
     
     /// A function to resize an image to a target size.
