@@ -13,24 +13,30 @@ struct SheetView: View {
     @State private var path = [JournalEntry]()
     @State private var tabbarVisibility = Visibility.visible
     @State private var opacity = 1.0
-    @State private var phase = String()
-    @State private var quote = String()
-    @State private var quoteAuthor = String()
+    @AppStorage("phase") private var phase = String()
+    @AppStorage("quote") private var quote = String()
+    @AppStorage("author") private var quoteAuthor = String()
     @State private var sign = "Sagittarius"
     @State private var moonDescription = false
-    @State private var horoscope = String() {
+    @AppStorage("horoscope") private var horoscope = String() {
         willSet{
             Task{
                 shortHoroscope = await Gemini.fetchResponse(for: prepareRequest)
             }
         }
     }
-    @State private var shortHoroscope: String?
+    @AppStorage("shortHoroscope") private var shortHoroscope: String?
     let testText = "This is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test text"
     let testData = [10,7,3]
     var prepareRequest: String{
         return "Rewrite this daily horoscope so it is more consise and sounds better and more like a prediction also do not use the horoscope sign name: \(horoscope)"
     }
+    let stats = ["Daily", "Weekly", "Monthly"]
+    let charts = ["Sleep", "Coffee", "Meditation", "Mood", "Journal"]
+    @State private var chosenStat = "Weekly"
+    @State private var isChoosingStats = false
+    @State private var chosenChart = "Sleep"
+    @State private var isChoosingCharts = false
     var body: some View {
         NavigationStack(path: $path){
             ScrollView{
@@ -145,7 +151,9 @@ struct SheetView: View {
                                 .foregroundStyle(.white)
                                 .font(.system(size: 40, weight: .bold, design: .rounded))
                         }
-                        .padding()
+                        .padding(.top)
+                        .padding(.horizontal)
+                        .padding(.bottom, -5)
                         .frame(width: 345)
                         
                         
@@ -250,6 +258,222 @@ struct SheetView: View {
                             .fill(.ultraThinMaterial)
                     }
                     
+                    //Quick stats choice
+                    VStack(spacing:0){
+                        Group{
+                            Button{
+                                withAnimation{
+                                    isChoosingStats.toggle()
+                                }
+                            } label: {
+                                Text(chosenStat)
+                                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                                    .padding(.leading)
+                                    .frame(maxWidth: .infinity, maxHeight: 50, alignment: .leading)
+                                    .foregroundStyle(.white)
+                                    .background{
+                                        
+                                        if isChoosingStats{
+                                            Rectangle()
+                                                .foregroundStyle(.gray.opacity(0.3))
+                                        }
+                                        
+                                    }
+                                    .overlay(alignment: .trailing) {
+                                        Image(systemName: "chevron.forward")
+                                            .padding(.horizontal)
+                                            .foregroundStyle(.white)
+                                            .rotationEffect(Angle(degrees: isChoosingStats ? 90 : 0))
+                                    }
+                            }
+                            if isChoosingStats{
+                                ScrollView{
+                                    ForEach(stats, id: \.self){ stat in
+                                        stat != "Daily" ?
+                                        Rectangle()
+                                            .foregroundStyle(.gray.opacity(0.3))
+                                            .frame(width: 300, height: 1)
+                                        :
+                                        nil
+                                        Button{
+                                            withAnimation{
+                                                chosenStat = stat
+                                                isChoosingStats = false
+                                            }
+                                        } label: {
+                                            Text(stat)
+                                                .font(.system(size: 20, weight: .bold, design: .rounded))
+                                                .foregroundStyle(.white)
+                                                .padding(5)
+                                                .frame(maxWidth: .infinity)
+                                            
+                                                .overlay(alignment: .trailing) {
+                                                    if stat == chosenStat {
+                                                        Image(systemName: "checkmark.circle.fill")
+                                                            .padding(.horizontal)
+                                                            .foregroundStyle(.white)
+                                                    }
+                                                    
+                                                }
+                                            //                                    .background(.blue)
+                                        }
+                                        
+                                        
+                                    }
+                                }
+                                .scrollBounceBehavior(.basedOnSize)
+                                .scrollIndicators(.hidden)
+                                .padding(.bottom, 5)
+                            }
+                            
+                        }
+                        
+                    }
+                    .frame(width: 345, height: isChoosingStats ? 200 : 50)
+                    .background{
+                        Rectangle()
+                            .foregroundStyle(.ultraThinMaterial)
+                            .preferredColorScheme(.light)
+                        //                    .frame(width: 352, height: 50)
+                    }
+                    .clipShape(.rect(cornerRadius: 35))
+                    //Quick stats content
+                    HStack(spacing:22.5){
+                        //coffe
+                        VStack{
+                            Text("Coffee")
+                                .font(.system(size: 14, weight:.bold, design: .rounded))
+                            Text("5")
+                                .font(.system(size: 40, weight:.bold, design: .rounded))
+                                .minimumScaleFactor(0.5)
+                            Text("Cups")
+                                .font(.system(size: 12, weight:.bold, design: .rounded))
+                        }
+                        .padding()
+                        .frame(width: 100, height: 100)
+                        .background{
+                            RoundedRectangle(cornerRadius: 20)
+                                .fill(.ultraThinMaterial)
+                        }
+                        //meditation
+                        VStack{
+                            Text("Meditation")
+                                .font(.system(size: 14, weight:.bold, design: .rounded))
+                            Text("25")
+                                .font(.system(size: 40, weight:.bold, design: .rounded))
+                                .minimumScaleFactor(0.5)
+                                .padding(.horizontal)
+                            Text("Min")
+                                .font(.system(size: 12, weight:.bold, design: .rounded))
+                        }
+                        .padding(.vertical)
+                        .frame(width: 100, height: 100)
+                        .background{
+                            RoundedRectangle(cornerRadius: 20)
+                                .fill(.ultraThinMaterial)
+                        }
+                        //journal
+                        VStack{
+                            Text("Journal")
+                                .font(.system(size: 14, weight:.bold, design: .rounded))
+                            Text("4")
+                                .font(.system(size: 40, weight:.bold, design: .rounded))
+                                .minimumScaleFactor(0.5)
+                            Text("Entries")
+                                .font(.system(size: 12, weight:.bold, design: .rounded))
+                        }
+                        .padding()
+                        .frame(width: 100, height: 100)
+                        .background{
+                            RoundedRectangle(cornerRadius: 20)
+                                .fill(.ultraThinMaterial)
+                        }
+                        
+                    }
+                    .foregroundStyle(.white)
+                    
+                    //Chart choice
+                    VStack(spacing:0){
+                        Group{
+                            Button{
+                                withAnimation{
+                                    isChoosingCharts.toggle()
+                                }
+                            } label: {
+                                Text(chosenChart)
+                                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                                    .padding(.leading)
+                                    .frame(maxWidth: .infinity, maxHeight: 50, alignment: .leading)
+                                    .foregroundStyle(.white)
+                                    .background{
+                                        
+                                        if isChoosingCharts{
+                                            Rectangle()
+                                                .foregroundStyle(.gray.opacity(0.3))
+                                        }
+                                        
+                                    }
+                                    .overlay(alignment: .trailing) {
+                                        Image(systemName: "chevron.forward")
+                                            .padding(.horizontal)
+                                            .foregroundStyle(.white)
+                                            .rotationEffect(Angle(degrees: isChoosingCharts ? 90 : 0))
+                                    }
+                            }
+                            if isChoosingCharts{
+                                ScrollView{
+                                    ForEach(charts, id: \.self){ chart in
+                                        chart != "Daily" ?
+                                        Rectangle()
+                                            .foregroundStyle(.gray.opacity(0.3))
+                                            .frame(width: 300, height: 1)
+                                        :
+                                        nil
+                                        Button{
+                                            withAnimation{
+                                                chosenChart = chart
+                                                isChoosingCharts = false
+                                            }
+                                        } label: {
+                                            Text(chart)
+                                                .font(.system(size: 20, weight: .bold, design: .rounded))
+                                                .foregroundStyle(.white)
+                                                .padding(5)
+                                                .frame(maxWidth: .infinity)
+                                            
+                                                .overlay(alignment: .trailing) {
+                                                    if chart == chosenChart {
+                                                        Image(systemName: "checkmark.circle.fill")
+                                                            .padding(.horizontal)
+                                                            .foregroundStyle(.white)
+                                                    }
+                                                    
+                                                }
+                                            //                                    .background(.blue)
+                                        }
+                                        
+                                        
+                                    }
+                                }
+                                .scrollBounceBehavior(.basedOnSize)
+                                .scrollIndicators(.hidden)
+                                .padding(.bottom, 5)
+                            }
+                            
+                        }
+                        
+                    }
+                    .frame(width: 345, height: isChoosingCharts ? 200 : 50)
+                    .background{
+                        Rectangle()
+                            .foregroundStyle(.ultraThinMaterial)
+                            .preferredColorScheme(.light)
+                        //                    .frame(width: 352, height: 50)
+                    }
+                    .clipShape(.rect(cornerRadius: 35))
+//                    WeeklySleepChart()
+                    SleepChartView()
+                        .frame(height: 220)
                     
                     
                     Spacer()
@@ -259,9 +483,9 @@ struct SheetView: View {
                 //                .background(.red)
                 .onAppear {
                     Task{
-                        await loadMoonData()
-                        await loadQuotesData()
-                        await loadHoroscope()
+//                        await loadMoonData()
+//                        await loadQuotesData()
+//                        await loadHoroscope()
                     }
                 }
                 
@@ -285,7 +509,7 @@ struct SheetView: View {
 //            .padding(.bottom, 50)
 //            .toolbarBackground(.visible, for: .tabBar)
             
-            //        .background(.yellow)
+//                    .background(.yellow)
         }
         .toolbar(tabbarVisibility, for: .tabBar)
         .animation(.easeInOut(duration:0.2), value: tabbarVisibility)
