@@ -56,7 +56,25 @@ struct SettingsView: View {
                                                 Circle()
                                                     .frame(width:18, height: 18)
                                                     .foregroundStyle(.orange)
-                                                Spacer()
+
+                                                Text({
+                                                    switch num{
+                                                    case 1: return "Homescreen"
+                                                    case 2: return "Journal"
+                                                    case 3: return "Meditation"
+                                                    case 4: return "Night Mode"
+                                                    case 5: return "Privacy"
+                                                    case 6: return "Feedback"
+                                                    case 7: return "Notifications"
+                                                    case 8: return "App Info"
+                                                    case 9: return "Support"
+                                                    default: return "Error"
+                                                    }
+                                                }())
+                                                    .font(.system(size: 18, weight: .medium, design: .rounded))
+                                                    .foregroundStyle(.white)
+                                                    .lineLimit(1)
+                                                
                                                 Image(systemName: "chevron.forward")
                                                     .foregroundStyle(.white)
                                                     .rotationEffect(Angle(degrees: numTapped == num ? 90 : 0))
