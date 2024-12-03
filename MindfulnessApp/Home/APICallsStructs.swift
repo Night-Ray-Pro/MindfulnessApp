@@ -41,28 +41,14 @@ struct Horoscope: Codable {
 
 struct HoroscopeData: Codable {
     let horoscopeData: String
-//    let week: String
+    let week: String
     
     enum CodingKeys: String, CodingKey{
         case horoscopeData = "horoscope_data"
-//        case week = "week"
+        case week = "week"
     }
 }
 
-struct APIResponse: Codable {
-    let candidates: [Candidate]
-}
 
-struct Candidate: Codable {
-    let content: MyContent
-}
-
-struct MyContent: Codable {
-    let parts: [Part]
-}
-
-struct Part: Codable {
-    let text: String
-}
 
 

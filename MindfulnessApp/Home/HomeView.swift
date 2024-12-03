@@ -61,23 +61,26 @@ struct LightView: View{
     
     var body: some View {
         ZStack{
+            //Gradient
             VStack{
                 Rectangle()
-                    .frame(height:290)
+                    .frame(height:310)
                     .homeDayViewGradient()
                     .ignoresSafeArea()
                 Spacer()
             }
-            
+            //Graphics
             VStack{
                 Spacer()
                 
                 Image(.homeLightVector)
                     .resizable()
                     .scaledToFit()
+                    .padding(.bottom, 80)
+                    
                     
             }
-            
+            //Text
             VStack{
                 Text("Morning!")
                     .foregroundStyle(.white)
@@ -87,8 +90,10 @@ struct LightView: View{
                     .font(.system(size: 32, weight: .semibold, design: .rounded))
                 Spacer()
             }
+            .padding(.top, 60)
 
         }
+        .ignoresSafeArea()
         .bottomSheet(bottomSheetPosition: self.$position, switchablePositions: [
             .relative(0.51),
             .relativeTop(0.975)
@@ -96,20 +101,19 @@ struct LightView: View{
             Text("Dashboard")
                 .font(.system(size: 30, weight: .bold, design: .rounded))
                 .padding([.horizontal, .bottom])
+                .padding(.leading,15)
         })  {
             SheetView()
-//            ScrollView {
-//                ForEach(1..<10) { num in
-//                    Text("This is \(num) line")
-//                        .frame(maxWidth: .infinity, alignment: .leading)
-//                        .padding([.leading, .bottom])
-//                }
-//            }
+                .preferredColorScheme(.light)
+            //hhhi
         }
 //        .dragIndicatorColor(Color(red: 0.17, green: 0.17, blue: 0.33))
         .customBackground(
             Color("homeLightSheet")
                 .cornerRadius(30)
+//                Image(.homeSheetDayBackground)
+//                    .resizable()
+//                    .scaledToFit()
         )
         .foregroundColor(.white)
     }
@@ -135,6 +139,7 @@ struct DarkView: View{
                     Image(.homeDarkVector)
                         .resizable()
                         .scaledToFit()
+                        .padding(.bottom, 80)
                         
                         
                 }
@@ -148,8 +153,10 @@ struct DarkView: View{
                         .font(.system(size: 32, weight: .semibold, design: .rounded))
                     Spacer()
                 }
+                .padding(.top, 60)
 
             }
+            .ignoresSafeArea()
             .bottomSheet(bottomSheetPosition: self.$position, switchablePositions: [
                 .relative(0.51),
                 .relativeTop(0.975)
@@ -157,14 +164,19 @@ struct DarkView: View{
                 Text("Dashboard")
                     .font(.system(size: 30, weight: .bold, design: .rounded))
                     .padding([.horizontal, .bottom])
+                    .padding(.leading,15)
             })  {
                 SheetView()
+                    .preferredColorScheme(.light)
                 //hhhi
             }
     //        .dragIndicatorColor(Color(red: 0.17, green: 0.17, blue: 0.33))
             .customBackground(
                 Color("homeDarkSheet")
                     .cornerRadius(30)
+//                Image(.homeSheetDayBackground)
+//                    .resizable()
+//                    .scaledToFit()
             )
             .foregroundColor(.white)
         }

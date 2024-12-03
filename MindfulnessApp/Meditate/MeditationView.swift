@@ -289,7 +289,7 @@ struct MeditationView: View {
        
         .toolbar(tabbarVisibility, for: .tabBar)
         .animation(.easeInOut(duration:0.2), value: tabbarVisibility)
-        .accentColor(.white)
+//        .accentColor(.white)
     }
     private func startPulsating() {
         isBreathing = false // Stop any existing pulsation

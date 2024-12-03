@@ -33,6 +33,7 @@ struct MusicPlayerView: View {
             }
             .ignoresSafeArea()
         }
+        .accentColor(.white)
         
     }
 }
