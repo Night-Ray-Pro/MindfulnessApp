@@ -56,20 +56,45 @@ struct AccountAndPrivacyView: View {
                 }
                 if selectedSetting == 1{
                     ScrollView{
-                        Spacer()
-                        HStack{
+//                        Spacer()
+                        HStack(spacing:10){
                             Text("Username: ")
                                 .font(.system(size: 16, weight: .medium, design: .rounded))
                                 .foregroundStyle(.white)
-                                .frame(maxWidth: .infinity, alignment: .leading)
+                                
                                 .padding(.leading, 50)
+//                            Text("Test")
+//                            TextField("Title...", text: $username)
+//                                .padding(.bottom, 20)
+//                                .multilineTextAlignment(.center)
+//                                .foregroundStyle(.white)
+//                                .padding(10)
+//                                .background(.red.opacity(1.0))
+//                                .font(.system(size: 20, weight: .semibold, design: .rounded))
+//Spacer()
                             TextField(
-                                "Username",
+                                "",
                                 text: $username
                             )
-                            .background(.red)
-                            .
+                            
+                            .accentColor(.white)
+                            .font(.system(size: 16, weight: .medium, design: .rounded))
+                            .foregroundStyle(.white)
+                            .background{
+                                RoundedRectangle(cornerRadius: 5)
+                                    .foregroundStyle(.gray.opacity(0.3))
+                            }
+                            .frame(maxWidth:.infinity)
+//                            .textFieldStyle(.roundedBorder)
+                            .padding(.trailing, 45)
+                            
+                            
+//                            .background(.red)
+                            
                         }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.top,10)
+//                        .background(.blue)
                     }
                     .scrollBounceBehavior(.basedOnSize)
                     .scrollIndicators(.hidden)
