@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct AccountAndSecurityView: View {
+//    @Binding var selectedSetting: Int
+    @State private var selectedSetting = 0
     @State private var isChoosingStats = false
     var body: some View {
         VStack(spacing:0){
@@ -15,11 +17,18 @@ struct AccountAndSecurityView: View {
                 Button{
                     withAnimation{
                         isChoosingStats.toggle()
+                        
+                        if isChoosingStats{
+                            selectedSetting = 1
+                        }else{
+                            selectedSetting = 0
+                        }
+                        
                     }
                 } label: {
-                    Text("Account and Security")
+                    Text("Account & Security")
                         .font(.system(size: 20, weight: .bold, design: .rounded))
-                        .padding(.leading)
+                        .padding(.leading, 50)
                         .frame(maxWidth: .infinity, maxHeight: 50, alignment: .leading)
                         .foregroundStyle(.white)
                         .background{
@@ -36,8 +45,15 @@ struct AccountAndSecurityView: View {
                                 .foregroundStyle(.white)
                                 .rotationEffect(Angle(degrees: isChoosingStats ? 90 : 0))
                         }
+                        .overlay(alignment: .leading) {
+                            Circle()
+                                .frame(width: 18, height: 18)
+                                .padding(.horizontal)
+                                .foregroundStyle(.orange)
+                                
+                        }
                 }
-                if isChoosingStats{
+                if selectedSetting == 1{
                     ScrollView{
                         Text("Content")
                     }
@@ -49,7 +65,7 @@ struct AccountAndSecurityView: View {
             }
             
         }
-        .frame(width: 345, height: isChoosingStats ? 150 : 50)
+        .frame(width: 345, height: selectedSetting == 1 ? 150 : 50)
         .background{
             Rectangle()
                 .foregroundStyle(.blue)
@@ -61,5 +77,5 @@ struct AccountAndSecurityView: View {
 }
 
 #Preview {
-    AccountAndSecurityView()
+    AccountAndSecurityView(/*selectedSetting: .constant(1)*/)
 }
