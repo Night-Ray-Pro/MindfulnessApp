@@ -10,6 +10,7 @@ import SwiftUI
 struct AccountAndPrivacyView: View {
 //    @Binding var selectedSetting: Int
     @State private var username = String()
+    @State private var gender = String()
     @State private var selectedSetting = 0
     @State private var isChoosingStats = false
     var body: some View {
@@ -56,27 +57,17 @@ struct AccountAndPrivacyView: View {
                 }
                 if selectedSetting == 1{
                     ScrollView{
-//                        Spacer()
                         HStack(spacing:10){
                             Text("Username: ")
                                 .font(.system(size: 16, weight: .medium, design: .rounded))
                                 .foregroundStyle(.white)
-                                
                                 .padding(.leading, 50)
-//                            Text("Test")
-//                            TextField("Title...", text: $username)
-//                                .padding(.bottom, 20)
-//                                .multilineTextAlignment(.center)
-//                                .foregroundStyle(.white)
-//                                .padding(10)
-//                                .background(.red.opacity(1.0))
-//                                .font(.system(size: 20, weight: .semibold, design: .rounded))
-//Spacer()
+
                             TextField(
                                 "",
                                 text: $username
                             )
-                            
+                            .multilineTextAlignment(.center)
                             .accentColor(.white)
                             .font(.system(size: 16, weight: .medium, design: .rounded))
                             .foregroundStyle(.white)
@@ -94,7 +85,35 @@ struct AccountAndPrivacyView: View {
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.top,10)
-//                        .background(.blue)
+                        
+                        HStack(spacing:10){
+                            Text("Gender: ")
+                                .font(.system(size: 16, weight: .medium, design: .rounded))
+                                .foregroundStyle(.white)
+                                .padding(.leading, 50)
+                            
+                            Picker("", selection: $gender){
+                                Text("Woman")
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 16, weight: .medium, design: .rounded))
+                                Text("Man")
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 16, weight: .medium, design: .rounded))
+                            }
+                            .pickerStyle(SegmentedPickerStyle())
+                            .accentColor(.white)
+                            .background{
+                                RoundedRectangle(cornerRadius: 5)
+                                    .foregroundStyle(.gray.opacity(0.3))
+                            }
+                            .frame(maxWidth:.infinity)
+                            .padding(.trailing, 45)
+                            
+//                            .background(.red)
+                            
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.top,10)
                     }
                     .scrollBounceBehavior(.basedOnSize)
                     .scrollIndicators(.hidden)
