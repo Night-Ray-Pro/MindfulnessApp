@@ -1,5 +1,5 @@
 //
-//  AccountAndSecurityView.swift
+//  AccountAndPrivacyView.swift
 //  MindfulnessApp
 //
 //  Created by Oskar Kapuśniak on 4/12/24.
@@ -7,8 +7,9 @@
 
 import SwiftUI
 
-struct AccountAndSecurityView: View {
+struct AccountAndPrivacyView: View {
 //    @Binding var selectedSetting: Int
+    @State private var username = String()
     @State private var selectedSetting = 0
     @State private var isChoosingStats = false
     var body: some View {
@@ -26,8 +27,8 @@ struct AccountAndSecurityView: View {
                         
                     }
                 } label: {
-                    Text("Account & Security")
-                        .font(.system(size: 20, weight: .bold, design: .rounded))
+                    Text("Account & Privacy")
+                        .font(.system(size: 18, weight: .bold, design: .rounded))
                         .padding(.leading, 50)
                         .frame(maxWidth: .infinity, maxHeight: 50, alignment: .leading)
                         .foregroundStyle(.white)
@@ -55,7 +56,20 @@ struct AccountAndSecurityView: View {
                 }
                 if selectedSetting == 1{
                     ScrollView{
-                        Text("Content")
+                        Spacer()
+                        HStack{
+                            Text("Username: ")
+                                .font(.system(size: 16, weight: .medium, design: .rounded))
+                                .foregroundStyle(.white)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.leading, 50)
+                            TextField(
+                                "Username",
+                                text: $username
+                            )
+                            .background(.red)
+                            .
+                        }
                     }
                     .scrollBounceBehavior(.basedOnSize)
                     .scrollIndicators(.hidden)
@@ -68,8 +82,7 @@ struct AccountAndSecurityView: View {
         .frame(width: 345, height: selectedSetting == 1 ? 150 : 50)
         .background{
             Rectangle()
-                .foregroundStyle(.blue)
-                .preferredColorScheme(.light)
+                .settingsViewColor()
             //                    .frame(width: 352, height: 50)
         }
         .clipShape(.rect(cornerRadius: 35))
@@ -77,5 +90,5 @@ struct AccountAndSecurityView: View {
 }
 
 #Preview {
-    AccountAndSecurityView(/*selectedSetting: .constant(1)*/)
+    AccountAndPrivacyView(/*selectedSetting: .constant(1)*/)
 }
