@@ -292,6 +292,11 @@ struct MeditationView: View {
             .toolbarColorScheme(.dark, for: .tabBar)
         }
         .onAppear{
+            if let week = weeks.first{
+//                week.days.last!.mood
+                selectedEmotion = week.days.last!.mood
+
+            }
             isBreathing = false
             isBreathing.toggle()
         }

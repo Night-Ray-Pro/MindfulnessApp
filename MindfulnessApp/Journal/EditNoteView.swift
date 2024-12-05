@@ -12,6 +12,7 @@ import SwiftData
 struct EditNoteView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
+    @Query(sort: \ApplicationData.date, order: .reverse) var weeks: [ApplicationData]
     @Bindable var note: JournalEntry
     @State private var photo = [PhotosPickerItem]()
     @State private var imageData = [Data]()

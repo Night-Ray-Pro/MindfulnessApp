@@ -547,7 +547,7 @@ struct SheetView: View {
         if let week = weeks.first{
             var totalMeditation = 0
             for day in week.days{
-                totalMeditation += day.mood
+                totalMeditation += day.entries
             }
             return totalMeditation
         }

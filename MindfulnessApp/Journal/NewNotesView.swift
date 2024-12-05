@@ -12,6 +12,7 @@ struct NewNotesView: View {
     @Environment(\.modelContext) var modelContext
     @Query(sort: \JournalEntry.date, order: .reverse) var notes: [JournalEntry]
     let buttonOverlayColor = Color(red: 177 / 255, green: 147 / 255, blue: 233 / 255)
+    @Query(sort: \ApplicationData.date, order: .reverse) var weeks: [ApplicationData]
     @State private var currentWorkItem: DispatchWorkItem?
     @State private var isForEachVisible = true
     @State private var tabbarVisibility = Visibility.visible
@@ -67,6 +68,10 @@ struct NewNotesView: View {
                     HStack{
                         
                         Button{
+                            if let week = weeks.first{
+                                week.days.last!.entries += 1
+
+                            }
                             let newNote = JournalEntry()
                             modelContext.insert(newNote)
                             path = [newNote]
