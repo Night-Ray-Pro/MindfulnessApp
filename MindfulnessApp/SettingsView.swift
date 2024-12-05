@@ -34,6 +34,7 @@ struct SettingsView: View {
                             AccountAndPrivacyView()
                             AppearanceAndThemeView()
                             DataManagementView()
+                            NotificationsView()
 //                        ForEach(1..<10){ num in
 //                            Button{
 //                                if numTapped == num{

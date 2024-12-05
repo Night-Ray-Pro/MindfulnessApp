@@ -1,5 +1,5 @@
 //
-//  DataManagementView.swift
+//  NotificationsView.swift
 //  MindfulnessApp
 //
 //  Created by Oskar Kapuśniak on 5/12/24.
@@ -7,9 +7,10 @@
 
 import SwiftUI
 
-struct DataManagementView: View {
+struct NotificationsView: View {
     @State private var selectedSetting = 0 // zmien na 0
     @State private var isChoosingStats = false // zmen na false
+    @State private var notifications = false
     var body: some View {
         NavigationStack{
             VStack(spacing:0){
@@ -19,14 +20,14 @@ struct DataManagementView: View {
                             isChoosingStats.toggle()
                             
                             if isChoosingStats{
-                                selectedSetting = 3
+                                selectedSetting = 4
                             }else{
                                 selectedSetting = 0
                             }
                             
                         }
                     } label: {
-                        Text("Data Management")
+                        Text("Notifications")
                             .font(.system(size: 18, weight: .bold, design: .rounded))
                             .padding(.leading, 50)
                             .frame(maxWidth: .infinity, maxHeight: 50, alignment: .leading)
@@ -53,51 +54,23 @@ struct DataManagementView: View {
                                 
                             }
                     }
-                    if selectedSetting == 3{
+                    if selectedSetting == 4{
                         
                         ScrollView{
-                        
-                            NavigationLink{
-                                DataView()
-                                .toolbarBackground(.black.opacity(0.4), for: .navigationBar)
-                                .toolbarBackground(.visible, for: .navigationBar)
-                            } label:{
-                                HStack{
-                                    Text("Collected Data")
-                                        .font(.system(size: 16, weight: .medium, design: .rounded))
-                                       
-                              Spacer()
-                                    Image(systemName: "chevron.forward")
-                                      
-                                        .foregroundStyle(.white)
-                                }
-                                .frame(width:240)
-                                .padding(.horizontal ,15)
-                                .padding(.vertical, 5)
-                                .overlay{
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke(.white, lineWidth: 2)
-                                }
-                                .padding(.top,20)
-
-                            }
-                            
-                            Button{
-                                /// add functionality later
-                            } label: {
-                                Text("Clear Data")
+                            Toggle(isOn: $notifications){
+                                
+                                Text(notifications ? "Enabled":"Disabled")
+                                    .foregroundStyle(.white)
                                     .font(.system(size: 16, weight: .medium, design: .rounded))
-                                    .padding(.horizontal, 15)
-                                    .padding(.vertical, 5)
-                                    .overlay{
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .stroke(.white, lineWidth: 2)
-                                    }
-                                    .padding(.top, 10)
                             }
-                            
-                            
-                            
+                                .toggleStyle(SwitchToggleStyle(tint: .orange))
+                                .padding(.leading, 50)
+                                .padding(.trailing, 45)
+                                .padding(.top)
+//                            Toggle(isOn: $notifications) {
+//                                Text("Notifications")
+//                                    .foregroundStyle(.white)
+//                            }
                         }
                         .scrollBounceBehavior(.basedOnSize)
                         .scrollIndicators(.hidden)
@@ -107,7 +80,7 @@ struct DataManagementView: View {
                 }
                 
             }
-            .frame(width: 345, height: selectedSetting == 3 ? 165 : 50)
+            .frame(width: 345, height: selectedSetting == 4 ? 110 : 50)
             .background{
                 Rectangle()
                     .settingsViewColor()
@@ -122,5 +95,5 @@ struct DataManagementView: View {
 }
 
 #Preview {
-    DataManagementView()
+    NotificationsView()
 }
