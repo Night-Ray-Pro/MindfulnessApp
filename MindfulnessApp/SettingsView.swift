@@ -32,6 +32,8 @@ struct SettingsView: View {
                                 .frame(width: 314, height: 1)
                                 .foregroundStyle(Color("Settings"))
                             AccountAndPrivacyView()
+                            AppearanceAndThemeView()
+                            DataManagementView()
 //                        ForEach(1..<10){ num in
 //                            Button{
 //                                if numTapped == num{
@@ -109,6 +111,8 @@ struct SettingsView: View {
             .toolbarBackground(.visible, for: .tabBar)
             .toolbarColorScheme(.dark, for: .tabBar)
         }
+        .accentColor(.white)
+        .preferredColorScheme(.dark)
     }
 }
 

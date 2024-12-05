@@ -14,8 +14,8 @@ struct AccountAndPrivacyView: View {
     @State private var date_of_birth = Date()
     @State private var height = Int()
     @State private var weight = Int()
-    @State private var selectedSetting = 1 // zmien na 0
-    @State private var isChoosingStats = true // zmen na false
+    @State private var selectedSetting = 0 // zmien na 0
+    @State private var isChoosingStats = false // zmen na false
     @FocusState private var nameIsFocusedHeight: Bool
     @FocusState private var nameIsFocusedWeight: Bool
     var body: some View {
