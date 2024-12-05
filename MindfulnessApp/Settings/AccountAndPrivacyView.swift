@@ -11,8 +11,8 @@ struct AccountAndPrivacyView: View {
 //    @Binding var selectedSetting: Int
     @State private var username = String()
     @State private var gender = String()
-    @State private var selectedSetting = 0
-    @State private var isChoosingStats = false
+    @State private var selectedSetting = 1 // zmien na 0
+    @State private var isChoosingStats = true // zmen na false
     var body: some View {
         VStack(spacing:0){
             Group{
@@ -87,45 +87,52 @@ struct AccountAndPrivacyView: View {
                         .padding(.top,10)
                         
                         HStack(spacing:10){
-//                            Text("Gender: ")
-//                                .font(.system(size: 16, weight: .medium, design: .rounded))
-//                                .foregroundStyle(.white)
-//                                .padding(.leading, 50)
+                            Text("Gender:")
+                                .font(.system(size: 16, weight: .medium, design: .rounded))
+                                .foregroundStyle(.white)
+                                .padding(.leading, 50)
 //                                .frame(maxWidth: 100)
                             
+                            Spacer()
                             Button(action: {
+                                withAnimation{
                                     gender = "Woman"
+                                }
                                 }) {
                                     Text("Woman")
                                         .font(.system(size: 16, weight: .medium, design: .rounded))
                                         .foregroundColor(gender == "Woman" ? .white : .gray.opacity(0.3))
-                                        .padding()
-                                        .frame(maxWidth: 100)
+                                        
+                                        .frame(width: 70, height: 25)
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 5)
                                                 .stroke(gender == "Woman" ? Color.white : Color.gray.opacity(0.3), lineWidth: 2)
                                         )
+                                        .padding(.trailing, 5)
                             }
 
                             Button(action: {
+                                withAnimation{
                                     gender = "Man"
+                                }
                                 }) {
                                     Text("Man")
                                         .font(.system(size: 16, weight: .medium, design: .rounded))
                                         .foregroundColor(gender == "Man" ? .white : .gray.opacity(0.3))
-                                        .padding()
-                                        .frame(maxWidth: 100)
+                                        .frame(width: 70, height: 25)
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 5)
                                                 .stroke(gender == "Man" ? Color.white : Color.gray.opacity(0.3), lineWidth: 2)
                                         )
+                                        .padding(.trailing, 45)
                             }
-//                            .frame(maxWidth: .infinity)
-                            .padding(.trailing, 45)
+////                            .frame(maxWidth: .infinity)
+//                            .padding(.trailing, 45)
                             
                         }
 //                        .frame(maxWidth: .infinity, maxHeight: 18, alignment: .leading)
                         .padding(.top,10)
+//                        .background(.blue)
                     }
                     .scrollBounceBehavior(.basedOnSize)
                     .scrollIndicators(.hidden)
@@ -135,7 +142,7 @@ struct AccountAndPrivacyView: View {
             }
             
         }
-        .frame(width: 345, height: selectedSetting == 1 ? 150 : 50)
+        .frame(width: 345, height: selectedSetting == 1 ? 160 : 50)
         .background{
             Rectangle()
                 .settingsViewColor()
