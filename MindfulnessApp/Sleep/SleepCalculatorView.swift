@@ -266,9 +266,18 @@ struct SleepCalculatorView: View {
                                     .foregroundStyle(.ultraThinMaterial)
                                 
                                     .preferredColorScheme(.light)
-                                Text(isCalculated ? "Recalculate" : "Calculate")
-                                    .foregroundStyle(.white)
-                                    .font(.system(size: 24, weight: .bold, design: .rounded))
+                                if let week = weeks.first{
+                                    if week.days.last!.sleep == 0{
+                                        Text("Calculate")
+                                            .foregroundStyle(.white)
+                                            .font(.system(size: 24, weight: .bold, design: .rounded))
+                                    }else{
+                                        Text("Recalculate")
+                                            .foregroundStyle(.white)
+                                            .font(.system(size: 24, weight: .bold, design: .rounded))
+                                    }
+                                }
+                             
                             }
                             .frame(width: 195, height: 58)
                             .padding(.top, 22.0)
