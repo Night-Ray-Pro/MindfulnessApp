@@ -130,15 +130,37 @@ struct AccountAndPrivacyView: View {
                                 .font(.system(size: 16, weight: .medium, design: .rounded))
                                 .foregroundStyle(.white)
                                 .padding(.leading, 50)
-                            DatePicker("", selection: $date_of_birth, displayedComponents: .date)
-                                .font(.system(size: 16, weight: .medium, design: .rounded))
-                                .frame(width: 145, height: 25)
-                                .accentColor(.white.opacity(0.5))
-                                .environment(\.colorScheme, .dark)
-                                .background(.red)
-                                .padding(.trailing, 45)
+                            
+                            Spacer()
+                            HStack{
+                                Text(date_of_birth.formatted(.dateTime.day().month().year()))
+                                    .font(.system(size: 16, weight: .medium, design: .rounded))
+                                    .foregroundColor(.white)
+                                    
+                                Image(systemName: "chevron.right")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width:5)
+//                                    .font(.system(size: 9, weight: .bold))
+                                    .foregroundStyle(.white)
+                            }
+                            .frame(width: 120, height: 25)
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 5)
+                                                .stroke(.white, lineWidth: 2)
+                                        )
+                                        .padding(.trailing, 45)
+                                        .overlay {
+                                            DatePicker(selection: $date_of_birth, displayedComponents: .date) {}
+                                                .labelsHidden()
+                                                .colorMultiply(.clear)       // <<< here
+                                                .accentColor(.black.opacity(0.5))
+                                       
+                                        }
+                            
                         }
                         .padding(.top,10)
+                        
                     }
                     .scrollBounceBehavior(.basedOnSize)
                     .scrollIndicators(.hidden)
