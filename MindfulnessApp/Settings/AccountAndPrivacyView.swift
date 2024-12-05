@@ -11,6 +11,7 @@ struct AccountAndPrivacyView: View {
 //    @Binding var selectedSetting: Int
     @State private var username = String()
     @State private var gender = String()
+    @State private var date_of_birth = Date()
     @State private var selectedSetting = 1 // zmien na 0
     @State private var isChoosingStats = true // zmen na false
     var body: some View {
@@ -58,7 +59,7 @@ struct AccountAndPrivacyView: View {
                 if selectedSetting == 1{
                     ScrollView{
                         HStack(spacing:10){
-                            Text("Username: ")
+                            Text("Username:")
                                 .font(.system(size: 16, weight: .medium, design: .rounded))
                                 .foregroundStyle(.white)
                                 .padding(.leading, 50)
@@ -79,9 +80,6 @@ struct AccountAndPrivacyView: View {
 //                            .textFieldStyle(.roundedBorder)
                             .padding(.trailing, 45)
                             
-                            
-//                            .background(.red)
-                            
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.top,10)
@@ -91,7 +89,6 @@ struct AccountAndPrivacyView: View {
                                 .font(.system(size: 16, weight: .medium, design: .rounded))
                                 .foregroundStyle(.white)
                                 .padding(.leading, 50)
-//                                .frame(maxWidth: 100)
                             
                             Spacer()
                             Button(action: {
@@ -102,7 +99,6 @@ struct AccountAndPrivacyView: View {
                                     Text("Woman")
                                         .font(.system(size: 16, weight: .medium, design: .rounded))
                                         .foregroundColor(gender == "Woman" ? .white : .gray.opacity(0.3))
-                                        
                                         .frame(width: 70, height: 25)
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 5)
@@ -126,13 +122,23 @@ struct AccountAndPrivacyView: View {
                                         )
                                         .padding(.trailing, 45)
                             }
-////                            .frame(maxWidth: .infinity)
-//                            .padding(.trailing, 45)
-                            
                         }
-//                        .frame(maxWidth: .infinity, maxHeight: 18, alignment: .leading)
                         .padding(.top,10)
-//                        .background(.blue)
+                        
+                        HStack(spacing:10){
+                            Text("Date of birth:")
+                                .font(.system(size: 16, weight: .medium, design: .rounded))
+                                .foregroundStyle(.white)
+                                .padding(.leading, 50)
+                            DatePicker("", selection: $date_of_birth, displayedComponents: .date)
+                                .font(.system(size: 16, weight: .medium, design: .rounded))
+                                .frame(width: 145, height: 25)
+                                .accentColor(.white.opacity(0.5))
+                                .environment(\.colorScheme, .dark)
+                                .background(.red)
+                                .padding(.trailing, 45)
+                        }
+                        .padding(.top,10)
                     }
                     .scrollBounceBehavior(.basedOnSize)
                     .scrollIndicators(.hidden)
@@ -142,7 +148,7 @@ struct AccountAndPrivacyView: View {
             }
             
         }
-        .frame(width: 345, height: selectedSetting == 1 ? 160 : 50)
+        .frame(width: 345, height: selectedSetting == 1 ? 200 : 50)
         .background{
             Rectangle()
                 .settingsViewColor()
