@@ -25,6 +25,20 @@ struct EditNoteView: View {
     @State private var isThePhotoBoxShowing:Bool
     @State private var titleText: String
     @State private var contentText: String
+    @State private var isAlertShowing = false
+    var currentDay: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd.MM.yyyy"
+        return formatter.string(from: note.date)
+    }
+    var currentWeekInterval: String {
+        guard let interval = Calendar.current.dateInterval(of: .weekOfMonth, for: note.date) else { return "N/A" }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd.MM"
+        let startDate = formatter.string(from: interval.start)
+        let endDate = formatter.string(from: interval.end)
+        return "\(startDate) - \(endDate) \(Calendar.current.component(.year, from: note.date))"
+    }
     
     init(note: JournalEntry) {
         self.note = note
@@ -35,7 +49,9 @@ struct EditNoteView: View {
         }
         self.titleText = note.title
         self.contentText = note.content
+        UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = .systemBlue
     }
+   
     
     var body: some View {
         ZStack{
@@ -207,6 +223,19 @@ struct EditNoteView: View {
                     Button("Photo Library") { isPhotoPickerShowing = true }
                     Button("Cancel", role: .cancel) { }
                 }
+                .alert("Delete note?", isPresented: $isAlertShowing){
+                    Button("Cancel", role:.cancel){
+                        //
+                    }
+                    
+                    Button("Delete", role: .destructive){
+                        updateEntryAmmount()
+                        modelContext.delete(note)
+                        dismiss()
+                    }
+                } message:{
+                    Text("Are you sure you want to delete this note?")
+                }
                 .photosPicker(isPresented: $isPhotoPickerShowing, selection: $photo, matching: .images)
                 .sheet(isPresented: $browsePhotos){
                     OnlinePhotosView(choosenImages: $note.photoData)
@@ -224,8 +253,10 @@ struct EditNoteView: View {
                 .preferredColorScheme(.light)
                 .toolbar{
                     Button{
-                        modelContext.delete(note)
-                        dismiss()
+                        isAlertShowing.toggle()
+//                        updateEntryAmmount()
+//                        modelContext.delete(note)
+//                        dismiss()
                     } label: {
                         Image(systemName: "trash")
                             .foregroundStyle(.white)
@@ -233,11 +264,30 @@ struct EditNoteView: View {
                     }
                 }
             }
+            
         }
         .onDisappear{
             note.title = titleText
             note.content = contentText
         }
+        
+    }
+    
+    func updateEntryAmmount(){
+
+        if let week = weeks.first(where: { $0.week == currentWeekInterval }){
+            print("Week exists")
+            if let day = week.days.first(where: { $0.dayIdentyfier == currentDay }){
+                print("Day exists")
+                if day.entries > 0 {
+                    day.entries -= 1
+                    return
+                }
+            }
+            print("Day not found")
+            return
+        }
+        print("Week doesnt exist")
     }
 }
 
