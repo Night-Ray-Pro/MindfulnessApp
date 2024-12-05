@@ -7,9 +7,11 @@
 
 import SwiftUI
 import Charts
+import SwiftData
 
 struct SheetView: View {
     @Environment(\.modelContext) var modelContext
+    @Query(sort: \ApplicationData.date, order: .reverse) var weeks: [ApplicationData]
     @State private var path = [JournalEntry]()
     @State private var tabbarVisibility = Visibility.visible
     @State private var opacity = 1.0
@@ -37,6 +39,7 @@ struct SheetView: View {
     @State private var isChoosingStats = false
     @State private var chosenChart = "Sleep"
     @State private var isChoosingCharts = false
+//    @State private var totalSleep = 0
     var body: some View {
         NavigationStack(path: $path){
             ScrollView{
@@ -49,7 +52,7 @@ struct SheetView: View {
                     
                     //Daily quote
                     VStack(spacing:0){
-                        Text(quoteAuthor)
+                        Text(weeks.first?.days.last?.author ?? "Loading ...")
                         //                            .foregroundStyle(.black.opacity(0.2))
                             .foregroundStyle(.white)
                             .font(.system(size: 16, weight: .bold, design: .rounded))
@@ -57,7 +60,7 @@ struct SheetView: View {
                             .frame(width: 345, alignment: .leading)
                         //                            .background(.blue)
                         
-                        Text(quote)
+                        Text(weeks.first?.days.last?.quote ?? "Loading ...")
                             .font(.system(size: 24, weight: .bold, design: .rounded))
                             .foregroundStyle(.white)
                             .multilineTextAlignment(.center)
@@ -147,7 +150,7 @@ struct SheetView: View {
                                 .foregroundStyle(.white)
                                 .font(.system(size: 20, weight: .bold, design: .rounded))
                             Spacer()
-                            Text(testData.reduce(0, +).formatted(.number) + "h")
+                            Text(calculateTotalSleep().formatted(.number) + "h")
                                 .foregroundStyle(.white)
                                 .font(.system(size: 40, weight: .bold, design: .rounded))
                         }
@@ -157,15 +160,14 @@ struct SheetView: View {
                         .frame(width: 345)
                         
                         
-                        Chart(testData, id: \.self) { data in
-                            
+                        Chart{
                             BarMark(
-                                x: .value("Views", data)
+                                x: .value("Sleep", calculateTotalSleep())
                             )
                             .foregroundStyle(.white)
                             
                         }
-                        .chartXScale(domain: 0...30)
+                        .chartXScale(domain: 0...56)
                         .chartPlotStyle { plotArea in
                             plotArea
                                 .background(Color(.systemFill))
@@ -188,13 +190,13 @@ struct SheetView: View {
                             }
                         } label: {
                             VStack(spacing:15){
-                                Text(moonDescription ? phase : "Moon Phase")
+                                Text(moonDescription ? (weeks.first?.days.last?.moonPhase ?? "Loading...") : "Moon Phase")
                                     .font(.system(size: 14, weight: .bold, design: .rounded))
                                     .foregroundStyle(.white)
                                     .minimumScaleFactor(0.5)
                                     .frame(width:85)
                                 
-                                Image(systemName: "moonphase." + (phase.lowercased().replacingOccurrences(of: " ", with: ".")))
+                                Image(systemName: "moonphase." + ((weeks.first?.days.last?.moonPhase ?? "").lowercased().replacingOccurrences(of: " ", with: ".")))
                                     .resizable()
                                     .scaledToFit()
                                     .frame(height: 42)
@@ -243,15 +245,15 @@ struct SheetView: View {
                             .padding([.horizontal, .vertical], 10)
                             .frame(width: 345, alignment: .leading)
                         
-                        if let shortHoroscope{
-                            Text(shortHoroscope)
+                        
+                        Text(weeks.first?.horoscope ?? "Loading...")
                                 .font(.system(size: 24, weight: .bold, design: .rounded))
                                 .foregroundStyle(.white)
                                 .multilineTextAlignment(.center)
                                 .minimumScaleFactor(0.4)
                                 .padding([.horizontal, .bottom],10)
                                 .frame(width: 345, height: 190, alignment: .center)
-                        }
+                        
                     }
                     .background{
                         RoundedRectangle(cornerRadius: 20)
@@ -511,12 +513,27 @@ struct SheetView: View {
             
 //                    .background(.yellow)
         }
+        .onAppear{
+//            calculateTotalSleep()
+        }
 //        .accentColor(.white)
         .toolbar(tabbarVisibility, for: .tabBar)
         .animation(.easeInOut(duration:0.2), value: tabbarVisibility)
         
         
     }
+    
+    func calculateTotalSleep() -> Int{
+        if let week = weeks.first{
+            var totalSleep = 0
+            for day in week.days{
+                totalSleep += day.sleep
+            }
+            return totalSleep
+        }
+        return 0
+    }
+    
     func loadMoonData() async{
         let timeStamp = Int(Date().timeIntervalSince1970)
         guard let url = URL(string: "https://api.farmsense.net/v1/moonphases/?d=\(timeStamp)") else { return }

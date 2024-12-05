@@ -3,4 +3,22 @@
    uuid = "A5CB9EAE-C6E3-4682-9B10-2791DC2BF183"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "450187F0-3AC8-4D17-918B-D26E5D5B7550"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../../../../var/folders/wh/7svbjtc17zs3r73r3j0br0mc0000gn/T/swift-generated-sources/@__swiftmacro_14MindfulnessApp15ApplicationDataC4days18_PersistedPropertyfMa_.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1"
+            endingLineNumber = "1"
+            landmarkName = "unknown"
+            landmarkType = "0">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>
