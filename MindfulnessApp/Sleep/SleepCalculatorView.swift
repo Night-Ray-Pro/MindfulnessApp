@@ -18,7 +18,7 @@ struct SleepCalculatorView: View {
     @State private var alertTitle = "Your ideal bed time is:"
     @AppStorage("calculatedSleepTime") private var alertMessage = "Calculating ..."
     @State private var alertShow = false
-    @State private var isCalculated = false
+    let isCalculated = false
     
     static var averageDate:Date{
         var components = DateComponents()
@@ -258,7 +258,7 @@ struct SleepCalculatorView: View {
                         Button{
                             calculateBedTime()
                             withAnimation{
-                                isCalculated.toggle()
+//                                isCalculated.toggle()
                             }
                         } label: {
                             ZStack{
@@ -316,8 +316,10 @@ struct SleepCalculatorView: View {
             if let week = weeks.first{
                 if  week.days.last!.sleep == 0{
                     week.days.last!.sleep = Int(sleepAmount)
+                    week.days.last!.coffee = Int(coffeAmount)
                 }else{
                     week.days.last!.sleep = 0
+                    week.days.last!.coffee = 0
                 }
                 
             }

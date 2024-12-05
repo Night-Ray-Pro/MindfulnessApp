@@ -345,7 +345,7 @@ struct SheetView: View {
                         VStack{
                             Text("Coffee")
                                 .font(.system(size: 14, weight:.bold, design: .rounded))
-                            Text("5")
+                            Text("\(calculateTotalCoffe())")
                                 .font(.system(size: 40, weight:.bold, design: .rounded))
                                 .minimumScaleFactor(0.5)
                             Text("Cups")
@@ -530,6 +530,17 @@ struct SheetView: View {
                 totalSleep += day.sleep
             }
             return totalSleep
+        }
+        return 0
+    }
+    
+    func calculateTotalCoffe() -> Int{
+        if let week = weeks.first{
+            var totalCoffe = 0
+            for day in week.days{
+                totalCoffe += day.coffee
+            }
+            return totalCoffe
         }
         return 0
     }
