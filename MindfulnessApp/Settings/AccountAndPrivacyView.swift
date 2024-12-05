@@ -12,6 +12,8 @@ struct AccountAndPrivacyView: View {
     @State private var username = String()
     @State private var gender = String()
     @State private var date_of_birth = Date()
+    @State private var height = Int()
+    @State private var weight = Int()
     @State private var selectedSetting = 1 // zmien na 0
     @State private var isChoosingStats = true // zmen na false
     var body: some View {
@@ -161,6 +163,32 @@ struct AccountAndPrivacyView: View {
                         }
                         .padding(.top,10)
                         
+                        HStack(spacing:10){
+                            Text("Height [cm]:")
+                                .font(.system(size: 16, weight: .medium, design: .rounded))
+                                .foregroundStyle(.white)
+                                .padding(.leading, 50)
+
+                            TextField(
+                                "",
+                                text: $height
+                            )
+                            .multilineTextAlignment(.center)
+                            .accentColor(.white)
+                            .font(.system(size: 16, weight: .medium, design: .rounded))
+                            .foregroundStyle(.white)
+                            .background{
+                                RoundedRectangle(cornerRadius: 5)
+                                    .foregroundStyle(.gray.opacity(0.3))
+                            }
+                            .frame(maxWidth:.infinity)
+//                            .textFieldStyle(.roundedBorder)
+                            .padding(.trailing, 45)
+                            
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.top,10)
+                        
                     }
                     .scrollBounceBehavior(.basedOnSize)
                     .scrollIndicators(.hidden)
@@ -170,7 +198,7 @@ struct AccountAndPrivacyView: View {
             }
             
         }
-        .frame(width: 345, height: selectedSetting == 1 ? 200 : 50)
+        .frame(width: 345, height: selectedSetting == 1 ? 250 : 50)
         .background{
             Rectangle()
                 .settingsViewColor()
