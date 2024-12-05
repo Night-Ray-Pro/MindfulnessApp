@@ -6,8 +6,10 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct MeditationView: View {
+    @Query(sort: \ApplicationData.date, order: .reverse) var weeks: [ApplicationData]
     @State private var tabbarVisibility = Visibility.visible
     @State private var opacity = 1.0
     @State private var isBreathing = false
@@ -107,6 +109,12 @@ struct MeditationView: View {
                                     Spacer()
                                 }
                                 .frame(width:300)
+                                .onChange(of: selectedEmotion) { oldValue, newValue in
+                                    if let week = weeks.first{
+                                        week.days.last!.mood = newValue
+
+                                    }
+                                }
                             }
                             
                         }
@@ -244,11 +252,12 @@ struct MeditationView: View {
                     NavigationLink {
                         MusicPlayerView(length: playbackDuration, theme: themes[selectedTheme])
                             .onAppear {
-                                    tabbarVisibility = .hidden
-                                    opacity = 0.0
+                                tabbarVisibility = .hidden
+                                opacity = 0.0
+                               
                             }
                             .onDisappear{
-                                    tabbarVisibility = .visible
+                                tabbarVisibility = .visible
                                 opacity = 1.0
                             }
                             
@@ -286,6 +295,12 @@ struct MeditationView: View {
             isBreathing = false
             isBreathing.toggle()
         }
+//        .onDisappear{
+//            if let week = weeks.first{
+//                week.days.last!.mood = selectedEmotion
+//
+//            }
+//        }
        
         .toolbar(tabbarVisibility, for: .tabBar)
         .animation(.easeInOut(duration:0.2), value: tabbarVisibility)
@@ -295,6 +310,13 @@ struct MeditationView: View {
         isBreathing = false // Stop any existing pulsation
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             isBreathing = true // Restart the animation for the new button
+        }
+    }
+    
+    func saveMood(){
+        if let week = weeks.first{
+            week.days.last!.mood = selectedEmotion
+
         }
     }
 }

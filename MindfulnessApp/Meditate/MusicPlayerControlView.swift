@@ -9,9 +9,11 @@ import SwiftUI
 import AVFoundation
 import MediaPlayer
 import UIKit
+import SwiftData
 
 
 struct VolumeSliderView: UIViewRepresentable {
+
     func makeUIView(context: Context) -> MPVolumeView {
         let volumeView = MPVolumeView()
         volumeView.showsVolumeSlider = true
@@ -24,6 +26,7 @@ struct VolumeSliderView: UIViewRepresentable {
 }
 
 struct MusicPlayerControlView: View {
+    @Query(sort: \ApplicationData.date, order: .reverse) var weeks: [ApplicationData]
     let length: Int
     let theme: String
     @State private var currentTime: Double = 0
@@ -213,6 +216,11 @@ struct MusicPlayerControlView: View {
             }
             .onDisappear {
                 stopAudio()
+                if let week = weeks.first{
+                    week.days.last!.meditation += Int(currentTime)
+
+                }
+                print(Int(currentTime))
             }
             .onChange(of: audioPlayer?.isPlaying) {
 //                startTimer()

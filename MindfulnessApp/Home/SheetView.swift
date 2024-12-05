@@ -361,7 +361,7 @@ struct SheetView: View {
                         VStack{
                             Text("Meditation")
                                 .font(.system(size: 14, weight:.bold, design: .rounded))
-                            Text("25")
+                            Text("\(calculateTotalMeditation())")
                                 .font(.system(size: 40, weight:.bold, design: .rounded))
                                 .minimumScaleFactor(0.5)
                                 .padding(.horizontal)
@@ -378,7 +378,7 @@ struct SheetView: View {
                         VStack{
                             Text("Journal")
                                 .font(.system(size: 14, weight:.bold, design: .rounded))
-                            Text("4")
+                            Text("\(calculateTotalEmotion())")
                                 .font(.system(size: 40, weight:.bold, design: .rounded))
                                 .minimumScaleFactor(0.5)
                             Text("Entries")
@@ -530,6 +530,26 @@ struct SheetView: View {
                 totalSleep += day.sleep
             }
             return totalSleep
+        }
+        return 0
+    }
+    func calculateTotalMeditation() -> Int{
+        if let week = weeks.first{
+            var totalMeditation = 0
+            for day in week.days{
+                totalMeditation += day.meditation
+            }
+            return totalMeditation/60
+        }
+        return 0
+    }
+    func calculateTotalEmotion() -> Int{
+        if let week = weeks.first{
+            var totalMeditation = 0
+            for day in week.days{
+                totalMeditation += day.mood
+            }
+            return totalMeditation
         }
         return 0
     }

@@ -37,7 +37,7 @@ class Day: Identifiable{
     var entries: Int
     var moonPhase: String
     
-    init(author: String = "", quote: String = "", date: Date = .now, weekDay: String = "", dayIdentyfier: String = "", coffee: Int = 0, sleep: Int = 0, meditation: Int = 0, mood: Int = 5, entries: Int = 0, moonPhase: String = "") {
+    init(author: String = "", quote: String = "", date: Date = .now, weekDay: String = "", dayIdentyfier: String = "", coffee: Int = 0, sleep: Int = 0, meditation: Int = 0, mood: Int = 4, entries: Int = 0, moonPhase: String = "") {
         self.author = author
         self.quote = quote
         self.date = date
