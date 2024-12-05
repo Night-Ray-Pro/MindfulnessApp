@@ -87,32 +87,44 @@ struct AccountAndPrivacyView: View {
                         .padding(.top,10)
                         
                         HStack(spacing:10){
-                            Text("Gender: ")
-                                .font(.system(size: 16, weight: .medium, design: .rounded))
-                                .foregroundStyle(.white)
-                                .padding(.leading, 50)
+//                            Text("Gender: ")
+//                                .font(.system(size: 16, weight: .medium, design: .rounded))
+//                                .foregroundStyle(.white)
+//                                .padding(.leading, 50)
+//                                .frame(maxWidth: 100)
                             
-                            Picker("", selection: $gender){
-                                Text("Woman")
-                                    .foregroundColor(.white)
-                                    .font(.system(size: 16, weight: .medium, design: .rounded))
-                                Text("Man")
-                                    .foregroundColor(.white)
-                                    .font(.system(size: 16, weight: .medium, design: .rounded))
+                            Button(action: {
+                                    gender = "Woman"
+                                }) {
+                                    Text("Woman")
+                                        .font(.system(size: 16, weight: .medium, design: .rounded))
+                                        .foregroundColor(gender == "Woman" ? .white : .gray.opacity(0.3))
+                                        .padding()
+                                        .frame(maxWidth: 100)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 5)
+                                                .stroke(gender == "Woman" ? Color.white : Color.gray.opacity(0.3), lineWidth: 2)
+                                        )
                             }
-                            .pickerStyle(SegmentedPickerStyle())
-                            .accentColor(.white)
-                            .background{
-                                RoundedRectangle(cornerRadius: 5)
-                                    .foregroundStyle(.gray.opacity(0.3))
+
+                            Button(action: {
+                                    gender = "Man"
+                                }) {
+                                    Text("Man")
+                                        .font(.system(size: 16, weight: .medium, design: .rounded))
+                                        .foregroundColor(gender == "Man" ? .white : .gray.opacity(0.3))
+                                        .padding()
+                                        .frame(maxWidth: 100)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 5)
+                                                .stroke(gender == "Man" ? Color.white : Color.gray.opacity(0.3), lineWidth: 2)
+                                        )
                             }
-                            .frame(maxWidth:.infinity)
+//                            .frame(maxWidth: .infinity)
                             .padding(.trailing, 45)
                             
-//                            .background(.red)
-                            
                         }
-                        .frame(maxWidth: .infinity, alignment: .leading)
+//                        .frame(maxWidth: .infinity, maxHeight: 18, alignment: .leading)
                         .padding(.top,10)
                     }
                     .scrollBounceBehavior(.basedOnSize)
