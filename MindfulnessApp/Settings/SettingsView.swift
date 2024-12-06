@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @State private var numTapped = 0
-
+    @AppStorage("haptics") var haptics = false
     var body: some View {
         NavigationStack{
             ZStack{
@@ -156,7 +156,8 @@ struct SettingsView: View {
             .toolbarBackground(.visible, for: .tabBar)
             .toolbarColorScheme(.dark, for: .tabBar)
         }
-        .sensoryFeedback(.increase, trigger: numTapped)
+        .sensoryFeedback(haptics ? .selection : .alignment, trigger: numTapped)
+        
         .accentColor(.white)
         .preferredColorScheme(.dark)
     }
