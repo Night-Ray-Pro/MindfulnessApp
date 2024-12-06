@@ -15,27 +15,32 @@ struct SheetView: View {
     @State private var path = [JournalEntry]()
     @State private var tabbarVisibility = Visibility.visible
     @State private var opacity = 1.0
-    @AppStorage("phase") private var phase = String()
-    @AppStorage("quote") private var quote = String()
-    @AppStorage("author") private var quoteAuthor = String()
+//    @AppStorage("phase") private var phase = String()
+//    @AppStorage("quote") private var quote = String()
+//    @AppStorage("author") private var quoteAuthor = String()
     @State private var sign = "Sagittarius"
     @State private var moonDescription = false
-    @AppStorage("horoscope") private var horoscope = String() {
-        willSet{
-            Task{
-                shortHoroscope = await Gemini.fetchResponse(for: prepareRequest)
-            }
-        }
+//    @AppStorage("horoscope") private var horoscope = String() {
+//        willSet{
+//            Task{
+//                shortHoroscope = await Gemini.fetchResponse(for: prepareRequest)
+//            }
+//        }
+//    }
+//    @AppStorage("shortHoroscope") private var shortHoroscope: String?
+//    let testText = "This is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test text"
+//    let testData = [10,7,3]
+//    var prepareRequest: String{
+//        return "Rewrite this daily horoscope so it is more consise and sounds better and more like a prediction also do not use the horoscope sign name: \(horoscope)"
+//    }
+    enum stats: CaseIterable{
+        case Daily
+        case Weekly
+        case Monthly
     }
-    @AppStorage("shortHoroscope") private var shortHoroscope: String?
-    let testText = "This is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test textThis is a test text"
-    let testData = [10,7,3]
-    var prepareRequest: String{
-        return "Rewrite this daily horoscope so it is more consise and sounds better and more like a prediction also do not use the horoscope sign name: \(horoscope)"
-    }
-    let stats = ["Daily", "Weekly", "Monthly"]
+//    let stats = ["Daily", "Weekly", "Monthly"]
     let charts = ["Sleep", "Coffee", "Meditation", "Mood", "Journal"]
-    @State private var chosenStat = "Weekly"
+    @State private var chosenStat = stats.Weekly
     @State private var isChoosingStats = false
     @State private var chosenChart = "Sleep"
     @State private var isChoosingCharts = false
@@ -268,7 +273,7 @@ struct SheetView: View {
                                     isChoosingStats.toggle()
                                 }
                             } label: {
-                                Text(chosenStat)
+                                Text(String(describing:chosenStat))
                                     .font(.system(size: 20, weight: .bold, design: .rounded))
                                     .padding(.leading)
                                     .frame(maxWidth: .infinity, maxHeight: 50, alignment: .leading)
@@ -290,8 +295,9 @@ struct SheetView: View {
                             }
                             if isChoosingStats{
                                 ScrollView{
-                                    ForEach(stats, id: \.self){ stat in
-                                        stat != "Daily" ?
+                                    ForEach(stats.allCases, id: \.self){ stat in
+//                                        Text("HI")
+                                        stat != .Daily ?
                                         Rectangle()
                                             .foregroundStyle(.gray.opacity(0.3))
                                             .frame(width: 300, height: 1)
@@ -303,7 +309,7 @@ struct SheetView: View {
                                                 isChoosingStats = false
                                             }
                                         } label: {
-                                            Text(stat)
+                                            Text(String(describing:stat))
                                                 .font(.system(size: 20, weight: .bold, design: .rounded))
                                                 .foregroundStyle(.white)
                                                 .padding(5)
@@ -319,8 +325,8 @@ struct SheetView: View {
                                                 }
                                             //                                    .background(.blue)
                                         }
-                                        
-                                        
+//                                        
+//                                        
                                     }
                                 }
                                 .scrollBounceBehavior(.basedOnSize)
@@ -340,59 +346,15 @@ struct SheetView: View {
                     }
                     .clipShape(.rect(cornerRadius: 35))
                     //Quick stats content
-                    HStack(spacing:22.5){
-                        //coffe
-                        VStack{
-                            Text("Coffee")
-                                .font(.system(size: 14, weight:.bold, design: .rounded))
-                            Text("\(calculateTotalCoffe())")
-                                .font(.system(size: 40, weight:.bold, design: .rounded))
-                                .minimumScaleFactor(0.5)
-                            Text("Cups")
-                                .font(.system(size: 12, weight:.bold, design: .rounded))
-                        }
-                        .padding()
-                        .frame(width: 100, height: 100)
-                        .background{
-                            RoundedRectangle(cornerRadius: 20)
-                                .fill(.ultraThinMaterial)
-                        }
-                        //meditation
-                        VStack{
-                            Text("Meditation")
-                                .font(.system(size: 14, weight:.bold, design: .rounded))
-                            Text("\(calculateTotalMeditation())")
-                                .font(.system(size: 40, weight:.bold, design: .rounded))
-                                .minimumScaleFactor(0.5)
-                                .padding(.horizontal)
-                            Text("Min")
-                                .font(.system(size: 12, weight:.bold, design: .rounded))
-                        }
-                        .padding(.vertical)
-                        .frame(width: 100, height: 100)
-                        .background{
-                            RoundedRectangle(cornerRadius: 20)
-                                .fill(.ultraThinMaterial)
-                        }
-                        //journal
-                        VStack{
-                            Text("Journal")
-                                .font(.system(size: 14, weight:.bold, design: .rounded))
-                            Text("\(calculateTotalEmotion())")
-                                .font(.system(size: 40, weight:.bold, design: .rounded))
-                                .minimumScaleFactor(0.5)
-                            Text("Entries")
-                                .font(.system(size: 12, weight:.bold, design: .rounded))
-                        }
-                        .padding()
-                        .frame(width: 100, height: 100)
-                        .background{
-                            RoundedRectangle(cornerRadius: 20)
-                                .fill(.ultraThinMaterial)
-                        }
-                        
+                    switch chosenStat {
+                    case .Daily:
+                        QuickStatsDaily()
+                    case .Weekly:
+                        QuickStatsWeekly()
+                    case .Monthly:
+                        Text("HI")
                     }
-                    .foregroundStyle(.white)
+//                    QuickStatsDaily()
                     
                     //Chart choice
                     VStack(spacing:0){
@@ -533,84 +495,53 @@ struct SheetView: View {
         }
         return 0
     }
-    func calculateTotalMeditation() -> Int{
-        if let week = weeks.first{
-            var totalMeditation = 0
-            for day in week.days{
-                totalMeditation += day.meditation
-            }
-            return totalMeditation/60
-        }
-        return 0
-    }
-    func calculateTotalEmotion() -> Int{
-        if let week = weeks.first{
-            var totalMeditation = 0
-            for day in week.days{
-                totalMeditation += day.entries
-            }
-            return totalMeditation
-        }
-        return 0
-    }
     
-    func calculateTotalCoffe() -> Int{
-        if let week = weeks.first{
-            var totalCoffe = 0
-            for day in week.days{
-                totalCoffe += day.coffee
-            }
-            return totalCoffe
-        }
-        return 0
-    }
-    
-    func loadMoonData() async{
-        let timeStamp = Int(Date().timeIntervalSince1970)
-        guard let url = URL(string: "https://api.farmsense.net/v1/moonphases/?d=\(timeStamp)") else { return }
-        do{
-            let (data, _) = try await URLSession.shared.data(from: url)
-            print(timeStamp)
-            if let decodedResponse = try? JSONDecoder().decode([moonPhase].self, from: data) {
-                phase = decodedResponse.first?.phase ?? "error"
-            }
-        }catch{
-            print(error.localizedDescription)
-        }
-        
-        
-    }
-    
-    func loadQuotesData() async{
-        let timeStamp = Int(Date().timeIntervalSince1970)
-        guard let url = URL(string: "https://api.realinspire.tech/v1/quotes/random") else { return }
-        do{
-            let (data, _) = try await URLSession.shared.data(from: url)
-            print(timeStamp)
-            if let decodedResponse = try? JSONDecoder().decode([dailyQuote].self, from: data) {
-                quote = decodedResponse.first?.content ?? "error"
-                quoteAuthor = decodedResponse.first?.author ?? "error"
-            }
-        }catch{
-            print(error.localizedDescription)
-        }
-        
-        
-    }
-    
-    func loadHoroscope() async{
-        guard let url = URL(string: "https://horoscope-app-api.vercel.app/api/v1/get-horoscope/weekly?sign=\(sign)") else { return }
-        
-        do{
-            let (data, _) = try await URLSession.shared.data(from: url)
-            if let decodedData = try? JSONDecoder().decode(Horoscope.self, from: data) {
-                horoscope = decodedData.data.horoscopeData
-            }
-        }catch{
-            print(error.localizedDescription)
-        }
-        
-    }
+//    func loadMoonData() async{
+//        let timeStamp = Int(Date().timeIntervalSince1970)
+//        guard let url = URL(string: "https://api.farmsense.net/v1/moonphases/?d=\(timeStamp)") else { return }
+//        do{
+//            let (data, _) = try await URLSession.shared.data(from: url)
+//            print(timeStamp)
+//            if let decodedResponse = try? JSONDecoder().decode([moonPhase].self, from: data) {
+//                phase = decodedResponse.first?.phase ?? "error"
+//            }
+//        }catch{
+//            print(error.localizedDescription)
+//        }
+//        
+//        
+//    }
+//    
+//    func loadQuotesData() async{
+//        let timeStamp = Int(Date().timeIntervalSince1970)
+//        guard let url = URL(string: "https://api.realinspire.tech/v1/quotes/random") else { return }
+//        do{
+//            let (data, _) = try await URLSession.shared.data(from: url)
+//            print(timeStamp)
+//            if let decodedResponse = try? JSONDecoder().decode([dailyQuote].self, from: data) {
+//                quote = decodedResponse.first?.content ?? "error"
+//                quoteAuthor = decodedResponse.first?.author ?? "error"
+//            }
+//        }catch{
+//            print(error.localizedDescription)
+//        }
+//        
+//        
+//    }
+//    
+//    func loadHoroscope() async{
+//        guard let url = URL(string: "https://horoscope-app-api.vercel.app/api/v1/get-horoscope/weekly?sign=\(sign)") else { return }
+//        
+//        do{
+//            let (data, _) = try await URLSession.shared.data(from: url)
+//            if let decodedData = try? JSONDecoder().decode(Horoscope.self, from: data) {
+//                horoscope = decodedData.data.horoscopeData
+//            }
+//        }catch{
+//            print(error.localizedDescription)
+//        }
+//        
+//    }
 }
 
 #Preview {
