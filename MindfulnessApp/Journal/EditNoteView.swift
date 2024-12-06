@@ -26,6 +26,7 @@ struct EditNoteView: View {
     @State private var titleText: String
     @State private var contentText: String
     @State private var isAlertShowing = false
+    @AppStorage("haptics") var haptics = false
     var currentDay: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd.MM.yyyy"
@@ -266,6 +267,9 @@ struct EditNoteView: View {
             }
             
         }
+        .sensoryFeedback(haptics ? .selection : .alignment, trigger: isTryingToAddPhoto)
+        .sensoryFeedback(haptics ? .warning : .alignment, trigger: isAlertShowing)
+        .sensoryFeedback(haptics ? .selection : .alignment, trigger: sheetIsShowing)
         .onDisappear{
             note.title = titleText
             note.content = contentText

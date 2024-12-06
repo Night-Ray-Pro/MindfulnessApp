@@ -20,7 +20,7 @@ struct NewNotesView: View {
     @State private var isScrolling = false
     @State private var isSearching = false
     @State private var searchString = String()
-    
+    @State private var newNoteTrackHaptics: Bool = false
     @State private var sortOrder = sortViews.Day
     @State private var path = [JournalEntry]()
     @FocusState private var isFocused: Bool
@@ -73,6 +73,7 @@ struct NewNotesView: View {
                                 week.days.last!.entries += 1
 
                             }
+                            newNoteTrackHaptics.toggle()
                             let newNote = JournalEntry()
                             modelContext.insert(newNote)
                             path = [newNote]
@@ -301,6 +302,9 @@ struct NewNotesView: View {
             .toolbarColorScheme(.dark, for: .tabBar)
             
         }
+        .sensoryFeedback(haptics ? .selection : .alignment, trigger: sortOrder)
+        .sensoryFeedback(haptics ? .selection : .alignment, trigger: isSearching)
+        .sensoryFeedback(haptics ? .selection : .alignment, trigger: newNoteTrackHaptics)
         .onAppear{
             do{
                 try modelContext.save()
