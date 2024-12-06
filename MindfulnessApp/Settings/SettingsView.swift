@@ -57,10 +57,13 @@ struct SettingsView: View {
                             HapticsView(selectedSetting: $numTapped)
                                 .id(8)
                             
+                            NewFeaturesView(selectedSetting: $numTapped)
+                                .id(9)
+                            
                             Rectangle()
                                 .frame(width: 314, height: 50)
                                 .opacity(0)
-                                .id(9)
+                                .id(10)
                                
                             //                        ForEach(1..<10){ num in
                             //                            Button{
