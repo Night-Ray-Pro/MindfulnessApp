@@ -37,6 +37,7 @@ struct SettingsView: View {
                             NotificationsView()
                             DarkModeView()
                             FeedbackView()
+                            HelpAndSupportView()
 //                        ForEach(1..<10){ num in
 //                            Button{
 //                                if numTapped == num{
