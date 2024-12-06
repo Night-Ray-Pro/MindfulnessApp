@@ -25,7 +25,7 @@ struct NewFeaturesView: View {
                             
                         }
                     } label: {
-                        Text("Help & Support")
+                        Text("New Features")
                             .font(.system(size: 18, weight: .bold, design: .rounded))
                             .padding(.leading, 50)
                             .frame(maxWidth: .infinity, maxHeight: 50, alignment: .leading)
@@ -57,12 +57,23 @@ struct NewFeaturesView: View {
                         ScrollView{
                             VStack(spacing: 10){
                                 HStack{
-                                    Text("App Version: \(getAppVersion())")
-                                    Text("Build Number: \(getBuildNumber())")
+                                    VStack{
+                                        Image(.AppIconImage)
+                                            .scaledToFit()
+                                        Text("MindFlow")
+                                            .font(.system(size: 16, weight: .bold, design: .rounded))
+                                            .foregroundStyle(.white)
+                                    }
+                                    .multilineTextAlignment(.center)
+                                    .padding(.leading, 50)
+                                    
+                                    VStack{
+                                        Text("Version ").font(.system(size: 16, weight: .bold, design: .rounded)) + Text("\(getAppVersion())").font(.system(size: 16, weight: .medium, design: .default)).italic()
+                                        Text("Build ").font(.system(size: 16, weight: .bold, design: .rounded)) + Text("\(getBuildNumber())").font(.system(size: 16, weight: .medium, design: .default)).italic()
+                                    }
+                                    .multilineTextAlignment(.center)
+                                    .padding(.trailing, 45)
                                 }
-                            
-                                
-
                             }
                             .frame(width:250)
                             .foregroundStyle(.white)
