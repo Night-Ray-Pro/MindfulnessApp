@@ -17,6 +17,7 @@ struct MeditationView: View {
     @State private var currentDurationOffset = -108
     @State private var currentEmotionOffset = 115
     @State private var selectedTheme: Int = 0
+    @AppStorage("haptics") var haptics = false
     let duration: [Int] = [5, 10, 15, 20]
     let durationOffsets = [-108, -36, 36, 108]
     let emotionsOffsets = [-115, -57, 0 , 57, 115]
@@ -291,6 +292,9 @@ struct MeditationView: View {
             .toolbarBackground(.visible, for: .tabBar)
             .toolbarColorScheme(.dark, for: .tabBar)
         }
+        .sensoryFeedback(haptics ? .selection : .alignment, trigger: selectedTheme)
+        .sensoryFeedback(haptics ? .selection : .alignment, trigger: selectedEmotion)
+        .sensoryFeedback(haptics ? .selection : .alignment, trigger: playbackDuration)
         .onAppear{
             if let week = weeks.first{
 //                week.days.last!.mood

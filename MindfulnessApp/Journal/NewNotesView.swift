@@ -24,6 +24,7 @@ struct NewNotesView: View {
     @State private var sortOrder = sortViews.Day
     @State private var path = [JournalEntry]()
     @FocusState private var isFocused: Bool
+    @AppStorage("haptics") var haptics = false
     var filteredNotes: [JournalEntry] {
             if searchString.isEmpty {
                 return notes

@@ -18,6 +18,7 @@ struct SleepCalculatorView: View {
     @State private var alertTitle = "Your ideal bed time is:"
     @AppStorage("calculatedSleepTime") private var alertMessage = "Calculating ..."
     @State private var alertShow = false
+    @AppStorage("haptics") var haptics = false
     let isCalculated = false
     
     static var averageDate:Date{
@@ -293,6 +294,9 @@ struct SleepCalculatorView: View {
             .toolbarBackground(.visible, for: .tabBar)
             .toolbarColorScheme(.dark, for: .tabBar)
         }
+        .sensoryFeedback(haptics ? .selection : .alignment, trigger: coffeAmount)
+        .sensoryFeedback(haptics ? .selection : .alignment, trigger: sleepAmount)
+        .sensoryFeedback(haptics ? .selection : .alignment, trigger: wakeUp)
     }
     
     func calculateBedTime(){
