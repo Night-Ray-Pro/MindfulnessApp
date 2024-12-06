@@ -77,8 +77,48 @@ struct NewFeaturesView: View {
                                     .frame(width: 100)
                                     .padding(.trailing, 50)
                                 }
+                                
+                                Spacer()
+                                
+                                Text("Latest App Updates:")
+                                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                
+                                Rectangle()
+                                    .foregroundStyle(Color.white.opacity(0.5))
+                                    .frame(width: 250, height: 1)
+                                VStack{
+                                    HStack{
+                                        Circle()
+                                            .frame(width: 10, height: 10)
+                                        Text("xd")
+                                            .font(.system(size: 16, weight: .medium, design: .rounded))
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    HStack{
+                                        Circle()
+                                            .frame(width: 10, height: 10)
+                                        Text("xd2")
+                                            .font(.system(size: 16, weight: .medium, design: .rounded))
+                                        }
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    HStack{
+                                        Circle()
+                                            .frame(width: 10, height: 10)
+                                        Text("xd3")
+                                            .font(.system(size: 16, weight: .medium, design: .rounded))
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    HStack{
+                                        Circle()
+                                            .frame(width: 10, height: 10)
+                                        Text("xd4")
+                                            .font(.system(size: 16, weight: .medium, design: .rounded))
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                }
                             }
-                            .frame(width:250)
+                            .frame(width: 250)
                             .foregroundStyle(.white)
                             
                         }
@@ -90,7 +130,7 @@ struct NewFeaturesView: View {
                 }
                 
             }
-            .frame(width: 345, height: selectedSetting == 9 ? 370 : 50)
+            .frame(width: 345, height: selectedSetting == 9 ? 330 : 50)
             .background{
                 Rectangle()
                     .settingsViewColor()
