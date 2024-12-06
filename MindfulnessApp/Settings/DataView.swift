@@ -41,11 +41,12 @@ struct DataView: View {
                                 .padding(.trailing, 15)
                         }
                         .frame(width:300)
-                            .overlay{
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(.white, lineWidth: 2)
-                            }
-                            .padding(.top, 10)
+                        .overlay{
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(.white, lineWidth: 2)
+                        }
+                        .padding(.top, 10)
+                        .padding(.horizontal)
                     }
                     
                 }

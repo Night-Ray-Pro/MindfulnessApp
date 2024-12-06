@@ -39,10 +39,17 @@ struct SheetView: View {
         case Monthly
     }
 //    let stats = ["Daily", "Weekly", "Monthly"]
-    let charts = ["Sleep", "Coffee", "Meditation", "Mood", "Journal"]
+    enum charts: CaseIterable{
+        case Sleep
+        case Coffee
+        case Meditation
+        case Mood
+        case Journal
+    }
+    
     @State private var chosenStat = stats.Weekly
     @State private var isChoosingStats = false
-    @State private var chosenChart = "Sleep"
+    @State private var chosenChart = charts.Sleep
     @State private var isChoosingCharts = false
 //    @State private var totalSleep = 0
     var body: some View {
@@ -91,6 +98,10 @@ struct SheetView: View {
                     //Quick acces buttons
                     HStack{
                         Button{
+                            if let week = weeks.first{
+                                week.days.last!.entries += 1
+
+                            }
                             let newNote = JournalEntry()
                             modelContext.insert(newNote)
                             path = [newNote]
@@ -352,9 +363,8 @@ struct SheetView: View {
                     case .Weekly:
                         QuickStatsWeekly()
                     case .Monthly:
-                        Text("HI")
+                        QuickStatsMonthly()
                     }
-//                    QuickStatsDaily()
                     
                     //Chart choice
                     VStack(spacing:0){
@@ -364,7 +374,7 @@ struct SheetView: View {
                                     isChoosingCharts.toggle()
                                 }
                             } label: {
-                                Text(chosenChart)
+                                Text(String(describing:chosenChart))
                                     .font(.system(size: 20, weight: .bold, design: .rounded))
                                     .padding(.leading)
                                     .frame(maxWidth: .infinity, maxHeight: 50, alignment: .leading)
@@ -386,8 +396,8 @@ struct SheetView: View {
                             }
                             if isChoosingCharts{
                                 ScrollView{
-                                    ForEach(charts, id: \.self){ chart in
-                                        chart != "Daily" ?
+                                    ForEach(charts.allCases, id: \.self){ chart in
+                                        chart != .Sleep ?
                                         Rectangle()
                                             .foregroundStyle(.gray.opacity(0.3))
                                             .frame(width: 300, height: 1)
@@ -399,7 +409,7 @@ struct SheetView: View {
                                                 isChoosingCharts = false
                                             }
                                         } label: {
-                                            Text(chart)
+                                            Text(String(describing:chart))
                                                 .font(.system(size: 20, weight: .bold, design: .rounded))
                                                 .foregroundStyle(.white)
                                                 .padding(5)
@@ -436,8 +446,24 @@ struct SheetView: View {
                     }
                     .clipShape(.rect(cornerRadius: 35))
 //                    WeeklySleepChart()
-                    SleepChartView()
-                        .frame(height: 220)
+                    switch chosenChart {
+                    case .Sleep:
+                        SleepChartView()
+                            .frame(height: 220)
+                    case .Coffee:
+                        CoffeeChartView()
+                            .frame(height: 220)
+                    case .Meditation:
+                        MeditationChartView()
+                            .frame(height: 220)
+                    case .Mood:
+                        MoodChartView()
+                            .frame(height: 220)
+                    case .Journal:
+                        JournalChartView()
+                            .frame(height: 220)
+                    }
+                    
                     
                     
                     Spacer()
