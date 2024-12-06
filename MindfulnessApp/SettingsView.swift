@@ -60,7 +60,7 @@ struct SettingsView: View {
                             Rectangle()
                                 .frame(width: 314, height: 50)
                                 .opacity(0)
-                                .id(8)
+                                .id(9)
                                
                             //                        ForEach(1..<10){ num in
                             //                            Button{
