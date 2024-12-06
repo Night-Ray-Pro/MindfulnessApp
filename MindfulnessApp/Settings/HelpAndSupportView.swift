@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct HelpAndSupportView: View {
-    @State private var selectedSetting = 0 // zmien na 0
+    @Binding var selectedSetting: Int
+//    @State private var selectedSetting = 0 //// zmien na 0
     @State private var isChoosingStats = false // zmen na false
     var body: some View {
         NavigationStack{
@@ -16,12 +17,10 @@ struct HelpAndSupportView: View {
                 Group{
                     Button{
                         withAnimation{
-                            isChoosingStats.toggle()
-                            
-                            if isChoosingStats{
-                                selectedSetting = 7
-                            }else{
+                            if selectedSetting == 7{
                                 selectedSetting = 0
+                            }else{
+                                selectedSetting = 7
                             }
                             
                         }
@@ -64,8 +63,7 @@ struct HelpAndSupportView: View {
                                 .font(.system(size: 16, weight: .medium, design: .rounded))
                                 .foregroundStyle(.white)
                                 .multilineTextAlignment(.center)
-                                .padding(.leading, 50)
-                                .padding(.trailing, 50)
+                                .padding(.horizontal, 50)
                                 .padding(.top, 5)
                             HStack{
                                 Image(systemName: "envelope.fill")
@@ -116,9 +114,22 @@ struct HelpAndSupportView: View {
             }
             .clipShape(.rect(cornerRadius: 35))
         }
+        .onChange(of: selectedSetting) { oldValue, newValue in
+            withAnimation{
+                if newValue == 7 {
+                    isChoosingStats = true
+                } else{
+                    isChoosingStats = false
+                }
+                
+                
+                
+            }
+        }
+        
     }
 }
 
 #Preview {
-    HelpAndSupportView()
+    HelpAndSupportView(selectedSetting: .constant(7))
 }

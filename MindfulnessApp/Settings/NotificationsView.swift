@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct NotificationsView: View {
-    @State private var selectedSetting = 0 // zmien na 0
+    @Binding var selectedSetting: Int
+//    @State private var selectedSetting = 0 // zmien na 0
     @State private var isChoosingStats = false // zmen na false
     @State private var notifications = false
     var body: some View {
@@ -17,12 +18,10 @@ struct NotificationsView: View {
                 Group{
                     Button{
                         withAnimation{
-                            isChoosingStats.toggle()
-                            
-                            if isChoosingStats{
-                                selectedSetting = 4
-                            }else{
+                            if selectedSetting == 4{
                                 selectedSetting = 0
+                            }else{
+                                selectedSetting = 4
                             }
                             
                         }
@@ -88,6 +87,18 @@ struct NotificationsView: View {
             }
             .clipShape(.rect(cornerRadius: 35))
         }
+        .onChange(of: selectedSetting) { oldValue, newValue in
+            withAnimation{
+                if newValue == 4 {
+                    isChoosingStats = true
+                } else{
+                    isChoosingStats = false
+                }
+                
+                
+                
+            }
+        }
         .accentColor(.white)
         .preferredColorScheme(.dark)
         
@@ -95,5 +106,5 @@ struct NotificationsView: View {
 }
 
 #Preview {
-    NotificationsView()
+    NotificationsView(selectedSetting: .constant(1))
 }

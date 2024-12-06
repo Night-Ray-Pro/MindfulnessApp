@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct DataManagementView: View {
-    @State private var selectedSetting = 0 // zmien na 0
+    @Binding var selectedSetting: Int
+//    @State private var selectedSetting = 0 // zmien na 0
     @State private var isChoosingStats = false // zmen na false
     var body: some View {
         NavigationStack{
@@ -16,12 +17,10 @@ struct DataManagementView: View {
                 Group{
                     Button{
                         withAnimation{
-                            isChoosingStats.toggle()
-                            
-                            if isChoosingStats{
-                                selectedSetting = 3
-                            }else{
+                            if selectedSetting == 3{
                                 selectedSetting = 0
+                            }else{
+                                selectedSetting = 3
                             }
                             
                         }
@@ -72,13 +71,14 @@ struct DataManagementView: View {
                                         .foregroundStyle(.white)
                                 }
                                 .frame(width:240)
-                                .padding(.horizontal ,15)
+                                .padding(.horizontal ,10)
                                 .padding(.vertical, 5)
                                 .overlay{
                                     RoundedRectangle(cornerRadius: 10)
                                         .stroke(.white, lineWidth: 2)
                                 }
                                 .padding(.top,20)
+                                .padding(.horizontal, 5)
 
                             }
                             
@@ -115,6 +115,18 @@ struct DataManagementView: View {
             }
             .clipShape(.rect(cornerRadius: 35))
         }
+        .onChange(of: selectedSetting) { oldValue, newValue in
+            withAnimation{
+                if newValue == 3 {
+                    isChoosingStats = true
+                } else{
+                    isChoosingStats = false
+                }
+                
+                
+                
+            }
+        }
         .accentColor(.white)
         .preferredColorScheme(.dark)
         
@@ -122,5 +134,7 @@ struct DataManagementView: View {
 }
 
 #Preview {
-    DataManagementView()
+    DataManagementView(selectedSetting: .constant(1))
 }
+
+

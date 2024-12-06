@@ -9,7 +9,8 @@ import SwiftUI
 import StoreKit
 
 struct FeedbackView: View {
-    @State private var selectedSetting = 0 // zmien na 0
+    @Binding var selectedSetting: Int
+//    @State private var selectedSetting = 0 // zmien na 0
     @State private var isChoosingStats = false // zmen na false
     @Environment(\.requestReview) var requestReview
     var body: some View {
@@ -18,12 +19,10 @@ struct FeedbackView: View {
                 Group{
                     Button{
                         withAnimation{
-                            isChoosingStats.toggle()
-                            
-                            if isChoosingStats{
-                                selectedSetting = 6
-                            }else{
+                            if selectedSetting == 6{
                                 selectedSetting = 0
+                            }else{
+                                selectedSetting = 6
                             }
                             
                         }
@@ -90,9 +89,21 @@ struct FeedbackView: View {
             }
             .clipShape(.rect(cornerRadius: 35))
         }
+        .onChange(of: selectedSetting) { oldValue, newValue in
+            withAnimation{
+                if newValue == 6 {
+                    isChoosingStats = true
+                } else{
+                    isChoosingStats = false
+                }
+                
+                
+                
+            }
+        }
     }
 }
 
 #Preview {
-    FeedbackView()
+    FeedbackView(selectedSetting: .constant(1))
 }

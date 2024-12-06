@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct AccountAndPrivacyView: View {
-    //    @Binding var selectedSetting: Int
+    @Binding var selectedSetting: Int
     @State private var username = String()
     @State private var gender = String()
     @State private var date_of_birth = Date()
     @State private var height = Int()
     @State private var weight = Int()
-    @State private var selectedSetting = 0 // zmien na 0
+//    @State private var selectedSetting = 0 // zmien na 0
     @State private var isChoosingStats = false // zmen na false
     @FocusState private var nameIsFocusedHeight: Bool
     @FocusState private var nameIsFocusedWeight: Bool
@@ -24,12 +24,10 @@ struct AccountAndPrivacyView: View {
                 Group{
                     Button{
                         withAnimation{
-                            isChoosingStats.toggle()
-                            
-                            if isChoosingStats{
-                                selectedSetting = 1
-                            }else{
+                            if selectedSetting == 1{
                                 selectedSetting = 0
+                            }else{
+                                selectedSetting = 1
                             }
                             
                         }
@@ -61,6 +59,7 @@ struct AccountAndPrivacyView: View {
                                 
                             }
                     }
+//                    .sensoryFeedback(.increase, trigger: selectedSetting)
                     if selectedSetting == 1{
                         ScrollView{
                             HStack(spacing:10){
@@ -253,10 +252,21 @@ struct AccountAndPrivacyView: View {
                 //                    .frame(width: 352, height: 50)
             }
             .clipShape(.rect(cornerRadius: 35))
+        }.onChange(of: selectedSetting) { oldValue, newValue in
+            withAnimation{
+                if newValue == 1 {
+                    isChoosingStats = true
+                } else{
+                    isChoosingStats = false
+                }
+                
+                
+                
+            }
         }
     }
 }
 
 #Preview {
-    AccountAndPrivacyView(/*selectedSetting: .constant(1)*/)
+    AccountAndPrivacyView(selectedSetting: .constant(1))
 }

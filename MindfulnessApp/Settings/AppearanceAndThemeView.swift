@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct AppearanceAndThemeView: View {
-    @State private var selectedSetting = 0 // zmien na 0
+    @Binding var selectedSetting: Int
+//    @State private var selectedSetting = 0 // zmien na 0
     @State private var isChoosingStats = false // zmen na false
     var body: some View {
         NavigationStack{
@@ -16,12 +17,10 @@ struct AppearanceAndThemeView: View {
                 Group{
                     Button{
                         withAnimation{
-                            isChoosingStats.toggle()
-                            
-                            if isChoosingStats{
-                                selectedSetting = 2
-                            }else{
+                            if selectedSetting == 2{
                                 selectedSetting = 0
+                            }else{
+                                selectedSetting = 2
                             }
                             
                         }
@@ -119,9 +118,22 @@ struct AppearanceAndThemeView: View {
             }
             .clipShape(.rect(cornerRadius: 35))
         }
+        .onChange(of: selectedSetting) { oldValue, newValue in
+            withAnimation{
+                if newValue == 2 {
+                    isChoosingStats = true
+                } else{
+                    isChoosingStats = false
+                }
+                
+                
+                
+            }
+        }
     }
 }
 
 #Preview {
-    AppearanceAndThemeView()
+    AppearanceAndThemeView(selectedSetting: .constant(1))
 }
+
