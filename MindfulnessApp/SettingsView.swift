@@ -54,6 +54,9 @@ struct SettingsView: View {
                             HelpAndSupportView(selectedSetting: $numTapped)
                                 .id(7)
                             
+                            HapticsView(selectedSetting: $numTapped)
+                                .id(8)
+                            
                             Rectangle()
                                 .frame(width: 314, height: 50)
                                 .opacity(0)
