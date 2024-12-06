@@ -58,21 +58,24 @@ struct NewFeaturesView: View {
                             VStack(spacing: 10){
                                 HStack{
                                     VStack{
-                                        Image(.AppIconImage)
+                                        Image("AppIconImage")
+                                            .resizable()
                                             .scaledToFit()
+                                            .frame(width: 50)
+                                            .clipShape(.rect(cornerRadius: 15))
                                         Text("MindFlow")
                                             .font(.system(size: 16, weight: .bold, design: .rounded))
                                             .foregroundStyle(.white)
                                     }
-                                    .multilineTextAlignment(.center)
+                                    .frame(width: 100)
                                     .padding(.leading, 50)
                                     
                                     VStack{
                                         Text("Version ").font(.system(size: 16, weight: .bold, design: .rounded)) + Text("\(getAppVersion())").font(.system(size: 16, weight: .medium, design: .default)).italic()
                                         Text("Build ").font(.system(size: 16, weight: .bold, design: .rounded)) + Text("\(getBuildNumber())").font(.system(size: 16, weight: .medium, design: .default)).italic()
                                     }
-                                    .multilineTextAlignment(.center)
-                                    .padding(.trailing, 45)
+                                    .frame(width: 100)
+                                    .padding(.trailing, 50)
                                 }
                             }
                             .frame(width:250)
