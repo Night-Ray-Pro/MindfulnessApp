@@ -58,7 +58,7 @@ struct NewFeaturesView: View {
                             VStack(spacing: 10){
                                 HStack{
                                     VStack{
-                                        Image("AppIconImage")
+                                        Image("appIconImage")
                                             .resizable()
                                             .scaledToFit()
                                             .frame(width: 50)
