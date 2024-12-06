@@ -71,6 +71,7 @@ struct FeedbackView: View {
                                             .stroke(.white, lineWidth: 2)
                                     }
                                     .padding(.top, 15)
+                                    .padding(.horizontal)
                             }
                         }
                         .scrollBounceBehavior(.basedOnSize)
