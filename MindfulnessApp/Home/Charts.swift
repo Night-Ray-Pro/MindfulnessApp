@@ -90,7 +90,7 @@ struct SleepChartView: View {
     }
     var body: some View {
         TabView(selection: $startingTab) {
-            ForEach(weeks, id: \.week) { weekData in
+            ForEach(weeks.reversed(), id: \.week) { weekData in
                 WeeklySleepChart(week: weekData.week, sleepData: weekData.days)
                     .tabItem {
                         Text(weekData.week)
@@ -179,7 +179,7 @@ struct CoffeeChartView: View {
     }
     var body: some View {
         TabView(selection: $startingTab) {
-            ForEach(weeks, id: \.week) { weekData in
+            ForEach(weeks.reversed(), id: \.week) { weekData in
                 WeeklyCoffeeChart(week: weekData.week, sleepData: weekData.days)
                     .tabItem {
                         Text(weekData.week)
@@ -268,7 +268,7 @@ struct MeditationChartView: View {
     }
     var body: some View {
         TabView(selection: $startingTab) {
-            ForEach(weeks, id: \.week) { weekData in
+            ForEach(weeks.reversed(), id: \.week) { weekData in
                 WeeklyMeditationChart(week: weekData.week, sleepData: weekData.days)
                     .tabItem {
                         Text(weekData.week)
@@ -357,7 +357,7 @@ struct MoodChartView: View {
     }
     var body: some View {
         TabView(selection: $startingTab) {
-            ForEach(weeks, id: \.week) { weekData in
+            ForEach(weeks.reversed(), id: \.week) { weekData in
                 WeeklyMoodChart(week: weekData.week, sleepData: weekData.days)
                     .tabItem {
                         Text(weekData.week)
@@ -446,7 +446,7 @@ struct JournalChartView: View {
     }
     var body: some View {
         TabView(selection: $startingTab) {
-            ForEach(weeks, id: \.week) { weekData in
+            ForEach(weeks.reversed(), id: \.week) { weekData in
                 WeeklyJournalChart(week: weekData.week, sleepData: weekData.days)
                     .tabItem {
                         Text(weekData.week)
