@@ -134,7 +134,7 @@ struct DataManagementView: View {
 }
 
 #Preview {
-    DataManagementView(selectedSetting: .constant(1))
+    DataManagementView(selectedSetting: .constant(3))
 }
 
 

@@ -19,10 +19,10 @@ struct FeedbackView: View {
                 Group{
                     Button{
                         withAnimation{
-                            if selectedSetting == 6{
+                            if selectedSetting == 8{
                                 selectedSetting = 0
                             }else{
-                                selectedSetting = 6
+                                selectedSetting = 8
                             }
                             
                         }
@@ -54,7 +54,7 @@ struct FeedbackView: View {
                                 
                             }
                     }
-                    if selectedSetting == 6{
+                    if selectedSetting == 8{
                         
                         ScrollView{
                             Button{
@@ -81,7 +81,7 @@ struct FeedbackView: View {
                 }
                 
             }
-            .frame(width: 345, height: selectedSetting == 6 ? 110 : 50)
+            .frame(width: 345, height: selectedSetting == 8 ? 110 : 50)
             .background{
                 Rectangle()
                     .settingsViewColor()
@@ -91,7 +91,7 @@ struct FeedbackView: View {
         }
         .onChange(of: selectedSetting) { oldValue, newValue in
             withAnimation{
-                if newValue == 6 {
+                if newValue == 8 {
                     isChoosingStats = true
                 } else{
                     isChoosingStats = false
@@ -105,5 +105,5 @@ struct FeedbackView: View {
 }
 
 #Preview {
-    FeedbackView(selectedSetting: .constant(1))
+    FeedbackView(selectedSetting: .constant(8))
 }

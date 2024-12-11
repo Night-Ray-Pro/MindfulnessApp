@@ -106,5 +106,5 @@ struct NotificationsView: View {
 }
 
 #Preview {
-    NotificationsView(selectedSetting: .constant(1))
+    NotificationsView(selectedSetting: .constant(4))
 }

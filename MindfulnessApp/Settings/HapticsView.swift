@@ -18,10 +18,10 @@ struct HapticsView: View {
                 Group{
                     Button{
                         withAnimation{
-                            if selectedSetting == 8{
+                            if selectedSetting == 6{
                                 selectedSetting = 0
                             }else{
-                                selectedSetting = 8
+                                selectedSetting = 6
                             }
                             
                         }
@@ -53,7 +53,7 @@ struct HapticsView: View {
                                 
                             }
                     }
-                    if selectedSetting == 8{
+                    if selectedSetting == 6{
                         
                         ScrollView{
                             Toggle(isOn: $haptics){
@@ -79,7 +79,7 @@ struct HapticsView: View {
                 }
                 
             }
-            .frame(width: 345, height: selectedSetting == 8 ? 110 : 50)
+            .frame(width: 345, height: selectedSetting == 6 ? 110 : 50)
             .background{
                 Rectangle()
                     .settingsViewColor()
@@ -89,7 +89,7 @@ struct HapticsView: View {
         }
         .onChange(of: selectedSetting) { oldValue, newValue in
             withAnimation{
-                if newValue == 8 {
+                if newValue == 6 {
                     isChoosingStats = true
                 } else{
                     isChoosingStats = false
@@ -106,5 +106,5 @@ struct HapticsView: View {
 }
 
 #Preview {
-    HapticsView(selectedSetting: .constant(8))
+    HapticsView(selectedSetting: .constant(6))
 }

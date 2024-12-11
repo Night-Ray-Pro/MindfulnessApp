@@ -93,5 +93,5 @@ struct DarkModeView: View {
 }
 
 #Preview {
-    DarkModeView(selectedSetting: .constant(1))
+    DarkModeView(selectedSetting: .constant(5))
 }

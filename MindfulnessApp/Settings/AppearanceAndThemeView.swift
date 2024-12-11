@@ -134,6 +134,6 @@ struct AppearanceAndThemeView: View {
 }
 
 #Preview {
-    AppearanceAndThemeView(selectedSetting: .constant(1))
+    AppearanceAndThemeView(selectedSetting: .constant(2))
 }
 

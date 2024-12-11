@@ -47,14 +47,14 @@ struct SettingsView: View {
                                 
                             DarkModeView(selectedSetting: $numTapped)
                                 .id(5)
-                                
-                            FeedbackView(selectedSetting: $numTapped)
+                            
+                            HapticsView(selectedSetting: $numTapped)
                                 .id(6)
                                 
                             HelpAndSupportView(selectedSetting: $numTapped)
                                 .id(7)
                             
-                            HapticsView(selectedSetting: $numTapped)
+                            FeedbackView(selectedSetting: $numTapped)
                                 .id(8)
                             
                             NewFeaturesView(selectedSetting: $numTapped)
