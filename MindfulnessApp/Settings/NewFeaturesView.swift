@@ -91,28 +91,28 @@ struct NewFeaturesView: View {
                                     HStack{
                                         Circle()
                                             .frame(width: 10, height: 10)
-                                        Text("xd")
+                                        Text("First official version of the app.")
                                             .font(.system(size: 16, weight: .medium, design: .rounded))
                                     }
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     HStack{
                                         Circle()
                                             .frame(width: 10, height: 10)
-                                        Text("xd2")
+                                        Text("App functionality added.")
                                             .font(.system(size: 16, weight: .medium, design: .rounded))
                                         }
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     HStack{
                                         Circle()
                                             .frame(width: 10, height: 10)
-                                        Text("xd3")
+                                        Text("App UI/UX implemented.")
                                             .font(.system(size: 16, weight: .medium, design: .rounded))
                                     }
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     HStack{
                                         Circle()
                                             .frame(width: 10, height: 10)
-                                        Text("xd4")
+                                        Text("Settings screen added.")
                                             .font(.system(size: 16, weight: .medium, design: .rounded))
                                     }
                                     .frame(maxWidth: .infinity, alignment: .leading)
