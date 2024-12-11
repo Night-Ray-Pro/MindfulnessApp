@@ -78,7 +78,7 @@ struct HelpAndSupportView: View {
                                         .font(.system(size: 16))
                                         .multilineTextAlignment(.leading)
                                        
-                                    Text("+48 12 123 45 67")
+                                    Text("+48 12 345 67 89")
                                         .font(.system(size: 16, weight: .medium, design: .rounded))
                                        
                                 }
