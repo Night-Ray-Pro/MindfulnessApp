@@ -10,6 +10,7 @@ import SwiftUI
 struct SettingsView: View {
     @State private var numTapped = 0
     @AppStorage("haptics") var haptics = false
+    @AppStorage("username") private var username = String()
     var body: some View {
         NavigationStack{
             ZStack{
@@ -23,13 +24,13 @@ struct SettingsView: View {
                         VStack{
                             Image(.settingsVector)
                                 .id(0)
-                            Text("Oskar")
+                            Text(username)
                                 .font(.system(size: 48, weight: .bold, design: .rounded))
                                 .foregroundStyle(.white)
                                 .padding(.top, -20)
-                            Text("Personal info...")
-                                .font(.system(size: 30, weight: .bold, design: .rounded))
-                                .foregroundStyle(.white)
+//                            Text("Personal info...")
+//                                .font(.system(size: 30, weight: .bold, design: .rounded))
+//                                .foregroundStyle(.white)
                             Rectangle()
                                 .frame(width: 314, height: 1)
                                 .foregroundStyle(Color("Settings"))

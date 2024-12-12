@@ -9,9 +9,10 @@ import SwiftUI
 
 struct AccountAndPrivacyView: View {
     @Binding var selectedSetting: Int
-    @State private var username = String()
+    @AppStorage("username") private var username = String()
     @State private var gender = String()
     @State private var date_of_birth = Date()
+    @AppStorage("zodiacSign") private var sign = String()
     @State private var height = Int()
     @State private var weight = Int()
 //    @State private var selectedSetting = 0 // zmien na 0
@@ -263,6 +264,49 @@ struct AccountAndPrivacyView: View {
                 
                 
             }
+        }
+        .onChange(of: date_of_birth) { oldValue, newValue in
+            updateDayOfYear(for: date_of_birth)
+        }
+    }
+    func updateDayOfYear(for date: Date) {
+        let calendar = Calendar.current
+//        print("Hi")
+        if let day = calendar.ordinality(of: .day, in: .year, for: date) {
+//            print(day)
+            switch day{
+            case 1...20:
+                sign = "Capricorn"
+            case 21...49:
+                sign = "Aquarius"
+            case 50...79:
+                sign = "Pisces"
+            case 80...110:
+                sign = "Aries"
+            case 111...140:
+                sign = "Taurus"
+            case 141...171:
+                sign = "Gemini"
+            case 172...203:
+                sign = "Cancer"
+            case 204...234:
+                sign = "Leo"
+            case 235...265:
+                sign = "Virgo"
+            case 266...295:
+                sign = "Libra"
+            case 296...325:
+                sign = "Scorpio"
+            case 326...355:
+                sign = "Sagittarius"
+            case 356...365:
+                sign = "Capricorn"
+            default:
+                sign = "Capricorn"
+
+            }
+        } else {
+            print(0) // Fallback for unexpected cases
         }
     }
 }

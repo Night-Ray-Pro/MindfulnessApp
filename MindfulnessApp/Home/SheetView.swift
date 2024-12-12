@@ -18,7 +18,7 @@ struct SheetView: View {
 //    @AppStorage("phase") private var phase = String()
 //    @AppStorage("quote") private var quote = String()
 //    @AppStorage("author") private var quoteAuthor = String()
-    @State private var sign = "Sagittarius"
+    @AppStorage("zodiacSign") private var sign = "Capricorn"
     @State private var moonDescription = false
 //    @AppStorage("horoscope") private var horoscope = String() {
 //        willSet{

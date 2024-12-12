@@ -10,6 +10,7 @@ import SwiftUI
 
 struct NewNotesView: View {
     @Environment(\.modelContext) var modelContext
+    @AppStorage("username") private var username = String()
     @Query(sort: \JournalEntry.date, order: .reverse) var notes: [JournalEntry]
     let buttonOverlayColor = Color(red: 177 / 255, green: 147 / 255, blue: 233 / 255)
     @Query(sort: \ApplicationData.date, order: .reverse) var weeks: [ApplicationData]
@@ -123,7 +124,7 @@ struct NewNotesView: View {
                     .padding(.top, 55)
 //                    .padding(.bottom, 5)
                     .padding(.horizontal,20)
-                    Text("Oskar's Journal")
+                    Text("\(username)'s Journal")
                         .font(.custom("SignPainter", size: 60))
                         .foregroundStyle(.white)
 //                        .padding(.top,-5)

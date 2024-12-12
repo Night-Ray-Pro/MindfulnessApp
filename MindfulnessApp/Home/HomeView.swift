@@ -209,6 +209,7 @@ struct HomeView: View {
 
 struct LightView: View{
     @State private var position: BottomSheetPosition = .relative(0.51)
+    @AppStorage("username") private var username = String()
     
     var body: some View {
         ZStack{
@@ -236,7 +237,7 @@ struct LightView: View{
                 Text("Morning!")
                     .foregroundStyle(.white)
                     .font(.system(size: 48, weight: .semibold, design: .rounded))
-                Text("Oskar")
+                Text(username)
                     .foregroundStyle(.white)
                     .font(.system(size: 32, weight: .semibold, design: .rounded))
                 Spacer()
@@ -272,7 +273,7 @@ struct LightView: View{
 
 struct DarkView: View{
     @State var position: BottomSheetPosition = .relative(0.51)
-        
+    @AppStorage("username") private var username = String()
         var body: some View {
             ZStack{
                 //Gradient
@@ -299,7 +300,7 @@ struct DarkView: View{
                     Text("Evening!")
                         .foregroundStyle(.white)
                         .font(.system(size: 48, weight: .semibold, design: .rounded))
-                    Text("Oskar")
+                    Text(username)
                         .foregroundStyle(.white)
                         .font(.system(size: 32, weight: .semibold, design: .rounded))
                     Spacer()
