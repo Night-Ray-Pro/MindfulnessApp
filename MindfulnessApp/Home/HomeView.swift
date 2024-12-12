@@ -13,7 +13,7 @@ struct HomeView: View {
     @Environment(\.scenePhase) var scenePhase
     @State private var hour:Int = Calendar.current.component(.hour, from: .now)
     @State private var mode: Bool = true
-    
+    @AppStorage("zodiacSign") private var sign = "Capricorn"
     @Environment(\.modelContext) var modelContext
     @Query(sort: \ApplicationData.date, order: .reverse) var weeks: [ApplicationData]
     
@@ -191,7 +191,8 @@ struct HomeView: View {
     }
     
     func loadHoroscope() async -> String{
-        guard let url = URL(string: "https://horoscope-app-api.vercel.app/api/v1/get-horoscope/weekly?sign=\("Sagittarius")") else { return "Error in URL"}
+        
+        guard let url = URL(string: "https://horoscope-app-api.vercel.app/api/v1/get-horoscope/weekly?sign=\(sign)") else { return "Error in URL"}
         
         do{
             let (data, _) = try await URLSession.shared.data(from: url)
