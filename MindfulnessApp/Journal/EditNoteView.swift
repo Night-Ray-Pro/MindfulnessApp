@@ -159,6 +159,7 @@ struct EditNoteView: View {
                                         .foregroundStyle(.white)
                                         .id("TextEditor")
                                         .scrollContentBackground(.hidden)
+                                        .frame(width: 322)
                                         .padding(10)
                                         .background{
                                             RoundedRectangle(cornerRadius: 20)

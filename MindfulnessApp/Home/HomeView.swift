@@ -104,11 +104,16 @@ struct HomeView: View {
         // Check if the week already exists
         if weeks.contains(where: { $0.week == currentWeek }) {
             print("Week already exists")
-            
-            if weeks.first!.horoscope.isEmpty{
+//            print( weeks.first!.horoscope)
+            if weeks.first!.horoscope.isEmpty || weeks.first!.horoscope == "Error in fetching response"{
                 horoscope = await loadHoroscope()
+//                print(horoscope)
                 let shortHoroscope = await Gemini.fetchResponse(for: prepareRequest)
-                weeks.first!.horoscope = shortHoroscope
+                if shortHoroscope == "Error in fetching response"{
+                    weeks.first!.horoscope = horoscope
+                }else{
+                    weeks.first!.horoscope = shortHoroscope
+                }
             }else{
                 print( weeks.first!.horoscope)
             }
